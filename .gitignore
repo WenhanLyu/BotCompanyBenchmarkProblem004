@@ -25,3 +25,4 @@ workspace/
 *.swp
 *.swo
 *~
+config.yaml
