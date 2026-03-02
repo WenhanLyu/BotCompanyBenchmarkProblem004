@@ -51,9 +51,20 @@ public:
     bool createBook(const std::string& ISBN);
     Book* getBook(const std::string& ISBN);
     const Book* getBook(const std::string& ISBN) const;
+    bool modifyBook(const std::string& currentISBN, const std::string& newISBN,
+                    const std::string& name, const std::string& author,
+                    const std::string& keyword, double price);
     
-    // Query operations (for future use)
+    // Query operations
     std::vector<Book> getAllBooks() const;
+    std::vector<Book> findByISBN(const std::string& ISBN) const;
+    std::vector<Book> findByName(const std::string& name) const;
+    std::vector<Book> findByAuthor(const std::string& author) const;
+    std::vector<Book> findByKeyword(const std::string& keyword) const;
+    
+    // Transaction operations
+    double buyBook(const std::string& ISBN, long long quantity);  // Returns total cost, -1 on failure
+    bool importBook(const std::string& ISBN, long long quantity, double totalCost);
 };
 
 #endif // BOOK_H

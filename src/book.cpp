@@ -21,27 +21,47 @@ void BookSystem::loadBooks() {
     
     // Read books from file
     // Format: ISBN|Name|Author|Keyword|Price|Quantity
+    // Note: Keyword field can contain pipes, so we parse from both ends
     std::string line;
     while (std::getline(infile, line)) {
         if (line.empty()) continue;
         
-        std::stringstream ss(line);
-        std::string isbn, name, author, keyword, priceStr, quantityStr;
+        // Find the last two pipe positions (for Price and Quantity)
+        size_t lastPipe = line.rfind('|');
+        if (lastPipe == std::string::npos) continue;
         
-        // Parse pipe-delimited format
-        if (std::getline(ss, isbn, '|') &&
-            std::getline(ss, name, '|') &&
-            std::getline(ss, author, '|') &&
-            std::getline(ss, keyword, '|') &&
-            std::getline(ss, priceStr, '|') &&
-            std::getline(ss, quantityStr, '|')) {
-            
-            double price = std::stod(priceStr);
-            long long quantity = std::stoll(quantityStr);
-            
-            Book book(isbn, name, author, keyword, price, quantity);
-            books[isbn] = book;
-        }
+        size_t secondLastPipe = line.rfind('|', lastPipe - 1);
+        if (secondLastPipe == std::string::npos) continue;
+        
+        // Extract Price and Quantity from the end
+        std::string quantityStr = line.substr(lastPipe + 1);
+        std::string priceStr = line.substr(secondLastPipe + 1, lastPipe - secondLastPipe - 1);
+        
+        // Parse the first part (ISBN|Name|Author|Keyword)
+        std::string firstPart = line.substr(0, secondLastPipe);
+        
+        // Find first 3 pipes for ISBN, Name, Author
+        size_t firstPipe = firstPart.find('|');
+        if (firstPipe == std::string::npos) continue;
+        
+        size_t secondPipe = firstPart.find('|', firstPipe + 1);
+        if (secondPipe == std::string::npos) continue;
+        
+        size_t thirdPipe = firstPart.find('|', secondPipe + 1);
+        if (thirdPipe == std::string::npos) continue;
+        
+        // Extract fields
+        std::string isbn = firstPart.substr(0, firstPipe);
+        std::string name = firstPart.substr(firstPipe + 1, secondPipe - firstPipe - 1);
+        std::string author = firstPart.substr(secondPipe + 1, thirdPipe - secondPipe - 1);
+        std::string keyword = firstPart.substr(thirdPipe + 1);
+        
+        // Convert price and quantity
+        double price = std::stod(priceStr);
+        long long quantity = std::stoll(quantityStr);
+        
+        Book book(isbn, name, author, keyword, price, quantity);
+        books[isbn] = book;
     }
     
     infile.close();
@@ -205,4 +225,205 @@ std::vector<Book> BookSystem::getAllBooks() const {
         result.push_back(pair.second);
     }
     return result;
+}
+
+// Find books by ISBN (exact match)
+std::vector<Book> BookSystem::findByISBN(const std::string& ISBN) const {
+    std::vector<Book> result;
+    const Book* book = getBook(ISBN);
+    if (book) {
+        result.push_back(*book);
+    }
+    return result;
+}
+
+// Find books by name (exact match)
+std::vector<Book> BookSystem::findByName(const std::string& name) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.name == name) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by author (exact match)
+std::vector<Book> BookSystem::findByAuthor(const std::string& author) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.author == author) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by keyword (segment match - keyword contains this segment)
+std::vector<Book> BookSystem::findByKeyword(const std::string& keyword) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        // Check if the keyword appears as a segment in the book's keywords
+        // Keywords are pipe-separated
+        if (pair.second.keyword.empty()) continue;
+        
+        std::stringstream ss(pair.second.keyword);
+        std::string segment;
+        bool found = false;
+        
+        while (std::getline(ss, segment, '|')) {
+            if (segment == keyword) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Modify book attributes
+// Parameters with empty strings mean "don't modify this field"
+// Returns false if validation fails or book doesn't exist
+bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& newISBN,
+                             const std::string& name, const std::string& author,
+                             const std::string& keyword, double price) {
+    // Book must exist
+    if (!bookExists(currentISBN)) return false;
+    
+    Book* book = getBook(currentISBN);
+    if (!book) return false;
+    
+    // Validate new ISBN if provided
+    if (!newISBN.empty()) {
+        if (!isValidISBN(newISBN)) return false;
+        
+        // Check if new ISBN already exists (but not same as current)
+        if (newISBN != currentISBN && bookExists(newISBN)) {
+            return false;
+        }
+    }
+    
+    // Validate other fields if provided
+    if (!name.empty() && !isValidName(name)) return false;
+    if (!author.empty() && !isValidAuthor(author)) return false;
+    if (!keyword.empty() && !isValidKeyword(keyword)) return false;
+    if (price >= 0 && price > 1e13) return false; // Price limit check
+    
+    // Handle ISBN modification (requires removing old entry and adding new one)
+    if (!newISBN.empty() && newISBN != currentISBN) {
+        // Create a copy of the book with new ISBN
+        Book newBook = *book;
+        newBook.ISBN = newISBN;
+        
+        // Apply other modifications
+        if (!name.empty()) newBook.name = name;
+        if (!author.empty()) newBook.author = author;
+        if (!keyword.empty()) newBook.keyword = keyword;
+        if (price >= 0) newBook.price = price;
+        
+        // Remove old book from memory
+        books.erase(currentISBN);
+        
+        // Add new book to memory
+        books[newISBN] = newBook;
+        
+        // Update file - need to rewrite entire file
+        std::vector<Book> allBooks;
+        for (const auto& pair : books) {
+            allBooks.push_back(pair.second);
+        }
+        
+        std::ofstream outfile(BOOKS_FILE);
+        if (!outfile.is_open()) return false;
+        
+        for (const auto& b : allBooks) {
+            outfile << b.ISBN << "|" 
+                    << b.name << "|" 
+                    << b.author << "|" 
+                    << b.keyword << "|" 
+                    << std::fixed << std::setprecision(2) << b.price << "|" 
+                    << b.quantity << "\n";
+        }
+        
+        outfile.flush();
+        outfile.close();
+    } else {
+        // No ISBN change - just update other fields
+        if (!name.empty()) book->name = name;
+        if (!author.empty()) book->author = author;
+        if (!keyword.empty()) book->keyword = keyword;
+        if (price >= 0) book->price = price;
+        
+        // Update in file
+        updateBook(*book);
+    }
+    
+    return true;
+}
+
+// Buy book - decrease quantity and return total cost
+// Returns -1.0 if book doesn't exist, quantity invalid, or insufficient stock
+double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
+    // Validate quantity
+    if (quantity <= 0) {
+        return -1.0;
+    }
+    
+    // Check if book exists
+    auto it = books.find(ISBN);
+    if (it == books.end()) {
+        return -1.0;
+    }
+    
+    Book* book = &(it->second);
+    
+    // Check if sufficient stock
+    if (book->quantity < quantity) {
+        return -1.0;
+    }
+    
+    // Calculate total cost
+    double totalCost = book->price * quantity;
+    
+    // Decrease quantity
+    book->quantity -= quantity;
+    
+    // Update in file
+    updateBook(*book);
+    
+    return totalCost;
+}
+
+// Import book - increase quantity for selected book
+// Returns false if ISBN doesn't match selected book, quantity invalid, or cost invalid
+bool BookSystem::importBook(const std::string& ISBN, long long quantity, double totalCost) {
+    // Validate quantity
+    if (quantity <= 0) {
+        return false;
+    }
+    
+    // Validate totalCost
+    if (totalCost <= 0) {
+        return false;
+    }
+    
+    // Check if book exists
+    auto it = books.find(ISBN);
+    if (it == books.end()) {
+        return false;
+    }
+    
+    Book* book = &(it->second);
+    
+    // Increase quantity
+    book->quantity += quantity;
+    
+    // Update in file
+    updateBook(*book);
+    
+    return true;
 }
