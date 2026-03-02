@@ -16,6 +16,9 @@ code
 # Workspace directory (agent working area)
 workspace/
 
+# Test results
+test_verification_results/
+
 # macOS
 .DS_Store
 
