@@ -61,6 +61,10 @@ public:
     std::vector<Book> findByName(const std::string& name) const;
     std::vector<Book> findByAuthor(const std::string& author) const;
     std::vector<Book> findByKeyword(const std::string& keyword) const;
+    
+    // Transaction operations
+    double buyBook(const std::string& ISBN, long long quantity);  // Returns total cost, -1 on failure
+    bool importBook(const std::string& ISBN, long long quantity, double totalCost);
 };
 
 #endif // BOOK_H

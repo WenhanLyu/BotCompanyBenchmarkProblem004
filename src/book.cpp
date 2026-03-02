@@ -364,3 +364,66 @@ bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& n
     
     return true;
 }
+
+// Buy book - decrease quantity and return total cost
+// Returns -1.0 if book doesn't exist, quantity invalid, or insufficient stock
+double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
+    // Validate quantity
+    if (quantity <= 0) {
+        return -1.0;
+    }
+    
+    // Check if book exists
+    auto it = books.find(ISBN);
+    if (it == books.end()) {
+        return -1.0;
+    }
+    
+    Book* book = &(it->second);
+    
+    // Check if sufficient stock
+    if (book->quantity < quantity) {
+        return -1.0;
+    }
+    
+    // Calculate total cost
+    double totalCost = book->price * quantity;
+    
+    // Decrease quantity
+    book->quantity -= quantity;
+    
+    // Update in file
+    updateBook(*book);
+    
+    return totalCost;
+}
+
+// Import book - increase quantity for selected book
+// Returns false if ISBN doesn't match selected book, quantity invalid, or cost invalid
+bool BookSystem::importBook(const std::string& ISBN, long long quantity, double totalCost) {
+    // Validate quantity
+    if (quantity <= 0) {
+        return false;
+    }
+    
+    // Validate totalCost
+    if (totalCost <= 0) {
+        return false;
+    }
+    
+    // Check if book exists
+    auto it = books.find(ISBN);
+    if (it == books.end()) {
+        return false;
+    }
+    
+    Book* book = &(it->second);
+    
+    // Increase quantity
+    book->quantity += quantity;
+    
+    // Update in file
+    updateBook(*book);
+    
+    return true;
+}

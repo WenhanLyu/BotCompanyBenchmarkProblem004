@@ -493,6 +493,90 @@ int main() {
             continue;
         }
         
+        // Handle buy command
+        // Syntax: buy [ISBN] [Quantity]
+        // Requires privilege >= 1 (any logged in user)
+        if (command == "buy") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 1 to buy)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 1) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse ISBN and quantity
+            std::string isbn;
+            long long quantity;
+            ss >> isbn >> quantity;
+            
+            if (isbn.empty() || ss.fail()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Try to buy the book
+            double totalCost = bookSystem.buyBook(isbn, quantity);
+            
+            if (totalCost < 0) {
+                std::cout << "Invalid" << std::endl;
+            } else {
+                // Output total cost with 2 decimal places
+                std::cout << std::fixed << std::setprecision(2) << totalCost << std::endl;
+            }
+            
+            continue;
+        }
+        
+        // Handle import command
+        // Syntax: import [Quantity] [TotalCost]
+        // Requires privilege >= 3 and a book must be selected
+        if (command == "import") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 3 to import)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 3) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check if a book is selected
+            std::string selectedISBN = accountSystem.getCurrentSelectedBook();
+            if (selectedISBN.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse quantity and total cost
+            long long quantity;
+            double totalCost;
+            ss >> quantity >> totalCost;
+            
+            if (ss.fail()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Try to import the book
+            if (bookSystem.importBook(selectedISBN, quantity, totalCost)) {
+                // Success - no output
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            
+            continue;
+        }
+        
         // For now, all other commands are invalid
         std::cout << "Invalid" << std::endl;
     }
