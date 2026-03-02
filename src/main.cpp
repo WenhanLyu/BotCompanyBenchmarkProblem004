@@ -225,7 +225,7 @@ int main() {
         
         // Handle select command
         // Syntax: select [ISBN]
-        // Requires privilege >= 1 (user must be logged in)
+        // Requires privilege >= 3 per specification
         // If book exists, select it; if not, create it and select it
         if (command == "select") {
             // Check if user is logged in
@@ -234,9 +234,9 @@ int main() {
                 continue;
             }
             
-            // Check privilege (must be >= 1 to select books)
+            // Check privilege (must be >= 3 to select books per spec)
             int currentPriv = accountSystem.getCurrentPrivilege();
-            if (currentPriv < 1) {
+            if (currentPriv < 3) {
                 std::cout << "Invalid" << std::endl;
                 continue;
             }
