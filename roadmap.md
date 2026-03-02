@@ -4,10 +4,11 @@
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
 ## Current State
-- **Phase**: PLANNING (Post-M2.1 completion, ready for M3)
-- **Milestone**: M2.1 COMPLETE ✅ (su optional password bug fixed)
-- **Repository**: Complete account system with all features, ready for book system
-- **Cycles Used**: 26 (3 planning + 5 M1 impl + 2 M1 verify + 1 M2 impl + 2 M2 verify + 7 M2.1 planning + 1 M2.1 impl + 5 M3 planning)
+- **Phase**: PLANNING (Post-M3 completion, ready for M4 Log System)
+- **Milestone**: M3 COMPLETE ✅ (Book system fully implemented)
+- **Repository**: Complete account + book systems, log system partially implemented
+- **Critical Bug**: Finance records not persisted - must fix in M4
+- **Cycles Used**: TBD (need to count actual cycles used)
 
 ## Strategic Approach
 
