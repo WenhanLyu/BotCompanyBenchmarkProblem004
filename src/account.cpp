@@ -176,6 +176,12 @@ int AccountSystem::getCurrentPrivilege() const {
     return loginStack.top().privilege;
 }
 
+// Get privilege of a specific account
+int AccountSystem::getAccountPrivilege(const std::string& userID) const {
+    if (!accountExists(userID)) return -1;
+    return accounts.at(userID).privilege;
+}
+
 // Check if someone is logged in
 bool AccountSystem::isLoggedIn() const {
     return !loginStack.empty();
@@ -206,9 +212,17 @@ bool AccountSystem::su(const std::string& userID, const std::string& password) {
         return false;
     }
     
-    // Verify password
-    if (accounts[userID].password != password) {
-        return false;
+    // Check if password is required
+    // Password can be omitted if current privilege > target privilege
+    int currentPriv = getCurrentPrivilege();
+    int targetPriv = accounts[userID].privilege;
+    bool passwordRequired = (currentPriv <= targetPriv);
+    
+    // If password is required (or provided), verify it
+    if (passwordRequired || !password.empty()) {
+        if (accounts[userID].password != password) {
+            return false;
+        }
     }
     
     // Create new login session and push onto stack
