@@ -1,0 +1,27 @@
+# Build artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Executable
+code
+
+# Object files
+*.o
+
+# Data files
+*.dat
+
+# Workspace directory (agent working area)
+workspace/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
