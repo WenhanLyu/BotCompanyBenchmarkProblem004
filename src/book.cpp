@@ -301,8 +301,13 @@ bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& n
     if (!newISBN.empty()) {
         if (!isValidISBN(newISBN)) return false;
         
-        // Check if new ISBN already exists (but not same as current)
-        if (newISBN != currentISBN && bookExists(newISBN)) {
+        // Cannot change ISBN to its original ISBN (per specification)
+        if (newISBN == currentISBN) {
+            return false;
+        }
+        
+        // Check if new ISBN already exists
+        if (bookExists(newISBN)) {
             return false;
         }
     }
