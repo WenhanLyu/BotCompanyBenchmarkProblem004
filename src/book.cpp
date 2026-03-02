@@ -227,6 +227,64 @@ std::vector<Book> BookSystem::getAllBooks() const {
     return result;
 }
 
+// Find books by ISBN (exact match)
+std::vector<Book> BookSystem::findByISBN(const std::string& ISBN) const {
+    std::vector<Book> result;
+    const Book* book = getBook(ISBN);
+    if (book) {
+        result.push_back(*book);
+    }
+    return result;
+}
+
+// Find books by name (exact match)
+std::vector<Book> BookSystem::findByName(const std::string& name) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.name == name) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by author (exact match)
+std::vector<Book> BookSystem::findByAuthor(const std::string& author) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.author == author) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by keyword (segment match - keyword contains this segment)
+std::vector<Book> BookSystem::findByKeyword(const std::string& keyword) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        // Check if the keyword appears as a segment in the book's keywords
+        // Keywords are pipe-separated
+        if (pair.second.keyword.empty()) continue;
+        
+        std::stringstream ss(pair.second.keyword);
+        std::string segment;
+        bool found = false;
+        
+        while (std::getline(ss, segment, '|')) {
+            if (segment == keyword) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
 // Modify book attributes
 // Parameters with empty strings mean "don't modify this field"
 // Returns false if validation fails or book doesn't exist

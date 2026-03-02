@@ -55,8 +55,12 @@ public:
                     const std::string& name, const std::string& author,
                     const std::string& keyword, double price);
     
-    // Query operations (for future use)
+    // Query operations
     std::vector<Book> getAllBooks() const;
+    std::vector<Book> findByISBN(const std::string& ISBN) const;
+    std::vector<Book> findByName(const std::string& name) const;
+    std::vector<Book> findByAuthor(const std::string& author) const;
+    std::vector<Book> findByKeyword(const std::string& keyword) const;
 };
 
 #endif // BOOK_H

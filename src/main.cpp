@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
+#include <iomanip>
 #include "account.h"
 #include "book.h"
 
@@ -391,6 +393,101 @@ int main() {
                 // No output on success
             } else {
                 std::cout << "Invalid" << std::endl;
+            }
+            
+            continue;
+        }
+        
+        // Handle show command
+        // Syntax: show [filter?]
+        // Filter can be: -ISBN=[value], -name="[value]", -author="[value]", -keyword=[value]
+        // Requires privilege >= 1
+        if (command == "show") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 1 to show books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 1) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse filter parameter (optional)
+            std::string param;
+            std::vector<Book> results;
+            
+            if (ss >> param) {
+                // Check if parameter starts with '-'
+                if (param[0] != '-') {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                // Find the '=' sign
+                size_t eqPos = param.find('=');
+                if (eqPos == std::string::npos) {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                std::string paramName = param.substr(1, eqPos - 1);
+                std::string paramValue = param.substr(eqPos + 1);
+                
+                // Remove quotes if present (for name and author)
+                if (paramValue.length() >= 2 && paramValue[0] == '"' && paramValue[paramValue.length() - 1] == '"') {
+                    paramValue = paramValue.substr(1, paramValue.length() - 2);
+                }
+                
+                // Check if parameter value is empty
+                if (paramValue.empty()) {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                // Execute search based on parameter
+                if (paramName == "ISBN") {
+                    results = bookSystem.findByISBN(paramValue);
+                } else if (paramName == "name") {
+                    results = bookSystem.findByName(paramValue);
+                } else if (paramName == "author") {
+                    results = bookSystem.findByAuthor(paramValue);
+                } else if (paramName == "keyword") {
+                    // Check that keyword doesn't contain pipe (must be single keyword)
+                    if (paramValue.find('|') != std::string::npos) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
+                    results = bookSystem.findByKeyword(paramValue);
+                } else {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+            } else {
+                // No filter - show all books
+                results = bookSystem.getAllBooks();
+            }
+            
+            // Sort results lexicographically by ISBN
+            std::sort(results.begin(), results.end(), [](const Book& a, const Book& b) {
+                return a.ISBN < b.ISBN;
+            });
+            
+            // Output results
+            if (results.empty()) {
+                std::cout << std::endl;
+            } else {
+                for (const auto& book : results) {
+                    std::cout << book.ISBN << "\t"
+                              << book.name << "\t"
+                              << book.author << "\t"
+                              << book.keyword << "\t"
+                              << std::fixed << std::setprecision(2) << book.price << "\t"
+                              << book.quantity << std::endl;
+                }
             }
             
             continue;
