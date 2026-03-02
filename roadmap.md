@@ -4,10 +4,10 @@
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
 ## Current State
-- **Phase**: PLANNING (Post-M2 verification, bug found)
-- **Milestone**: M2 COMPLETE ✅ but bug discovered in su command
-- **Repository**: Account system with file persistence, but su optional password not implemented
-- **Cycles Used**: 20 (3 planning + 5 M1 impl + 2 M1 verify + 1 M2 impl + 2 M2 verify + 7 M2 audit/M3 planning)
+- **Phase**: PLANNING (Post-M2.1 completion, ready for M3)
+- **Milestone**: M2.1 COMPLETE ✅ (su optional password bug fixed)
+- **Repository**: Complete account system with all features, ready for book system
+- **Cycles Used**: 26 (3 planning + 5 M1 impl + 2 M1 verify + 1 M2 impl + 2 M2 verify + 7 M2.1 planning + 1 M2.1 impl + 5 M3 planning)
 
 ## Strategic Approach
 
@@ -69,10 +69,19 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M2.1: Fix su Optional Password Bug
-**Status**: NEXT - Ready to define  
+### M2.1: Fix su Optional Password Bug ✅ COMPLETE
+**Status**: VERIFIED AND PASSED  
 **Estimated Cycles**: 2  
+**Actual Cycles**: 1 implementation  
 **Description**: Fix critical bug in su command to support optional password per specification.
+
+**Deliverables**:
+- Modified su() to allow password omission when current privilege > target privilege
+- Added getAccountPrivilege() helper to AccountSystem
+- Updated main.cpp su command parsing to accept 1 or 2 parameters
+- Test 210 now passes (reduced Invalid count from 6 to 4)
+
+**Result**: Bug fixed, merged to master in commit 54f7ec1
 
 **Key Risks Identified** (Marcus, Cycle 10):
 - Login stack refactoring needed (M1 uses single login, not stack)
@@ -107,72 +116,98 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M3: Book System Basic
-**Status**: Planned  
-**Estimated Cycles**: 10  
-**Description**: Basic book operations with simple storage and linear search.
+### M3: Complete Book Management System (Merged M3+M4)
+**Status**: NEXT - Ready to define  
+**Estimated Cycles**: 22  
+**Description**: Implement all 5 book commands with file persistence and multi-attribute search. This is the critical path - 98% of tests require book system.
+
+**Strategic Decision** (Cycle 26):
+- Original M3/M4 split was artificial - they describe same interdependent work
+- Show command REQUIRES multi-index search from day 1 (cannot defer to M5)
+- All 5 book commands are tightly coupled
+- Better one coherent milestone than two confused ones
 
 **Deliverables**:
-- Commands: select, show (all books), buy
-- Book file storage (simple, not optimized)
-- ISBN uniqueness enforcement
-- Inventory management
-- Basic show command (no filters yet)
+1. Book data structure with all fields (ISBN, name, author, keyword, price, quantity)
+2. File-based book storage (books.dat)
+3. Commands (all 5):
+   - select [ISBN] - select/create book, track in login stack
+   - modify [params] - update book attributes (including ISBN change)
+   - import [quantity] [cost] - add inventory
+   - show [filter?] - query with lexicographic sorting by ISBN
+   - buy [ISBN] [quantity] - purchase, update inventory
+4. Multi-attribute search indices:
+   - ISBN index (primary, unique)
+   - Name index (allows duplicates)
+   - Author index (allows duplicates)
+   - Keyword index (segment-level, allows duplicates)
+5. Keyword parsing (pipe-separated `|`, validate segment uniqueness)
+6. ISBN modification with transactional index updates
+7. Integration with login stack (selected book per session)
+8. Comprehensive validation for all edge cases
+9. File persistence with efficient I/O
 
 **Test Strategy**:
-- Test against basic book test cases
-- Verify inventory updates correctly
-- Test select/buy interaction
+- Start with tests 11-20 (basic show commands)
+- Test 10 (1000 select/modify operations - stress test)
+- Mixed workflow tests (110, 150)
+- Target: 80-100 tests passing (all tests not requiring log system)
 
 **Acceptance Criteria**:
-- Basic book operations work
-- Books persist correctly
-- Inventory tracking accurate
-- Selected book persists in login session
-- Passes 30-40 total test cases
+- All 5 book commands working correctly
+- File persistence for book data (survives restart)
+- Multi-attribute search returns correct results
+- Lexicographic sorting by ISBN (show command)
+- Keyword parsing with segment validation (no duplicates)
+- ISBN modification updates all indices atomically
+- Selected book tracked per login session in stack
+- Pass 80-100 tests (target: all non-log tests)
+- No regression on account system tests (27/27 still passing)
+- Handles 1000+ operations efficiently (Test 10 completes)
+- Buy command transaction handling (simple log for now)
 
-**Why This Order**:
-- Get books working before optimizing
-- Validate requirements understanding
-- May discover simple storage is sufficient for basic operations
+**Why 22 cycles**:
+- 5 complex commands (not simple CRUD)
+- Multi-index implementation required (4 indices minimum)
+- Keyword parsing with segment-level validation and indexing
+- ISBN modification edge cases (update all indices, prevent duplicates)
+- Integration with existing login stack
+- Based on Diana's analysis: 20-26 cycles realistic (taking middle estimate)
+
+**Critical Insights** (from team analysis):
+- 98.1% of tests (205/209) require book system - this is THE bottleneck
+- Buy command is most frequent (107K uses, 33% of ALL operations)
+- Book commands: 196K occurrences (61.4% of all commands)
+- Must build for scale from day 1 - cannot "defer optimization"
+
+**Risk Mitigation**:
+- Build data structures first, then add commands incrementally
+- Test after each command (don't wait for all 5)
+- Reuse account system's file I/O pattern
+- LoginSession already has selectedBook field (no refactoring needed)
+
+**Tricky Parts Identified**:
+- Show command lexicographic sorting (must be exact)
+- Keyword segment parsing and duplicate detection
+- ISBN modification (must maintain index consistency)
+- Multi-index updates must be atomic (all or nothing)
+- Float precision (2 decimal places for price/cost)
 
 ---
 
-### M4: Advanced Book Features
+### M4: Log System (formerly M6)
 **Status**: Planned  
-**Estimated Cycles**: 8  
-**Description**: Complete book system with modify, import, and filtered search.
+**Estimated Cycles**: 6  
+**Description**: Implement logging and financial tracking features.
 
-**Deliverables**:
-- modify command with all parameters (-ISBN, -name, -author, -keyword, -price)
-- import command
-- show with filters (-ISBN, -name, -author, -keyword)
-- Keyword parsing (pipe-separated, no duplicates)
-- Multi-attribute search (may need simple indexes)
-
-**Test Strategy**:
-- Test complex query scenarios
-- Test ISBN modification (requires reindexing)
-- Test keyword edge cases
-
-**Acceptance Criteria**:
-- All book commands work correctly
-- Complex queries return correct results
-- Modify updates all indexes properly
-- Keyword handling correct (parsing, searching)
-- Passes 60-70 total test cases
-
-**Risk Areas**:
-- Keyword parsing complexity
-- ISBN modification requires updating multiple indexes
-- Selected book interaction with modify
+**Note**: Renumbered from M6 due to M3/M4 merge. M5 (Performance Optimization) removed - optimization built into M3.
 
 ---
 
-### M5: Performance Optimization
+### M5: Edge Cases & Final Polish (formerly M7)
 **Status**: Planned  
 **Estimated Cycles**: 8  
-**Description**: Profile performance and add optimized data structures ONLY IF NEEDED.
+**Description**: Handle all edge cases and prepare for hidden tests (1775).
 
 **Deliverables**:
 - Profile test case performance (especially stress tests 170-214)
@@ -293,7 +328,15 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-## Total Estimated Cycles: 58
+## Total Estimated Cycles: 57
+- M1: 7 actual (5 estimated)
+- M2: 3 actual (12 estimated) 
+- M2.1: 1 actual (2 estimated)
+- M3 (merged M3+M4): 22 estimated (was 18 split)
+- M4 (formerly M6): 6 estimated
+- M5 (formerly M7): 8 estimated
+- M6 (formerly M8): 5 estimated
+- Planning cycles used: 5 (cycles 1-3, 10, 19-26)
 
 ## Lessons Learned
 
@@ -318,6 +361,21 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - **✅ Good**: Marcus identified M2 underestimated by 40-50% (8→12 cycles)
 - **⚠️ Risk**: Login stack refactoring is architectural change, not feature add
 - **📊 Key Insight**: Better to overestimate cycles than rush and fail verification
+
+### Cycle 11-18 (M2 Implementation & Verification)
+- **✅ Success**: M2 completed in 1 cycle (Noah's exceptional work)
+- **✅ Success**: Apollo verification passed, 27/27 tests
+- **⚠️ Bug Found**: Su optional password not implemented (post-verification)
+- **📊 Key Insight**: Even thorough verification can miss spec details
+
+### Cycle 19-25 (M2.1 Bug Fix + M3 Planning)
+- **✅ Success**: Su bug fixed in 1 cycle (Leo)
+- **✅ Good**: Comprehensive team analysis (Emma, Sophia, Diana, Marcus, Liam)
+- **✅ Critical**: Diana identified M3 underestimated by 100% (10→20-26 cycles)
+- **✅ Critical**: Sophia's test analysis - 98% of tests need book system
+- **📊 Key Insight**: Artificial milestone splits create confusion - merge related work
+- **📊 Key Insight**: Cannot "defer optimization" when feature requires indices from day 1
+- **📊 Key Decision**: Merged M3+M4 into single coherent milestone (22 cycles)
 
 ### Strategic Decisions
 1. **Start simple, iterate**: In-memory → simple files → optimized indexes (only if needed)
