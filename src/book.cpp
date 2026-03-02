@@ -21,27 +21,47 @@ void BookSystem::loadBooks() {
     
     // Read books from file
     // Format: ISBN|Name|Author|Keyword|Price|Quantity
+    // Note: Keyword field can contain pipes, so we parse from both ends
     std::string line;
     while (std::getline(infile, line)) {
         if (line.empty()) continue;
         
-        std::stringstream ss(line);
-        std::string isbn, name, author, keyword, priceStr, quantityStr;
+        // Find the last two pipe positions (for Price and Quantity)
+        size_t lastPipe = line.rfind('|');
+        if (lastPipe == std::string::npos) continue;
         
-        // Parse pipe-delimited format
-        if (std::getline(ss, isbn, '|') &&
-            std::getline(ss, name, '|') &&
-            std::getline(ss, author, '|') &&
-            std::getline(ss, keyword, '|') &&
-            std::getline(ss, priceStr, '|') &&
-            std::getline(ss, quantityStr, '|')) {
-            
-            double price = std::stod(priceStr);
-            long long quantity = std::stoll(quantityStr);
-            
-            Book book(isbn, name, author, keyword, price, quantity);
-            books[isbn] = book;
-        }
+        size_t secondLastPipe = line.rfind('|', lastPipe - 1);
+        if (secondLastPipe == std::string::npos) continue;
+        
+        // Extract Price and Quantity from the end
+        std::string quantityStr = line.substr(lastPipe + 1);
+        std::string priceStr = line.substr(secondLastPipe + 1, lastPipe - secondLastPipe - 1);
+        
+        // Parse the first part (ISBN|Name|Author|Keyword)
+        std::string firstPart = line.substr(0, secondLastPipe);
+        
+        // Find first 3 pipes for ISBN, Name, Author
+        size_t firstPipe = firstPart.find('|');
+        if (firstPipe == std::string::npos) continue;
+        
+        size_t secondPipe = firstPart.find('|', firstPipe + 1);
+        if (secondPipe == std::string::npos) continue;
+        
+        size_t thirdPipe = firstPart.find('|', secondPipe + 1);
+        if (thirdPipe == std::string::npos) continue;
+        
+        // Extract fields
+        std::string isbn = firstPart.substr(0, firstPipe);
+        std::string name = firstPart.substr(firstPipe + 1, secondPipe - firstPipe - 1);
+        std::string author = firstPart.substr(secondPipe + 1, thirdPipe - secondPipe - 1);
+        std::string keyword = firstPart.substr(thirdPipe + 1);
+        
+        // Convert price and quantity
+        double price = std::stod(priceStr);
+        long long quantity = std::stoll(quantityStr);
+        
+        Book book(isbn, name, author, keyword, price, quantity);
+        books[isbn] = book;
     }
     
     infile.close();
