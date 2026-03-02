@@ -422,6 +422,11 @@ bool BookSystem::importBook(const std::string& ISBN, long long quantity, double 
     
     Book* book = &(it->second);
     
+    // Validate totalCost >= quantity * price
+    if (totalCost < quantity * book->price) {
+        return false;
+    }
+    
     // Increase quantity
     book->quantity += quantity;
     
