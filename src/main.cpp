@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include "account.h"
+#include "book.h"
 
 // Parse command and arguments from normalized string
 void parseCommand(const std::string& normalized, std::string& command, std::vector<std::string>& args) {
@@ -45,6 +46,7 @@ void parseCommandWithSpaces(const std::string& normalized, std::string& command,
 int main() {
     std::string line;
     AccountSystem accountSystem;
+    BookSystem bookSystem;
     
     // Main command loop - read line by line
     while (std::getline(std::cin, line)) {
@@ -216,6 +218,52 @@ int main() {
             } else {
                 std::cout << "Invalid" << std::endl;
             }
+            continue;
+        }
+        
+        // Handle select command
+        // Syntax: select [ISBN]
+        // Requires privilege >= 1 (user must be logged in)
+        // If book exists, select it; if not, create it and select it
+        if (command == "select") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 1 to select books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 1) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse ISBN
+            std::string isbn;
+            ss >> isbn;
+            
+            if (isbn.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Try to select existing book
+            bool bookExists = bookSystem.selectBook(isbn);
+            
+            if (!bookExists) {
+                // Book doesn't exist - create it
+                if (!bookSystem.createBook(isbn)) {
+                    // Failed to create (invalid ISBN)
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+            }
+            
+            // Set selected book in login session
+            accountSystem.setSelectedBook(isbn);
+            
+            // Success - no output
             continue;
         }
         
