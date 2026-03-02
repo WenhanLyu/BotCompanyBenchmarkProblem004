@@ -5,9 +5,11 @@
 #include <iomanip>
 
 const std::string BookSystem::BOOKS_FILE = "books.dat";
+const std::string BookSystem::FINANCE_FILE = "transactions.dat";
 
 BookSystem::BookSystem() {
     loadBooks();
+    loadFinance();
 }
 
 // Load books from file
@@ -120,6 +122,56 @@ void BookSystem::updateBook(const Book& book) {
     
     for (const auto& l : lines) {
         outfile << l << "\n";
+    }
+    
+    outfile.flush();
+    outfile.close();
+}
+
+// Load finance records from file
+void BookSystem::loadFinance() {
+    std::ifstream infile(FINANCE_FILE);
+    
+    if (!infile.is_open()) {
+        // File doesn't exist - no finance records to load
+        return;
+    }
+    
+    // Read finance records from file
+    // Format: type|amount
+    // type: 0 = INCOME, 1 = EXPENSE
+    std::string line;
+    while (std::getline(infile, line)) {
+        if (line.empty()) continue;
+        
+        size_t pipePos = line.find('|');
+        if (pipePos == std::string::npos) continue;
+        
+        std::string typeStr = line.substr(0, pipePos);
+        std::string amountStr = line.substr(pipePos + 1);
+        
+        int typeInt = std::stoi(typeStr);
+        double amount = std::stod(amountStr);
+        
+        FinanceRecord::Type type = (typeInt == 0) ? FinanceRecord::INCOME : FinanceRecord::EXPENSE;
+        financeRecords.push_back(FinanceRecord(type, amount));
+    }
+    
+    infile.close();
+}
+
+// Save all finance records to file (rewrite entire file)
+void BookSystem::saveFinance() {
+    std::ofstream outfile(FINANCE_FILE);
+    if (!outfile.is_open()) return;
+    
+    // Write all finance records
+    // Format: type|amount
+    // type: 0 = INCOME, 1 = EXPENSE
+    for (const auto& record : financeRecords) {
+        int typeInt = (record.type == FinanceRecord::INCOME) ? 0 : 1;
+        outfile << typeInt << "|" 
+                << std::fixed << std::setprecision(2) << record.amount << "\n";
     }
     
     outfile.flush();
@@ -403,6 +455,9 @@ double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
     // Record income transaction
     financeRecords.push_back(FinanceRecord(FinanceRecord::INCOME, totalCost));
     
+    // Save finance records to file
+    saveFinance();
+    
     return totalCost;
 }
 
@@ -435,6 +490,9 @@ bool BookSystem::importBook(const std::string& ISBN, long long quantity, double 
     
     // Record expense transaction
     financeRecords.push_back(FinanceRecord(FinanceRecord::EXPENSE, totalCost));
+    
+    // Save finance records to file
+    saveFinance();
     
     return true;
 }
