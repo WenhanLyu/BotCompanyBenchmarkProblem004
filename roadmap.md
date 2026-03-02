@@ -4,10 +4,10 @@
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
 ## Current State
-- **Phase**: PLANNING (Post-M1 verification)
-- **Milestone**: M1 COMPLETE ✅ - Preparing M2
-- **Repository**: Basic working system with build + root account + su/logout
-- **Cycles Used**: 10 (3 planning + 5 M1 implementation + 2 M1 verification)
+- **Phase**: PLANNING (Post-M2 verification, bug found)
+- **Milestone**: M2 COMPLETE ✅ but bug discovered in su command
+- **Repository**: Account system with file persistence, but su optional password not implemented
+- **Cycles Used**: 20 (3 planning + 5 M1 impl + 2 M1 verify + 1 M2 impl + 2 M2 verify + 7 M2 audit/M3 planning)
 
 ## Strategic Approach
 
@@ -55,10 +55,24 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M2: Account System Core + File Persistence
+### M2: Account System Core + File Persistence ✅ COMPLETE
+**Status**: VERIFIED AND PASSED (with bug discovered post-verification)  
+**Estimated Cycles**: 12  
+**Actual Cycles**: 1 implementation + 2 verification = 3 total  
+**Description**: Complete account system with all commands and file-based persistence.
+
+**Bug Discovered** (Cycle 19 by Nina):
+- su command does not implement optional password feature
+- Specification requires: "If current privilege > target privilege, password can be omitted"
+- Current implementation always requires password
+- Affects test 210 and likely others
+
+---
+
+### M2.1: Fix su Optional Password Bug
 **Status**: NEXT - Ready to define  
-**Estimated Cycles**: 12 (revised from 8 based on Marcus's risk analysis)  
-**Description**: Complete account system with all commands and simple file-based persistence.
+**Estimated Cycles**: 2  
+**Description**: Fix critical bug in su command to support optional password per specification.
 
 **Key Risks Identified** (Marcus, Cycle 10):
 - Login stack refactoring needed (M1 uses single login, not stack)
