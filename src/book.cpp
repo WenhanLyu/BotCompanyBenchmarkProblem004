@@ -395,6 +395,9 @@ double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
     // Update in file
     updateBook(*book);
     
+    // Record income transaction
+    financeRecords.push_back(FinanceRecord(FinanceRecord::INCOME, totalCost));
+    
     return totalCost;
 }
 
@@ -425,5 +428,42 @@ bool BookSystem::importBook(const std::string& ISBN, long long quantity, double 
     // Update in file
     updateBook(*book);
     
+    // Record expense transaction
+    financeRecords.push_back(FinanceRecord(FinanceRecord::EXPENSE, totalCost));
+    
     return true;
+}
+
+// Show finance - calculate income and expenses from transactions
+// count = 0: show all transactions
+// count > 0: show last N transactions
+std::string BookSystem::showFinance(int count) const {
+    double totalIncome = 0.0;
+    double totalExpense = 0.0;
+    
+    // Determine which transactions to include
+    int startIdx = 0;
+    int totalRecords = financeRecords.size();
+    
+    if (count > 0 && count < totalRecords) {
+        // Show last N transactions
+        startIdx = totalRecords - count;
+    }
+    // If count == 0 or count >= total records, include all
+    
+    // Calculate totals from selected range
+    for (int i = startIdx; i < totalRecords; i++) {
+        if (financeRecords[i].type == FinanceRecord::INCOME) {
+            totalIncome += financeRecords[i].amount;
+        } else {
+            totalExpense += financeRecords[i].amount;
+        }
+    }
+    
+    // Format output: "+ <income> - <expense>"
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2);
+    ss << "+ " << totalIncome << " - " << totalExpense;
+    
+    return ss.str();
 }

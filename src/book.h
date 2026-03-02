@@ -24,12 +24,22 @@ struct Book {
         : ISBN(isbn), name(n), author(auth), keyword(kw), price(p), quantity(qty) {}
 };
 
+// Finance record structure - tracks income and expenses
+struct FinanceRecord {
+    enum Type { INCOME, EXPENSE };
+    Type type;
+    double amount;
+    
+    FinanceRecord(Type t, double amt) : type(t), amount(amt) {}
+};
+
 // Book system class - manages books, indices, and file persistence
 class BookSystem {
 private:
     static const std::string BOOKS_FILE;
     
     std::map<std::string, Book> books;  // ISBN -> Book (in-memory, primary index)
+    std::vector<FinanceRecord> financeRecords;  // Transaction history
     
     // File I/O operations
     void loadBooks();
@@ -65,6 +75,9 @@ public:
     // Transaction operations
     double buyBook(const std::string& ISBN, long long quantity);  // Returns total cost, -1 on failure
     bool importBook(const std::string& ISBN, long long quantity, double totalCost);
+    
+    // Finance operations
+    std::string showFinance(int count = 0) const;  // Returns formatted finance report
 };
 
 #endif // BOOK_H

@@ -399,9 +399,9 @@ int main() {
         }
         
         // Handle show command
-        // Syntax: show [filter?]
+        // Syntax: show [filter?] or show finance [count?]
         // Filter can be: -ISBN=[value], -name="[value]", -author="[value]", -keyword=[value]
-        // Requires privilege >= 1
+        // Requires privilege >= 1 for books, >= 7 for finance
         if (command == "show") {
             // Check if user is logged in
             if (!accountSystem.isLoggedIn()) {
@@ -409,6 +409,36 @@ int main() {
                 continue;
             }
             
+            // Parse next parameter to check if it's "finance"
+            std::string param;
+            if (ss >> param) {
+                if (param == "finance") {
+                    // Handle "show finance" command
+                    // Requires privilege >= 7
+                    int currentPriv = accountSystem.getCurrentPrivilege();
+                    if (currentPriv < 7) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
+                    
+                    // Parse optional count parameter
+                    int count = 0;
+                    if (ss >> count) {
+                        if (ss.fail() || count < 0) {
+                            std::cout << "Invalid" << std::endl;
+                            continue;
+                        }
+                    }
+                    
+                    // Call showFinance and output result
+                    std::string result = bookSystem.showFinance(count);
+                    std::cout << result << std::endl;
+                    
+                    continue;
+                }
+            }
+            
+            // Regular show command handling
             // Check privilege (must be >= 1 to show books)
             int currentPriv = accountSystem.getCurrentPrivilege();
             if (currentPriv < 1) {
@@ -417,10 +447,10 @@ int main() {
             }
             
             // Parse filter parameter (optional)
-            std::string param;
             std::vector<Book> results;
             
-            if (ss >> param) {
+            if (!param.empty()) {
+                // We already read param above
                 // Check if parameter starts with '-'
                 if (param[0] != '-') {
                     std::cout << "Invalid" << std::endl;
