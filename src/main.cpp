@@ -1,24 +1,45 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "account.h"
 
-// Normalize whitespace: multiple spaces become single space, trim leading/trailing
-std::string normalizeWhitespace(const std::string& line) {
-    std::stringstream ss(line);
-    std::string word;
-    std::string result;
-    bool first = true;
+// Parse command and arguments from normalized string
+void parseCommand(const std::string& normalized, std::string& command, std::vector<std::string>& args) {
+    std::stringstream ss(normalized);
+    ss >> command;
     
-    while (ss >> word) {
-        if (!first) {
-            result += " ";
+    std::string arg;
+    while (ss >> arg) {
+        args.push_back(arg);
+    }
+}
+
+// Parse command but preserve spaces in last argument (for username)
+void parseCommandWithSpaces(const std::string& normalized, std::string& command, std::vector<std::string>& args, int maxArgs) {
+    std::stringstream ss(normalized);
+    ss >> command;
+    
+    // Read first (maxArgs - 1) arguments normally
+    for (int i = 0; i < maxArgs - 1; ++i) {
+        std::string arg;
+        if (ss >> arg) {
+            args.push_back(arg);
+        } else {
+            return;
         }
-        result += word;
-        first = false;
     }
     
-    return result;
+    // Read rest of line as last argument (may contain spaces)
+    std::string lastArg;
+    std::getline(ss, lastArg);
+    // Trim leading space
+    if (!lastArg.empty() && lastArg[0] == ' ') {
+        lastArg = lastArg.substr(1);
+    }
+    if (!lastArg.empty()) {
+        args.push_back(lastArg);
+    }
 }
 
 int main() {
@@ -27,16 +48,16 @@ int main() {
     
     // Main command loop - read line by line
     while (std::getline(std::cin, line)) {
-        // Normalize whitespace
-        std::string normalized = normalizeWhitespace(line);
+        // Trim and normalize whitespace, but preserve structure for username parsing
+        // We'll handle whitespace more carefully per command
         
         // Empty line - skip (no output)
-        if (normalized.empty()) {
+        if (line.empty()) {
             continue;
         }
         
         // Extract the command (first word)
-        std::stringstream ss(normalized);
+        std::stringstream ss(line);
         std::string command;
         ss >> command;
         
@@ -46,21 +67,19 @@ int main() {
         }
         
         // Handle su command
+        // Syntax: su [UserID] [Password]
         if (command == "su") {
-            std::string username, password;
-            ss >> username;
+            std::string userID, password;
+            ss >> userID >> password;
             
-            // Check if password is provided
-            if (ss >> password) {
-                // su with password
-                if (accountSystem.login(username, password)) {
-                    // Successful login - no output for su
-                    continue;
-                } else {
-                    std::cout << "Invalid" << std::endl;
-                }
+            if (userID.empty() || password.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            if (accountSystem.su(userID, password)) {
+                // Success - no output
             } else {
-                // su without password - for M1, this is invalid
                 std::cout << "Invalid" << std::endl;
             }
             continue;
@@ -69,8 +88,122 @@ int main() {
         // Handle logout command
         if (command == "logout") {
             if (accountSystem.logout()) {
-                // Successful logout - no output
+                // Success - no output
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            continue;
+        }
+        
+        // Handle register command
+        // Syntax: register [UserID] [Password] [Username]
+        // Username can contain spaces
+        if (command == "register") {
+            std::string userID, password;
+            ss >> userID >> password;
+            
+            // Read rest of line as username (may contain spaces)
+            std::string username;
+            std::getline(ss, username);
+            // Trim leading space
+            if (!username.empty() && username[0] == ' ') {
+                username = username.substr(1);
+            }
+            
+            if (userID.empty() || password.empty() || username.empty()) {
+                std::cout << "Invalid" << std::endl;
                 continue;
+            }
+            
+            if (accountSystem.registerAccount(userID, password, username)) {
+                // Success - no output
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            continue;
+        }
+        
+        // Handle useradd command
+        // Syntax: useradd [UserID] [Password] [Privilege] [Username]
+        // Username can contain spaces
+        if (command == "useradd") {
+            std::string userID, password, privStr;
+            ss >> userID >> password >> privStr;
+            
+            // Read rest of line as username (may contain spaces)
+            std::string username;
+            std::getline(ss, username);
+            // Trim leading space
+            if (!username.empty() && username[0] == ' ') {
+                username = username.substr(1);
+            }
+            
+            if (userID.empty() || password.empty() || privStr.empty() || username.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse privilege (must be single digit)
+            if (privStr.length() != 1 || !std::isdigit(privStr[0])) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            int privilege = privStr[0] - '0';
+            
+            if (accountSystem.useradd(userID, password, privilege, username)) {
+                // Success - no output
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            continue;
+        }
+        
+        // Handle passwd command
+        // Syntax: passwd [UserID] ([CurrentPassword])? [NewPassword]
+        // For privilege {7}: passwd [UserID] [NewPassword] (2 params)
+        // For privilege < {7}: passwd [UserID] [CurrentPassword] [NewPassword] (3 params)
+        if (command == "passwd") {
+            std::vector<std::string> args;
+            std::string arg;
+            while (ss >> arg) {
+                args.push_back(arg);
+            }
+            
+            bool success = false;
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            
+            if (currentPriv == 7 && args.size() == 2) {
+                // Privilege {7}: 2 parameters (no current password)
+                success = accountSystem.passwd(args[0], "", args[1], false);
+            } else if (currentPriv < 7 && args.size() == 3) {
+                // Privilege < {7}: 3 parameters (with current password)
+                success = accountSystem.passwd(args[0], args[1], args[2], true);
+            } else {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            if (success) {
+                // Success - no output
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            continue;
+        }
+        
+        // Handle delete command
+        // Syntax: delete [UserID]
+        if (command == "delete") {
+            std::string userID;
+            ss >> userID;
+            
+            if (userID.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            if (accountSystem.deleteUser(userID)) {
+                // Success - no output
             } else {
                 std::cout << "Invalid" << std::endl;
             }
