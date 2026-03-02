@@ -81,6 +81,7 @@ public:
     
     // Finance operations
     std::string showFinance(int count = 0) const;  // Returns formatted finance report
+    void reportFinance() const;  // Outputs detailed finance report to stdout
 };
 
 #endif // BOOK_H
