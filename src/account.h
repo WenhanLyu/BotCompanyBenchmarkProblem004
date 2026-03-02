@@ -75,6 +75,9 @@ public:
     bool isLoggedIn() const;
     std::string getCurrentSelectedBook() const;
     void setSelectedBook(const std::string& isbn);
+    
+    // Reporting
+    void reportEmployee() const;  // Outputs employee report to stdout
 };
 
 #endif // ACCOUNT_H

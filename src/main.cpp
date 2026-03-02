@@ -608,7 +608,7 @@ int main() {
         }
         
         // Handle report command
-        // Syntax: report finance
+        // Syntax: report finance | report employee
         // Requires privilege >= 7 (root only)
         if (command == "report") {
             // Check if user is logged in
@@ -617,21 +617,24 @@ int main() {
                 continue;
             }
             
-            // Parse next parameter - should be "finance"
+            // Parse next parameter
             std::string param;
             ss >> param;
             
+            // Check privilege (must be >= 7 for all reports)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 7) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             if (param == "finance") {
-                // Check privilege (must be >= 7 for finance reports)
-                int currentPriv = accountSystem.getCurrentPrivilege();
-                if (currentPriv < 7) {
-                    std::cout << "Invalid" << std::endl;
-                    continue;
-                }
-                
                 // Generate and output detailed finance report
                 bookSystem.reportFinance();
-                
+                continue;
+            } else if (param == "employee") {
+                // Generate and output employee report
+                accountSystem.reportEmployee();
                 continue;
             } else {
                 // Unknown report type

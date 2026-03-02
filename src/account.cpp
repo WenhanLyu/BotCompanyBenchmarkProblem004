@@ -2,6 +2,8 @@
 #include <cctype>
 #include <algorithm>
 #include <vector>
+#include <iostream>
+#include <iomanip>
 
 const std::string AccountSystem::ACCOUNTS_FILE = "accounts.dat";
 
@@ -339,4 +341,57 @@ bool AccountSystem::deleteUser(const std::string& userID) {
     deleteAccount(userID);
     
     return true;
+}
+
+// Generate employee report and output to stdout
+void AccountSystem::reportEmployee() const {
+    // Count employees by privilege level
+    int countRoot = 0;      // privilege 7
+    int countEmployee = 0;  // privilege 3
+    int countCustomer = 0;  // privilege 1
+    int countGuest = 0;     // privilege 0
+    
+    // Collect all accounts and sort by userID
+    std::vector<Account> sortedAccounts;
+    for (const auto& pair : accounts) {
+        sortedAccounts.push_back(pair.second);
+    }
+    std::sort(sortedAccounts.begin(), sortedAccounts.end(), 
+              [](const Account& a, const Account& b) {
+                  return a.userID < b.userID;
+              });
+    
+    // Count by privilege
+    for (const auto& account : sortedAccounts) {
+        switch (account.privilege) {
+            case 7: countRoot++; break;
+            case 3: countEmployee++; break;
+            case 1: countCustomer++; break;
+            case 0: countGuest++; break;
+        }
+    }
+    
+    // Output report in readable format
+    std::cout << "=== Employee Report ===" << std::endl;
+    std::cout << "Total Accounts: " << sortedAccounts.size() << std::endl;
+    std::cout << std::endl;
+    
+    std::cout << "By Privilege Level:" << std::endl;
+    std::cout << "  Root (7):      " << countRoot << std::endl;
+    std::cout << "  Employee (3):  " << countEmployee << std::endl;
+    std::cout << "  Customer (1):  " << countCustomer << std::endl;
+    std::cout << "  Guest (0):     " << countGuest << std::endl;
+    std::cout << std::endl;
+    
+    std::cout << "User Accounts:" << std::endl;
+    std::cout << std::setw(20) << std::left << "UserID"
+              << std::setw(30) << "Username"
+              << std::setw(10) << "Privilege" << std::endl;
+    std::cout << std::string(60, '-') << std::endl;
+    
+    for (const auto& account : sortedAccounts) {
+        std::cout << std::setw(20) << std::left << account.userID
+                  << std::setw(30) << account.username
+                  << std::setw(10) << account.privilege << std::endl;
+    }
 }
