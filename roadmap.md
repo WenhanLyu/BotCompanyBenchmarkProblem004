@@ -4,10 +4,10 @@
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
 ## Current State
-- **Phase**: PLANNING → IMPLEMENTATION (starting M1)
-- **Milestone**: Defining M1 (Minimal Viable System)
-- **Repository**: No code yet - documentation and analysis complete
-- **Cycles Used**: 3 (planning and analysis)
+- **Phase**: PLANNING (Post-M1 verification)
+- **Milestone**: M1 COMPLETE ✅ - Preparing M2
+- **Repository**: Basic working system with build + root account + su/logout
+- **Cycles Used**: 10 (3 planning + 5 M1 implementation + 2 M1 verification)
 
 ## Strategic Approach
 
@@ -20,9 +20,10 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ## Root Milestones (Revised)
 
-### M1: Minimal Viable System ✅ NEXT
-**Status**: Ready to define  
+### M1: Minimal Viable System ✅ COMPLETE
+**Status**: VERIFIED AND PASSED  
 **Estimated Cycles**: 5  
+**Actual Cycles**: 5 implementation + 2 verification = 7 total  
 **Description**: Get basic working system that compiles and passes simplest tests.
 
 **Deliverables**:
@@ -55,9 +56,15 @@ Implement a complete bookstore management system in C++ that passes all test cas
 ---
 
 ### M2: Account System Core + File Persistence
-**Status**: Planned  
-**Estimated Cycles**: 8  
+**Status**: NEXT - Ready to define  
+**Estimated Cycles**: 12 (revised from 8 based on Marcus's risk analysis)  
 **Description**: Complete account system with all commands and simple file-based persistence.
+
+**Key Risks Identified** (Marcus, Cycle 10):
+- Login stack refactoring needed (M1 uses single login, not stack)
+- File I/O infrastructure starts from zero
+- Input validation complexity underestimated
+- Edge case handling (Test 3 has 56 lines of errors)
 
 **Deliverables**:
 - All account commands: su, logout, register, passwd, useradd, delete
@@ -283,6 +290,20 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - **✅ Pivoted**: To vertical slice development with continuous testing
 - **📊 Key Insight**: Don't build infrastructure before validating requirements with real code
 - **📊 Key Insight**: 214 available test cases are invaluable - use them from Day 1
+
+### Cycle 4-9 (M1 Implementation)
+- **✅ Success**: M1 completed in exactly 5 cycles as estimated
+- **✅ Success**: 27/27 tests passed (far exceeded 5-10 target)
+- **✅ Good**: Build system, command parser, basic account system all working
+- **⚠️ Limitation**: Login stack is single-user (must refactor for M2)
+- **📊 Key Insight**: Vertical slice approach works - test from Day 1, iterate quickly
+- **📊 Key Insight**: Apollo's verification (2 cycles) caught the limitation but M1 still passes
+
+### Cycle 10 (M2 Planning)
+- **✅ Good**: Emma created comprehensive M2 requirements (23KB document)
+- **✅ Good**: Marcus identified M2 underestimated by 40-50% (8→12 cycles)
+- **⚠️ Risk**: Login stack refactoring is architectural change, not feature add
+- **📊 Key Insight**: Better to overestimate cycles than rush and fail verification
 
 ### Strategic Decisions
 1. **Start simple, iterate**: In-memory → simple files → optimized indexes (only if needed)
