@@ -37,6 +37,7 @@ struct FinanceRecord {
 class BookSystem {
 private:
     static const std::string BOOKS_FILE;
+    static const std::string FINANCE_FILE;
     
     std::map<std::string, Book> books;  // ISBN -> Book (in-memory, primary index)
     std::vector<FinanceRecord> financeRecords;  // Transaction history
@@ -45,6 +46,8 @@ private:
     void loadBooks();
     void saveBook(const Book& book);
     void updateBook(const Book& book);
+    void loadFinance();
+    void saveFinance();
     
     // Helper functions
     bool isValidISBN(const std::string& isbn) const;
