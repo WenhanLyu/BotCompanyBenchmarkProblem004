@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <vector>
 #include <iomanip>
+#include <iostream>
 
 const std::string BookSystem::BOOKS_FILE = "books.dat";
 
@@ -471,4 +472,30 @@ std::string BookSystem::showFinance(int count) const {
     ss << "+ " << totalIncome << " - " << totalExpense;
     
     return ss.str();
+}
+
+// Generate detailed finance report and output to stdout
+void BookSystem::reportFinance() const {
+    double totalIncome = 0.0;
+    double totalExpense = 0.0;
+    int transactionCount = financeRecords.size();
+    
+    // Calculate totals from all transactions
+    for (const auto& record : financeRecords) {
+        if (record.type == FinanceRecord::INCOME) {
+            totalIncome += record.amount;
+        } else {
+            totalExpense += record.amount;
+        }
+    }
+    
+    double netIncome = totalIncome - totalExpense;
+    
+    // Output report in readable format
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << "=== Financial Report ===" << std::endl;
+    std::cout << "Total Income:   " << totalIncome << std::endl;
+    std::cout << "Total Expense:  " << totalExpense << std::endl;
+    std::cout << "Net Income:     " << netIncome << std::endl;
+    std::cout << "Transaction Count: " << transactionCount << std::endl;
 }

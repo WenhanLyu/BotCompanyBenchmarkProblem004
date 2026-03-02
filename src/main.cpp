@@ -607,6 +607,39 @@ int main() {
             continue;
         }
         
+        // Handle report command
+        // Syntax: report finance
+        // Requires privilege >= 7 (root only)
+        if (command == "report") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse next parameter - should be "finance"
+            std::string param;
+            ss >> param;
+            
+            if (param == "finance") {
+                // Check privilege (must be >= 7 for finance reports)
+                int currentPriv = accountSystem.getCurrentPrivilege();
+                if (currentPriv < 7) {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                // Generate and output detailed finance report
+                bookSystem.reportFinance();
+                
+                continue;
+            } else {
+                // Unknown report type
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+        }
+        
         // For now, all other commands are invalid
         std::cout << "Invalid" << std::endl;
     }
