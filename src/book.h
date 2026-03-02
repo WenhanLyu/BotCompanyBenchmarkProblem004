@@ -51,6 +51,9 @@ public:
     bool createBook(const std::string& ISBN);
     Book* getBook(const std::string& ISBN);
     const Book* getBook(const std::string& ISBN) const;
+    bool modifyBook(const std::string& currentISBN, const std::string& newISBN,
+                    const std::string& name, const std::string& author,
+                    const std::string& keyword, double price);
     
     // Query operations (for future use)
     std::vector<Book> getAllBooks() const;

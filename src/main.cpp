@@ -267,6 +267,135 @@ int main() {
             continue;
         }
         
+        // Handle modify command
+        // Syntax: modify [-ISBN=value] [-name="value"] [-author="value"] [-keyword="value"] [-price=value]
+        // Requires privilege >= 3 and a book must be selected
+        if (command == "modify") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 3 to modify books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 3) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check if a book is selected
+            std::string selectedISBN = accountSystem.getCurrentSelectedBook();
+            if (selectedISBN.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse parameters
+            std::string newISBN = "";
+            std::string newName = "";
+            std::string newAuthor = "";
+            std::string newKeyword = "";
+            double newPrice = -1.0; // -1 means not specified
+            bool parseError = false;
+            
+            std::string param;
+            while (ss >> param) {
+                // Check if parameter starts with '-'
+                if (param[0] != '-') {
+                    parseError = true;
+                    break;
+                }
+                
+                // Find the '=' sign
+                size_t eqPos = param.find('=');
+                if (eqPos == std::string::npos) {
+                    parseError = true;
+                    break;
+                }
+                
+                std::string paramName = param.substr(1, eqPos - 1);
+                std::string paramValue = param.substr(eqPos + 1);
+                
+                // Remove quotes if present
+                if (paramValue.length() >= 2 && paramValue[0] == '"' && paramValue[paramValue.length() - 1] == '"') {
+                    paramValue = paramValue.substr(1, paramValue.length() - 2);
+                }
+                
+                // Process parameter
+                if (paramName == "ISBN") {
+                    if (!newISBN.empty()) {
+                        // Duplicate parameter
+                        parseError = true;
+                        break;
+                    }
+                    newISBN = paramValue;
+                } else if (paramName == "name") {
+                    if (!newName.empty()) {
+                        parseError = true;
+                        break;
+                    }
+                    newName = paramValue;
+                } else if (paramName == "author") {
+                    if (!newAuthor.empty()) {
+                        parseError = true;
+                        break;
+                    }
+                    newAuthor = paramValue;
+                } else if (paramName == "keyword") {
+                    if (!newKeyword.empty()) {
+                        parseError = true;
+                        break;
+                    }
+                    newKeyword = paramValue;
+                } else if (paramName == "price") {
+                    if (newPrice >= 0) {
+                        parseError = true;
+                        break;
+                    }
+                    try {
+                        newPrice = std::stod(paramValue);
+                        if (newPrice < 0) {
+                            parseError = true;
+                            break;
+                        }
+                    } catch (...) {
+                        parseError = true;
+                        break;
+                    }
+                } else {
+                    // Unknown parameter
+                    parseError = true;
+                    break;
+                }
+            }
+            
+            if (parseError) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Must have at least one parameter
+            if (newISBN.empty() && newName.empty() && newAuthor.empty() && 
+                newKeyword.empty() && newPrice < 0) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Modify the book
+            if (bookSystem.modifyBook(selectedISBN, newISBN, newName, newAuthor, newKeyword, newPrice)) {
+                // Success - update selected book ISBN if it changed
+                if (!newISBN.empty()) {
+                    accountSystem.setSelectedBook(newISBN);
+                }
+                // No output on success
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            
+            continue;
+        }
+        
         // For now, all other commands are invalid
         std::cout << "Invalid" << std::endl;
     }

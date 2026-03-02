@@ -206,3 +206,83 @@ std::vector<Book> BookSystem::getAllBooks() const {
     }
     return result;
 }
+
+// Modify book attributes
+// Parameters with empty strings mean "don't modify this field"
+// Returns false if validation fails or book doesn't exist
+bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& newISBN,
+                             const std::string& name, const std::string& author,
+                             const std::string& keyword, double price) {
+    // Book must exist
+    if (!bookExists(currentISBN)) return false;
+    
+    Book* book = getBook(currentISBN);
+    if (!book) return false;
+    
+    // Validate new ISBN if provided
+    if (!newISBN.empty()) {
+        if (!isValidISBN(newISBN)) return false;
+        
+        // Check if new ISBN already exists (but not same as current)
+        if (newISBN != currentISBN && bookExists(newISBN)) {
+            return false;
+        }
+    }
+    
+    // Validate other fields if provided
+    if (!name.empty() && !isValidName(name)) return false;
+    if (!author.empty() && !isValidAuthor(author)) return false;
+    if (!keyword.empty() && !isValidKeyword(keyword)) return false;
+    if (price >= 0 && price > 1e13) return false; // Price limit check
+    
+    // Handle ISBN modification (requires removing old entry and adding new one)
+    if (!newISBN.empty() && newISBN != currentISBN) {
+        // Create a copy of the book with new ISBN
+        Book newBook = *book;
+        newBook.ISBN = newISBN;
+        
+        // Apply other modifications
+        if (!name.empty()) newBook.name = name;
+        if (!author.empty()) newBook.author = author;
+        if (!keyword.empty()) newBook.keyword = keyword;
+        if (price >= 0) newBook.price = price;
+        
+        // Remove old book from memory
+        books.erase(currentISBN);
+        
+        // Add new book to memory
+        books[newISBN] = newBook;
+        
+        // Update file - need to rewrite entire file
+        std::vector<Book> allBooks;
+        for (const auto& pair : books) {
+            allBooks.push_back(pair.second);
+        }
+        
+        std::ofstream outfile(BOOKS_FILE);
+        if (!outfile.is_open()) return false;
+        
+        for (const auto& b : allBooks) {
+            outfile << b.ISBN << "|" 
+                    << b.name << "|" 
+                    << b.author << "|" 
+                    << b.keyword << "|" 
+                    << std::fixed << std::setprecision(2) << b.price << "|" 
+                    << b.quantity << "\n";
+        }
+        
+        outfile.flush();
+        outfile.close();
+    } else {
+        // No ISBN change - just update other fields
+        if (!name.empty()) book->name = name;
+        if (!author.empty()) book->author = author;
+        if (!keyword.empty()) book->keyword = keyword;
+        if (price >= 0) book->price = price;
+        
+        // Update in file
+        updateBook(*book);
+    }
+    
+    return true;
+}
