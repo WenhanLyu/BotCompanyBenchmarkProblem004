@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
+#include <iomanip>
 #include "account.h"
 #include "book.h"
 
@@ -389,6 +391,202 @@ int main() {
                     accountSystem.setSelectedBook(newISBN);
                 }
                 // No output on success
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            
+            continue;
+        }
+        
+        // Handle show command
+        // Syntax: show (-ISBN=[ISBN] | -name="[BookName]" | -author="[Author]" | -keyword="[Keyword]")?
+        // Requires privilege >= 1
+        if (command == "show") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 1 to show books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 1) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse filter parameter (optional)
+            std::string param;
+            std::vector<Book> results;
+            
+            if (ss >> param) {
+                
+                // Check if parameter starts with '-'
+                if (param[0] != '-') {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                // Find the '=' sign
+                size_t eqPos = param.find('=');
+                if (eqPos == std::string::npos) {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                std::string paramName = param.substr(1, eqPos - 1);
+                std::string paramValue = param.substr(eqPos + 1);
+                
+                // Remove quotes if present
+                if (paramValue.length() >= 2 && paramValue[0] == '"' && paramValue[paramValue.length() - 1] == '"') {
+                    paramValue = paramValue.substr(1, paramValue.length() - 2);
+                }
+                
+                // Check if parameter value is empty
+                if (paramValue.empty()) {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+                
+                // Execute search based on parameter
+                if (paramName == "ISBN") {
+                    results = bookSystem.findByISBN(paramValue);
+                } else if (paramName == "name") {
+                    results = bookSystem.findByName(paramValue);
+                } else if (paramName == "author") {
+                    results = bookSystem.findByAuthor(paramValue);
+                } else if (paramName == "keyword") {
+                    // Check that keyword doesn't contain pipe (must be single keyword)
+                    if (paramValue.find('|') != std::string::npos) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
+                    results = bookSystem.findByKeyword(paramValue);
+                } else {
+                    std::cout << "Invalid" << std::endl;
+                    continue;
+                }
+            } else {
+                // No filter - show all books
+                results = bookSystem.getAllBooks();
+            }
+            
+            // Sort results lexicographically by ISBN
+            std::sort(results.begin(), results.end(), [](const Book& a, const Book& b) {
+                return a.ISBN < b.ISBN;
+            });
+            
+            // Output results
+            if (results.empty()) {
+                std::cout << std::endl;
+            } else {
+                for (const auto& book : results) {
+                    std::cout << book.ISBN << "\t"
+                              << book.name << "\t"
+                              << book.author << "\t"
+                              << book.keyword << "\t"
+                              << std::fixed << std::setprecision(2) << book.price << "\t"
+                              << book.quantity << std::endl;
+                }
+            }
+            
+            continue;
+        }
+        
+        // Handle buy command
+        // Syntax: buy [ISBN] [Quantity]
+        // Requires privilege >= 1
+        if (command == "buy") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 1 to buy books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 1) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse ISBN and quantity
+            std::string isbn;
+            std::string quantityStr;
+            ss >> isbn >> quantityStr;
+            
+            if (isbn.empty() || quantityStr.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse quantity
+            long long quantity;
+            try {
+                quantity = std::stoll(quantityStr);
+            } catch (...) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Execute buy
+            double totalCost;
+            if (bookSystem.buyBook(isbn, quantity, totalCost)) {
+                std::cout << std::fixed << std::setprecision(2) << totalCost << std::endl;
+            } else {
+                std::cout << "Invalid" << std::endl;
+            }
+            
+            continue;
+        }
+        
+        // Handle import command
+        // Syntax: import [Quantity] [TotalCost]
+        // Requires privilege >= 3 and a book must be selected
+        if (command == "import") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 3 to import books)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 3) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check if a book is selected
+            std::string selectedISBN = accountSystem.getCurrentSelectedBook();
+            if (selectedISBN.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse quantity and total cost
+            std::string quantityStr, totalCostStr;
+            ss >> quantityStr >> totalCostStr;
+            
+            if (quantityStr.empty() || totalCostStr.empty()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Parse values
+            long long quantity;
+            double totalCost;
+            try {
+                quantity = std::stoll(quantityStr);
+                totalCost = std::stod(totalCostStr);
+            } catch (...) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Execute import
+            if (bookSystem.importBook(selectedISBN, quantity, totalCost)) {
+                // Success - no output
             } else {
                 std::cout << "Invalid" << std::endl;
             }

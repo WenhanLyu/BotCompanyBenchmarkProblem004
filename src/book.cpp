@@ -21,27 +21,40 @@ void BookSystem::loadBooks() {
     
     // Read books from file
     // Format: ISBN|Name|Author|Keyword|Price|Quantity
+    // Note: Keyword can contain pipes, so we need to parse carefully
     std::string line;
     while (std::getline(infile, line)) {
         if (line.empty()) continue;
         
-        std::stringstream ss(line);
-        std::string isbn, name, author, keyword, priceStr, quantityStr;
-        
-        // Parse pipe-delimited format
-        if (std::getline(ss, isbn, '|') &&
-            std::getline(ss, name, '|') &&
-            std::getline(ss, author, '|') &&
-            std::getline(ss, keyword, '|') &&
-            std::getline(ss, priceStr, '|') &&
-            std::getline(ss, quantityStr, '|')) {
-            
-            double price = std::stod(priceStr);
-            long long quantity = std::stoll(quantityStr);
-            
-            Book book(isbn, name, author, keyword, price, quantity);
-            books[isbn] = book;
+        // Find pipe positions - we need to parse from both ends
+        // since keyword can contain pipes
+        std::vector<size_t> pipes;
+        for (size_t i = 0; i < line.length(); ++i) {
+            if (line[i] == '|') pipes.push_back(i);
         }
+        
+        // Need at least 5 pipes (6 fields)
+        if (pipes.size() < 5) continue;
+        
+        // Parse from beginning: ISBN, Name, Author
+        std::string isbn = line.substr(0, pipes[0]);
+        std::string name = line.substr(pipes[0] + 1, pipes[1] - pipes[0] - 1);
+        std::string author = line.substr(pipes[1] + 1, pipes[2] - pipes[1] - 1);
+        
+        // Parse from end: Price, Quantity
+        std::string priceStr = line.substr(pipes[pipes.size() - 2] + 1, 
+                                          pipes[pipes.size() - 1] - pipes[pipes.size() - 2] - 1);
+        std::string quantityStr = line.substr(pipes[pipes.size() - 1] + 1);
+        
+        // Keyword is everything in between
+        std::string keyword = line.substr(pipes[2] + 1, 
+                                         pipes[pipes.size() - 2] - pipes[2] - 1);
+        
+        double price = std::stod(priceStr);
+        long long quantity = std::stoll(quantityStr);
+        
+        Book book(isbn, name, author, keyword, price, quantity);
+        books[isbn] = book;
     }
     
     infile.close();
@@ -283,6 +296,110 @@ bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& n
         // Update in file
         updateBook(*book);
     }
+    
+    return true;
+}
+
+// Find books by ISBN (exact match)
+std::vector<Book> BookSystem::findByISBN(const std::string& ISBN) const {
+    std::vector<Book> result;
+    const Book* book = getBook(ISBN);
+    if (book) {
+        result.push_back(*book);
+    }
+    return result;
+}
+
+// Find books by name (exact match)
+std::vector<Book> BookSystem::findByName(const std::string& name) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.name == name) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by author (exact match)
+std::vector<Book> BookSystem::findByAuthor(const std::string& author) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        if (pair.second.author == author) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Find books by keyword (segment match - keyword contains this segment)
+std::vector<Book> BookSystem::findByKeyword(const std::string& keyword) const {
+    std::vector<Book> result;
+    for (const auto& pair : books) {
+        // Check if the keyword appears as a segment in the book's keywords
+        // Keywords are pipe-separated
+        if (pair.second.keyword.empty()) continue;
+        
+        std::stringstream ss(pair.second.keyword);
+        std::string segment;
+        bool found = false;
+        
+        while (std::getline(ss, segment, '|')) {
+            if (segment == keyword) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            result.push_back(pair.second);
+        }
+    }
+    return result;
+}
+
+// Buy books - reduce inventory and return total cost
+bool BookSystem::buyBook(const std::string& ISBN, long long quantity, double& totalCost) {
+    // Validate quantity
+    if (quantity <= 0) return false;
+    
+    // Book must exist
+    if (!bookExists(ISBN)) return false;
+    
+    Book* book = getBook(ISBN);
+    if (!book) return false;
+    
+    // Check if enough inventory
+    if (book->quantity < quantity) return false;
+    
+    // Calculate total cost
+    totalCost = book->price * quantity;
+    
+    // Reduce inventory
+    book->quantity -= quantity;
+    
+    // Update in file
+    updateBook(*book);
+    
+    return true;
+}
+
+// Import books - add inventory (for selected book)
+bool BookSystem::importBook(const std::string& ISBN, long long quantity, double totalCost) {
+    // Validate quantity
+    if (quantity <= 0) return false;
+    
+    // Book must exist
+    if (!bookExists(ISBN)) return false;
+    
+    Book* book = getBook(ISBN);
+    if (!book) return false;
+    
+    // Add to inventory
+    book->quantity += quantity;
+    
+    // Update in file
+    updateBook(*book);
     
     return true;
 }
