@@ -68,11 +68,20 @@ int main() {
         
         // Handle su command
         // Syntax: su [UserID] [Password]
+        // Password can be omitted if current privilege > target privilege
         if (command == "su") {
             std::string userID, password;
-            ss >> userID >> password;
+            ss >> userID;
             
-            if (userID.empty() || password.empty()) {
+            // Read password if provided (might be empty)
+            if (ss >> password) {
+                // Password was provided
+            } else {
+                // Password was not provided - set to empty
+                password = "";
+            }
+            
+            if (userID.empty()) {
                 std::cout << "Invalid" << std::endl;
                 continue;
             }

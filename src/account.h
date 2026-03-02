@@ -71,6 +71,7 @@ public:
     
     // Privilege and state queries
     int getCurrentPrivilege() const;
+    int getAccountPrivilege(const std::string& userID) const;
     bool isLoggedIn() const;
     std::string getCurrentSelectedBook() const;
     void setSelectedBook(const std::string& isbn);
