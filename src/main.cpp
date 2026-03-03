@@ -353,6 +353,12 @@ int main() {
                     pos = endPos;
                 }
                 
+                // Check if parameter value is empty
+                if (paramValue.empty()) {
+                    parseError = true;
+                    break;
+                }
+                
                 // Process parameter
                 if (paramName == "ISBN") {
                     if (!newISBN.empty()) {
