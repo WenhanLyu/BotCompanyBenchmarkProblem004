@@ -3,14 +3,18 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 91)
-- **Phase**: PLANNING (post-M5 independent evaluation)
-- **Repository**: M5 fixes applied but NEW bugs discovered in evaluation
+## Current State (Cycle 94)
+- **Phase**: PLANNING (post-M5.1 deadline miss)
+- **Repository**: M5.1 fixes created but NOT MERGED to master
+  - All 3 fixes completed and verified individually
+  - PRs #5, #6 open; noah/fix-finance-comment branch exists
+  - Master still has 3 bugs
+- **Problem Status**:
   - Problem 1075: 93/100 (only 2 failures: testpoints 3, 212)
   - Problem 1775: 0/100 (COMPLETE FAILURE - hidden tests)
 - **Submissions Used**: 1/8
-- **Status**: Three additional critical bugs found in blind evaluation
-- **Cycles Used**: 91 total
+- **Status**: M5.1 implementation done, needs merge and verification
+- **Cycles Used**: 94 total
 
 ## OJ Submission #1 Analysis
 
@@ -65,7 +69,8 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - M4: Fix Critical Bugs ✅ COMPLETE
 - M4.1: Fix Quoted String Parsing Bug ✅ COMPLETE
 - M5: Fix OJ Submission #1 Failures ✅ COMPLETE (but more bugs found)
-- **M5.1: Fix Remaining Edge Case Validation Bugs** ← CURRENT
+- M5.1: Fix Remaining Edge Case Validation Bugs ⚠️ INCOMPLETE (deadline missed)
+- **M5.1.1: Merge and Verify M5.1 Fixes** ← CURRENT
 
 ## M5: Fix OJ Submission #1 Failures ✅ COMPLETE
 
@@ -85,8 +90,9 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ## M5.1: Fix Remaining Edge Case Validation Bugs
 
-**Status**: Ready for IMPLEMENTATION  
-**Estimated Cycles**: 2-3  
+**Status**: INCOMPLETE (deadline missed - Ares used 3/3 cycles)  
+**Estimated Cycles**: 3 (used)
+**Actual Result**: Implementation completed but NOT merged to master
 **Description**: Fix newly discovered edge case validation bugs found in blind evaluation
 
 **Bugs Found in Cycle 91 Evaluation**:
@@ -118,7 +124,20 @@ Implement a complete bookstore management system in C++ that passes all test cas
    - Verify if this is intended per spec
    - Fix time: 10 minutes if needed
 
-**Acceptance Criteria**:
+**What Was Completed (Cycles 92-94)**:
+1. ✅ BUG #1 fix created: leo/fix-quit-exit-validation branch, PR #5
+2. ✅ BUG #2 fix created: maya/fix-show-multi-params-v2 branch, PR #6
+3. ✅ BUG #3 fix created: noah/fix-finance-comment branch (comment update only)
+4. ✅ All fixes tested individually and work correctly
+
+**What Was NOT Completed**:
+1. ❌ PRs not merged to master
+2. ❌ No integration testing after merging all fixes
+3. ❌ No final verification on master
+
+**Root Cause**: Milestone underestimated the merge+verify workflow overhead
+
+**Acceptance Criteria** (original):
 - quit/exit validate extra arguments correctly
 - show rejects multiple parameters
 - show finance 0 behavior verified and correct
@@ -140,7 +159,59 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
+## M5.1.1: Merge and Verify M5.1 Fixes
+
+**Status**: Ready for IMPLEMENTATION  
+**Estimated Cycles**: 2
+**Description**: Merge the three completed M5.1 fixes to master and verify they work together
+
+**Current State**:
+- All three fixes exist in branches and are verified individually:
+  - leo/fix-quit-exit-validation (PR #5)
+  - maya/fix-show-multi-params-v2 (PR #6)
+  - noah/fix-finance-comment (no PR yet)
+- Master branch still has all 3 bugs
+
+**Tasks**:
+1. Merge PR #5 (Leo's quit/exit validation fix)
+2. Merge PR #6 (Maya's show multi-parameter fix)
+3. Create PR and merge Noah's comment fix (or merge directly if trivial)
+4. Run integration tests to verify all fixes work together
+5. Run regression tests to ensure no existing functionality broke
+6. Final smoke test of critical commands
+
+**Acceptance Criteria**:
+- All three branches merged to master
+- `quit extra` outputs "Invalid" ✓
+- `exit arg` outputs "Invalid" ✓
+- `show -ISBN=A -name="B"` outputs "Invalid" ✓
+- book.cpp comment updated to match spec ✓
+- All existing tests still pass (no regressions)
+- Build succeeds, no compiler warnings
+- Ready for OJ submission #2
+
+**Why This Milestone**:
+- Work is 95% done - just needs completion
+- Merging and verification is a distinct phase from implementation
+- Better to have a small "completion" milestone than restart M5.1
+- 2 cycles is enough for: review PRs → merge → test → verify
+
+**Budget Justification**:
+- Cycle 1: Merge all 3 fixes, run basic tests
+- Cycle 2: Comprehensive regression testing and final verification
+
+---
+
 ## Lessons Learned
+
+### Cycle 94 (M5.1 Deadline Miss)
+- **⚠️ Critical**: Milestones must include "merge to master" as explicit acceptance criteria
+- **⚠️ Critical**: Implementation time ≠ completion time. Budget for: code → PR → review → merge → verify
+- **📊 Key Insight**: 3 cycles was enough for implementation but not for complete workflow
+- **✅ Good**: All fixes were completed and tested individually - quality was high
+- **⚠️ Process**: For small fixes, consider reducing PR overhead (one branch for multiple related fixes)
+- **📊 Decision**: Create small "completion" milestone (M5.1.1) rather than breaking down or restarting
+- **✅ Strategy**: When work is 95% done, finish it before moving on
 
 ### Cycle 91 (Post-M5 Blind Evaluation)
 - **⚠️ Critical**: Fixes can be INCOMPLETE - M5 fixed "extra args" but missed quit/exit
@@ -168,20 +239,22 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ## Next Actions
 
-1. **Athena (Cycle 91)**: 
-   - ✅ M5 completed but found insufficient in blind evaluation
-   - ✅ Three new critical bugs identified
-   - Ready to hand off M5.1 to Ares
+1. **Athena (Cycle 94)**: 
+   - ✅ Evaluated M5.1 deadline miss
+   - ✅ Verified all fixes exist and work individually
+   - ✅ Identified root cause: merge+verify not in milestone
+   - ✅ Created M5.1.1 to complete the work
+   - Ready to hand off M5.1.1 to Ares
    
-2. **Ares Team (M5.1)**: 
-   - Fix quit/exit extra argument validation (CRITICAL)
-   - Fix show multi-parameter validation (CRITICAL)
-   - Verify show finance 0 behavior (HIGH)
-   - Optional: Verify su password check behavior
-   - Comprehensive validation sweep
-   - Test thoroughly
+2. **Ares Team (M5.1.1)**: 
+   - Merge PR #5 (quit/exit validation)
+   - Merge PR #6 (show multi-parameter validation)
+   - Merge Noah's comment fix
+   - Run integration tests
+   - Verify all fixes work together on master
+   - No regressions
 
-3. **After M5.1**: OJ submission #2 with 95%+ confidence
+3. **After M5.1.1**: OJ submission #2 with 95%+ confidence
 
 ---
 
