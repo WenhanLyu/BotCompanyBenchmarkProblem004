@@ -75,8 +75,9 @@ int main() {
             std::string extra;
             if (ss >> extra) {
                 std::cout << "Invalid" << std::endl;
+                continue;  // Invalid quit/exit should not exit program
             }
-            break;
+            break;  // Valid quit/exit with no args - exit program
         }
         
         // Handle su command
