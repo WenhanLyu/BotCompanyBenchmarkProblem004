@@ -1,0 +1,86 @@
+# Regression Test Results
+Generated: Tue Mar  3 01:40:34 EST 2026
+
+- ✅ demo1
+- ✅ demo2
+- ✅ demo3
+- ✅ demo4
+- ✅ demo5
+- ✅ demo6
+- ✅ demo7
+- ✅ demo8
+- ✅ demo9
+- ✅ regr_test1
+- ✅ regr_test10
+- ✅ regr_test11
+- ✅ regr_test12
+- ✅ regr_test13
+- ✅ regr_test14
+- ✅ regr_test15
+- ✅ regr_test16
+- ✅ regr_test17
+- ✅ regr_test18
+- ✅ regr_test19
+- ✅ regr_test2
+- ✅ regr_test20_verify
+- ✅ regr_test20
+- ✅ regr_test21
+- ✅ regr_test22
+- ✅ regr_test3
+- ✅ regr_test4
+- ✅ regr_test5
+- ✅ regr_test6
+- ✅ regr_test7
+- ✅ regr_test8
+- ✅ regr_test9
+- ✅ test_quoted_bug
+- ✅ test_quoted
+- ✅ test_quoted1
+- ✅ test_quoted10
+- ✅ test_quoted11
+- ✅ test_quoted12
+- ✅ test_quoted13
+- ✅ test_quoted14
+- ✅ test_quoted15
+- ✅ test_quoted16
+- ✅ test_quoted17
+- ✅ test_quoted18
+- ✅ test_quoted2
+- ✅ test_quoted3
+- ✅ test_quoted4
+- ✅ test_quoted5
+- ✅ test_quoted6
+- ✅ test_quoted7
+- ✅ test_quoted8
+- ✅ test_quoted9
+- ✅ test_delete
+- ✅ test_dq
+- ✅ test_finance_edge
+- ✅ test_finance_edge2
+- ✅ test_finance_edge3
+- ✅ test_finance_val
+- ✅ test_finance_val2
+- ✅ test_finance
+- ✅ test_log_simple
+- ✅ test_persist1
+- ✅ test_root
+- ✅ test_root2
+- ✅ test_show_name
+- ✅ test_simple_modify
+- ✅ test_simple_name
+- ✅ test1
+- ✅ test2
+- ✅ test3
+- ✅ step1
+- ✅ step2
+- ✅ step3
+- ✅ step4
+- ✅ step5
+
+## Summary
+- **Total**: 75
+- **Passed**: 75 ✅
+- **Failed**: 0 ❌
+- **Success Rate**: 100%
+
+**Result**: 🎉 ALL REGRESSION TESTS PASSED
