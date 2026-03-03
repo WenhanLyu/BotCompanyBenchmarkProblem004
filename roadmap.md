@@ -3,18 +3,18 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 104)
-- **Phase**: PLANNING (post-M5.1.1 completion, regression found)
-- **Repository**: M5.1 fixes ALL MERGED to master
-  - BUG #1 fix (quit/exit validation): MERGED but HAS REGRESSION
+## Current State (Cycle 107)
+- **Phase**: PLANNING (post-M5.1.2 completion, evaluating readiness for OJ submission #2)
+- **Repository**: All M5.1 fixes COMPLETE and merged to master (commit cba884a)
+  - BUG #1 fix (quit/exit validation): FIXED ✓ (control flow corrected)
   - BUG #2 fix (show multi-param): MERGED and working ✓
   - BUG #3 fix (finance comment): MERGED and working ✓
-- **Problem Status**:
+- **Problem Status** (from OJ submission #1):
   - Problem 1075: 93/100 (only 2 failures: testpoints 3, 212)
   - Problem 1775: 0/100 (COMPLETE FAILURE - hidden tests)
 - **Submissions Used**: 1/8
-- **Status**: Critical regression found in quit/exit validation
-- **Cycles Used**: 104 total
+- **Status**: M5.1.2 complete, evaluating whether fixes resolve OJ failures
+- **Cycles Used**: 107 total
 
 ## OJ Submission #1 Analysis
 
@@ -200,10 +200,10 @@ Actual: "Invalid" then program exits (never reaches su)
 
 ---
 
-## M5.1.2: Fix quit/exit Control Flow Regression
+## M5.1.2: Fix quit/exit Control Flow Regression ✅ COMPLETE
 
-**Status**: Ready for IMPLEMENTATION  
-**Estimated Cycles**: 1
+**Status**: COMPLETE (Cycle 105)  
+**Estimated Cycles**: 1 (used 1)
 **Description**: Fix critical regression in quit/exit validation where program exits instead of continuing after outputting "Invalid"
 
 **The Bug**:
@@ -314,25 +314,41 @@ Invalid
 
 ---
 
-## Next Actions
+**What Was Completed (Cycle 105)**:
+1. ✅ Leo fixed the control flow bug in src/main.cpp lines 74-80
+2. ✅ quit/exit with extra args now output "Invalid" and **continue** (not exit)
+3. ✅ quit/exit without args still exit cleanly
+4. ✅ Commit cba884a pushed to master
+5. ✅ All tests passing
 
-1. **Athena (Cycle 104)**: 
-   - ✅ M5.1.1 completed: All 3 fixes merged to master
-   - ✅ Emma's audit found critical regression in quit/exit validation
-   - ✅ Analyzed bug: Control flow error (unconditional break)
-   - ✅ Created M5.1.2 milestone with exact fix specified
-   - Ready to hand off M5.1.2 to Ares
-   
-2. **Ares Team (M5.1.2)**: 
-   - Fix src/main.cpp lines 74-79
-   - Move break inside else clause
-   - Add continue after "Invalid" output
-   - Test: `quit extra` followed by more commands
-   - Verify all existing tests still pass
-
-3. **After M5.1.2**: Final verification sweep, then OJ submission #2
+**Acceptance Criteria Status**:
+- ✅ `quit extra` outputs "Invalid" and continues
+- ✅ `exit extra` outputs "Invalid" and continues
+- ✅ `quit` (no args) exits cleanly
+- ✅ `exit` (no args) exits cleanly
+- ✅ Test case passes completely
+- ✅ Build succeeds
 
 ---
 
-**Last Updated**: Cycle 104 (Athena)  
-**Status**: M5.1.2 ready for implementation - 1 critical regression fix needed
+## Next Actions
+
+1. **Athena (Cycle 107)**: 
+   - ✅ M5.1.2 verified complete (Leo's fix working correctly)
+   - Scheduled independent evaluation team to assess:
+     - Verify all M5.1 fixes are working (Iris)
+     - Analyze testpoint 3 failure (Oliver)
+     - Analyze testpoint 212 failure (Fiona)
+     - Analyze problem 1775 failures (Gordon)
+     - Comprehensive code audit (Marcus)
+   - Decision point: Are we ready for OJ submission #2?
+   
+2. **Next Milestone Options**:
+   - Option A: If fixes likely resolved failures → OJ Submission #2
+   - Option B: If more issues found → Fix identified bugs first
+   - Option C: If unclear → More targeted testing/analysis
+
+---
+
+**Last Updated**: Cycle 107 (Athena)  
+**Status**: M5.1.2 complete, evaluation in progress to determine readiness for OJ submission #2
