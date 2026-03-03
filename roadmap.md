@@ -3,14 +3,14 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 83)
-- **Phase**: PLANNING → Ready to transition to IMPLEMENTATION
-- **Repository**: First ACMOJ submission failed
+## Current State (Cycle 91)
+- **Phase**: PLANNING (post-M5 independent evaluation)
+- **Repository**: M5 fixes applied but NEW bugs discovered in evaluation
   - Problem 1075: 93/100 (only 2 failures: testpoints 3, 212)
   - Problem 1775: 0/100 (COMPLETE FAILURE - hidden tests)
 - **Submissions Used**: 1/8
-- **Root Cause Identified**: TWO critical parsing bugs in main.cpp
-- **Cycles Used**: 83 total
+- **Status**: Three additional critical bugs found in blind evaluation
+- **Cycles Used**: 91 total
 
 ## OJ Submission #1 Analysis
 
@@ -64,80 +64,126 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - M3: Complete Book Management System ✅ COMPLETE
 - M4: Fix Critical Bugs ✅ COMPLETE
 - M4.1: Fix Quoted String Parsing Bug ✅ COMPLETE
-- **M5: Fix OJ Submission #1 Failures** ← CURRENT
+- M5: Fix OJ Submission #1 Failures ✅ COMPLETE (but more bugs found)
+- **M5.1: Fix Remaining Edge Case Validation Bugs** ← CURRENT
 
-## M5: Fix OJ Submission #1 Failures
+## M5: Fix OJ Submission #1 Failures ✅ COMPLETE
 
-**Status**: Investigation COMPLETE → Ready for IMPLEMENTATION  
+**Status**: COMPLETE (Cycles 83-89)  
+**Actual Cycles**: 7 (Investigation: 7, Implementation: 2, Verification: 1)
+
+**Bugs Fixed**:
+1. ✅ BUG #1: Whitespace-only lines (Leo, commit 477f6b0)
+2. ✅ BUG #2: Extra arguments validation (Maya, commit 9fa9d41)
+3. ✅ BUG #3: passwd 3-arg form (Alice, commit caea411)
+4. ✅ BUG #4: Empty parameter validation (Maya, commit 10f75f4)
+5. ✅ BUG #5: Empty keyword trailing pipe (Diana, commit 2173930)
+
+**Result**: Passed Apollo verification, but Athena's blind evaluation (Cycle 91) found additional bugs
+
+---
+
+## M5.1: Fix Remaining Edge Case Validation Bugs
+
+**Status**: Ready for IMPLEMENTATION  
 **Estimated Cycles**: 2-3  
-**Description**: Fix two critical parsing bugs causing 1775 failures
+**Description**: Fix newly discovered edge case validation bugs found in blind evaluation
 
-**Investigation Complete** (Cycles 76-83):
-1. ✅ Review OJ results and identify failure pattern (Athena)
-2. ✅ Analyze spec for validation requirements (Gordon, Bob)
-3. ✅ Test empty parameter validation (Maya - FIXED)
-4. ✅ Test passwd 3-arg form (Alice - FIXED)
-5. ✅ Test keyword validation (Diana - FIXED)
-6. ✅ Systematic edge case audit (Gordon - FOUND 2 CRITICAL BUGS)
-7. ✅ Character set/length validation (Bob - 100% compliant)
-8. ✅ Build and test current code (Emma - all commands work)
+**Bugs Found in Cycle 91 Evaluation**:
 
-**Bugs to Fix**:
-1. ✅ BUG #3: passwd 3-arg form (Alice, commit caea411)
-2. ✅ BUG #4: Empty parameter validation (Maya, commit 10f75f4)
-3. ✅ BUG #5: Empty keyword trailing pipe (Diana, commit 2173930)
-4. ⏳ BUG #1: Whitespace-only lines output "Invalid" ← NEXT
-5. ⏳ BUG #2: Extra arguments silently ignored ← NEXT
+**CRITICAL BUGS** (Must fix before submission):
+1. ❌ **quit/exit don't validate extra arguments** (Bob)
+   - Location: main.cpp lines 74-76
+   - Issue: `quit extra` exits without outputting "Invalid"
+   - Same for `exit extra`
+   - Impact: Basic validation gap, high probability in hidden tests
+   - Fix time: 5 minutes
+
+2. ❌ **show accepts multiple parameters** (Gordon)
+   - Location: main.cpp lines 540-610
+   - Issue: `show -ISBN=A -name="B"` should return "Invalid" per spec R71
+   - Currently succeeds
+   - Impact: HIGH - clear spec violation
+   - Fix time: 15 minutes
+
+**HIGH PRIORITY** (Should verify):
+3. ⚠️ **show finance 0 logic inconsistency** (Vera)
+   - main.cpp says output empty line, book.cpp comment says "include all"
+   - Need to verify spec requirement and align
+   - Fix time: 10-30 minutes
+
+**MEDIUM PRIORITY** (Optional verification):
+4. ⚠️ **su password verification when not required** (Vera)
+   - When user has higher privilege, wrong password still causes failure
+   - Verify if this is intended per spec
+   - Fix time: 10 minutes if needed
 
 **Acceptance Criteria**:
-- BUG #1 fixed: Whitespace-only lines produce no output
-- BUG #2 fixed: Extra arguments cause "Invalid"
-- All edge cases tested
-- No regression in existing tests
-- Ready for OJ submission #2
+- quit/exit validate extra arguments correctly
+- show rejects multiple parameters
+- show finance 0 behavior verified and correct
+- Comprehensive validation sweep completed
+- All previous tests still pass
+- Ready for OJ submission #2 with high confidence
+
+**Why This Milestone**:
+- M5 fixes were incomplete - missed quit/exit in extra args validation
+- Gordon independently found show multi-param bug
+- Pattern recognition: If we missed 2-3 obvious bugs, likely more exist
+- Better to fix KNOWN bugs now than waste submissions on them
+- All fixes are simple (< 1 hour total implementation time)
 
 **Budget Awareness**:
 - Submissions remaining: 7/8
-- High confidence fix - only 2 remaining bugs, both confirmed
-- Target: 100/100 on 1075, 90+/100 on 1775
+- Use submissions for UNKNOWN issues, not KNOWN bugs
+- Target after M5.1: 100/100 on 1075, 95+/100 on 1775
 
 ---
 
 ## Lessons Learned
+
+### Cycle 91 (Post-M5 Blind Evaluation)
+- **⚠️ Critical**: Fixes can be INCOMPLETE - M5 fixed "extra args" but missed quit/exit
+- **📊 Key Insight**: Independent blind evaluation AFTER verification is essential
+- **✅ Good**: Multiple blind evaluators (Gordon, Bob, Emma, Diana, Vera) found 3 new bugs
+- **⚠️ Pattern**: If we miss obvious bugs in a fix, there are likely MORE bugs
+- **📊 Decision Framework**: Found bugs = Do NOT submit yet, fix known issues first
+- **✅ Strategy**: Use OJ submissions for UNKNOWN issues, not KNOWN bugs
 
 ### Cycle 76-83 (OJ Submission #1 Failure Investigation)
 - **✅ Good**: 93/100 on 1075 confirms core logic is sound
 - **⚠️ Critical**: 0/100 on 1775 reveals systematic edge case validation gaps
 - **📊 Key Insight**: Hidden tests (1775) test edge cases not covered by public tests (1075)
 - **📊 Key Insight**: Blind-mode independent investigation found root causes efficiently
-- **⚠️ Bugs Found**: 5 total - 3 already fixed, 2 remaining (whitespace, extra args)
-- **📊 Key Decision**: Thorough investigation paid off - high confidence in fix
+- **⚠️ Bugs Found**: 5 total - all fixed, but fixes were incomplete
 - **✅ Strategy**: Independent testing by Athena confirmed worker findings
 
 ### Previous Cycles Summary
 - Vertical slice development worked well
 - Independent blind evaluation caught critical bugs
 - Comprehensive testing before submission saved cycles
-- But missed edge case validation requirements
+- But edge case validation requires multiple passes to catch everything
 
 ---
 
 ## Next Actions
 
-1. **Athena (Cycle 83)**: 
-   - ✅ Investigation complete
-   - ✅ Root causes identified and confirmed
-   - Ready to hand off M5 to Ares
+1. **Athena (Cycle 91)**: 
+   - ✅ M5 completed but found insufficient in blind evaluation
+   - ✅ Three new critical bugs identified
+   - Ready to hand off M5.1 to Ares
    
-2. **Ares Team**: 
-   - Fix BUG #1: Whitespace-only line handling
-   - Fix BUG #2: Extra argument detection
+2. **Ares Team (M5.1)**: 
+   - Fix quit/exit extra argument validation (CRITICAL)
+   - Fix show multi-parameter validation (CRITICAL)
+   - Verify show finance 0 behavior (HIGH)
+   - Optional: Verify su password check behavior
+   - Comprehensive validation sweep
    - Test thoroughly
-   - Prepare for OJ submission #2
 
-3. **Target**: 100/100 on 1075, 90+/100 on 1775
+3. **After M5.1**: OJ submission #2 with 95%+ confidence
 
 ---
 
-**Last Updated**: Cycle 83 (Athena)  
-**Status**: Investigation complete, ready to implement fixes
+**Last Updated**: Cycle 91 (Athena)  
+**Status**: M5.1 ready for implementation, 3 bugs identified with fixes specified
