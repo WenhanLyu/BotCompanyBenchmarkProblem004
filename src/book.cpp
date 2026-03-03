@@ -217,6 +217,11 @@ bool BookSystem::isValidAuthor(const std::string& author) const {
 bool BookSystem::isValidKeyword(const std::string& keyword) const {
     if (keyword.empty() || keyword.length() > 60) return false;
     
+    // Check for leading or trailing pipe (would result in empty segment)
+    if (keyword[0] == '|' || keyword[keyword.length()-1] == '|') {
+        return false;
+    }
+    
     // Must be visible ASCII except pipe (pipe is used as separator)
     // Keywords are pipe-separated, each segment 1-60 chars
     std::vector<std::string> segments;
