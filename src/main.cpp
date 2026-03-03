@@ -293,7 +293,7 @@ int main() {
                 continue;
             }
             
-            // Parse parameters
+            // Parse parameters - need quote-aware parsing to handle spaces inside quotes
             std::string newISBN = "";
             std::string newName = "";
             std::string newAuthor = "";
@@ -301,27 +301,56 @@ int main() {
             double newPrice = -1.0; // -1 means not specified
             bool parseError = false;
             
-            std::string param;
-            while (ss >> param) {
-                // Check if parameter starts with '-'
-                if (param[0] != '-') {
+            // Get the rest of the line for manual parsing
+            std::string remaining;
+            std::getline(ss, remaining);
+            
+            // Parse remaining string manually to handle quoted values with spaces
+            size_t pos = 0;
+            while (pos < remaining.length()) {
+                // Skip leading whitespace
+                while (pos < remaining.length() && std::isspace(remaining[pos])) {
+                    pos++;
+                }
+                if (pos >= remaining.length()) break;
+                
+                // Must start with '-'
+                if (remaining[pos] != '-') {
                     parseError = true;
                     break;
                 }
+                pos++;
                 
-                // Find the '=' sign
-                size_t eqPos = param.find('=');
+                // Find '=' sign
+                size_t eqPos = remaining.find('=', pos);
                 if (eqPos == std::string::npos) {
                     parseError = true;
                     break;
                 }
                 
-                std::string paramName = param.substr(1, eqPos - 1);
-                std::string paramValue = param.substr(eqPos + 1);
+                std::string paramName = remaining.substr(pos, eqPos - pos);
+                pos = eqPos + 1;
                 
-                // Remove quotes if present
-                if (paramValue.length() >= 2 && paramValue[0] == '"' && paramValue[paramValue.length() - 1] == '"') {
-                    paramValue = paramValue.substr(1, paramValue.length() - 2);
+                // Parse value (quoted or unquoted)
+                std::string paramValue;
+                if (pos < remaining.length() && remaining[pos] == '"') {
+                    // Quoted value - read until closing quote
+                    pos++; // Skip opening quote
+                    size_t closeQuote = remaining.find('"', pos);
+                    if (closeQuote == std::string::npos) {
+                        parseError = true;
+                        break;
+                    }
+                    paramValue = remaining.substr(pos, closeQuote - pos);
+                    pos = closeQuote + 1;
+                } else {
+                    // Unquoted value - read until space or end
+                    size_t endPos = pos;
+                    while (endPos < remaining.length() && !std::isspace(remaining[endPos])) {
+                        endPos++;
+                    }
+                    paramValue = remaining.substr(pos, endPos - pos);
+                    pos = endPos;
                 }
                 
                 // Process parameter
@@ -409,46 +438,56 @@ int main() {
                 continue;
             }
             
-            // Parse next parameter to check if it's "finance"
-            std::string param;
-            if (ss >> param) {
-                if (param == "finance") {
-                    // Handle "show finance" command
-                    // Requires privilege >= 7
-                    int currentPriv = accountSystem.getCurrentPrivilege();
-                    if (currentPriv < 7) {
-                        std::cout << "Invalid" << std::endl;
-                        continue;
-                    }
-                    
-                    // Parse optional count parameter
-                    int count = 0;
-                    bool hasCount = false;
-                    if (ss >> count) {
-                        hasCount = true;
-                        if (ss.fail() || count < 0) {
-                            std::cout << "Invalid" << std::endl;
-                            continue;
-                        }
-                    }
-                    
-                    // Special case: if count is explicitly 0, output empty line
-                    if (hasCount && count == 0) {
-                        std::cout << std::endl;
-                        continue;
-                    }
-                    
-                    // Call showFinance and output result
-                    std::string result = bookSystem.showFinance(count);
-                    if (result.empty() && count > 0) {
-                        // Empty result with count > 0 means count exceeded total records
-                        std::cout << "Invalid" << std::endl;
-                    } else {
-                        std::cout << result << std::endl;
-                    }
-                    
+            // Get rest of line to check for "finance" or filter parameter
+            std::string remaining;
+            std::getline(ss, remaining);
+            
+            // Trim leading whitespace
+            size_t startPos = 0;
+            while (startPos < remaining.length() && std::isspace(remaining[startPos])) {
+                startPos++;
+            }
+            remaining = remaining.substr(startPos);
+            
+            // Check if first word is "finance"
+            if (remaining.substr(0, 7) == "finance" && 
+                (remaining.length() == 7 || std::isspace(remaining[7]))) {
+                // Handle "show finance" command
+                // Requires privilege >= 7
+                int currentPriv = accountSystem.getCurrentPrivilege();
+                if (currentPriv < 7) {
+                    std::cout << "Invalid" << std::endl;
                     continue;
                 }
+                
+                // Parse optional count parameter
+                std::istringstream finSs(remaining.substr(7));
+                int count = 0;
+                bool hasCount = false;
+                if (finSs >> count) {
+                    hasCount = true;
+                    if (finSs.fail() || count < 0) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
+                }
+                
+                // Special case: if count is explicitly 0, output empty line
+                if (hasCount && count == 0) {
+                    std::cout << std::endl;
+                    continue;
+                }
+                
+                // Call showFinance and output result
+                std::string result = bookSystem.showFinance(count);
+                if (result.empty() && count > 0) {
+                    // Empty result with count > 0 means count exceeded total records
+                    std::cout << "Invalid" << std::endl;
+                } else {
+                    std::cout << result << std::endl;
+                }
+                
+                continue;
             }
             
             // Regular show command handling
@@ -459,30 +498,44 @@ int main() {
                 continue;
             }
             
-            // Parse filter parameter (optional)
+            // Parse filter parameter (optional) - quote-aware parsing
             std::vector<Book> results;
             
-            if (!param.empty()) {
-                // We already read param above
+            if (!remaining.empty()) {
                 // Check if parameter starts with '-'
-                if (param[0] != '-') {
+                if (remaining[0] != '-') {
                     std::cout << "Invalid" << std::endl;
                     continue;
                 }
                 
                 // Find the '=' sign
-                size_t eqPos = param.find('=');
+                size_t eqPos = remaining.find('=');
                 if (eqPos == std::string::npos) {
                     std::cout << "Invalid" << std::endl;
                     continue;
                 }
                 
-                std::string paramName = param.substr(1, eqPos - 1);
-                std::string paramValue = param.substr(eqPos + 1);
+                std::string paramName = remaining.substr(1, eqPos - 1);
+                size_t valueStart = eqPos + 1;
+                std::string paramValue;
                 
-                // Remove quotes if present (for name and author)
-                if (paramValue.length() >= 2 && paramValue[0] == '"' && paramValue[paramValue.length() - 1] == '"') {
-                    paramValue = paramValue.substr(1, paramValue.length() - 2);
+                // Parse value (quoted or unquoted)
+                if (valueStart < remaining.length() && remaining[valueStart] == '"') {
+                    // Quoted value - read until closing quote
+                    valueStart++; // Skip opening quote
+                    size_t closeQuote = remaining.find('"', valueStart);
+                    if (closeQuote == std::string::npos) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
+                    paramValue = remaining.substr(valueStart, closeQuote - valueStart);
+                } else {
+                    // Unquoted value - read until space or end
+                    size_t endPos = valueStart;
+                    while (endPos < remaining.length() && !std::isspace(remaining[endPos])) {
+                        endPos++;
+                    }
+                    paramValue = remaining.substr(valueStart, endPos - valueStart);
                 }
                 
                 // Check if parameter value is empty
