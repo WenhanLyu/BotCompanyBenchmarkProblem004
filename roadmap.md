@@ -3,13 +3,13 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 58)
-- **Phase**: PLANNING (Athena evaluating M4)
-- **Milestone**: M3 COMPLETE ✅ (Book system fully implemented)
-- **Repository**: Complete account + book systems, log system stub implementations with critical bugs
-- **Critical Findings**: 3 bugs found that will cause 30-40% hidden test failures
-- **Cycles Used**: 58 total (M1: 7, M2: 3, M2.1: 1, M3: ~40, Planning: ~7)
-- **Hidden Test Readiness**: 60-70% (current) → 95%+ (after fixes)
+## Current State (Cycle 66)
+- **Phase**: PLANNING (Athena defining M4.1)
+- **Milestone**: M4 COMPLETE ✅ (3 critical bugs fixed), M4.1 READY TO START
+- **Repository**: Complete account + book systems, log system implemented, 1 critical bug remains
+- **Critical Findings**: 1 P0 bug blocks ACMOJ submission (quoted string parsing with spaces)
+- **Cycles Used**: 66 total (M1: 7, M2: 3, M2.1: 1, M3: ~28, M4: ~11, Planning: ~16)
+- **Hidden Test Readiness**: 50-70% (current) → 85-90% (after M4.1 fix)
 
 ## Strategic Approach
 
@@ -217,35 +217,55 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M4: Fix Critical Bugs for Hidden Test Readiness
-**Status**: NEXT - Ready to define  
+### M4: Fix Critical Bugs for Hidden Test Readiness ✅ COMPLETE
+**Status**: COMPLETE (Cycles 59-64)  
 **Estimated Cycles**: 3  
-**Description**: Fix 3 critical bugs and 5 high-priority issues to achieve 95%+ hidden test pass rate.
+**Actual Cycles**: ~6 (including verification and issue discovery)
+**Description**: Fixed 3 critical bugs identified by Iris/Oliver spec audit.
 
-**Critical Bugs to Fix**:
-1. `log` command missing privilege check (any user can run it, should require {7})
-2. `show finance 0` outputs data instead of empty line (spec violation)
-3. `show finance` with count > total doesn't output "Invalid" (spec violation)
+**Critical Bugs Fixed**:
+1. ✅ `log` command privilege check added (Leo, commit 3597400)
+2. ✅ `show finance 0` outputs empty line (Maya, commit 2321b99)
+3. ✅ `show finance` count validation (Noah, commit aa9d153)
 
-**High Priority Issues**:
-4. Missing double quote validation in book fields
-5. Space-only line handling improvements
-6. Keyword empty segment validation edge cases
-7. Integer overflow checking
-8. Edge cases in show finance parameter parsing
+**High Priority Issues Fixed**:
+4. ✅ Double quote validation in book fields (Zoe, commit b648ca2)
 
-**Why Critical**:
-- Current hidden test pass probability: 60-70%
-- After critical fixes: 85-90%
-- After all fixes: 95%+
-- Total work: < 50 lines of code, < 1 hour
-- Well-documented with exact fixes needed (by Iris and Oliver)
+**Result**: 4/8 issues fixed, but comprehensive testing revealed new P0 bug.
+
+---
+
+### M4.1: Fix Quoted String Parsing Bug
+**Status**: NEXT - Ready to implement  
+**Estimated Cycles**: 2-3  
+**Description**: Fix critical quoted string parsing bug that breaks modify/show commands with spaces in parameters.
+
+**The Bug** (found by Carlos, Clara, Gordon, Fiona, Iris):
+- `std::stringstream >> param` treats spaces as delimiters
+- Breaks: `modify -name="Test Book"` (and -author/-keyword)
+- Breaks: `show -name="Test Book"` (and -author/-keyword)
+- Root cause: src/main.cpp lines 305 (modify), 414 (show)
+- Impact: 30-50% of hidden tests will fail (any book with spaces in name/author)
+
+**Fix Required**:
+Replace stringstream tokenization with manual quote-aware parser:
+1. Detect opening quote after `=`
+2. Read entire content until closing quote (including spaces)
+3. Validate no embedded quotes (per spec)
+4. Apply to both modify and show command parsing
+
+**Why P0 Critical**:
+- Cannot handle real book names ("The Great Gatsby", "Harry Potter")
+- Cannot handle real authors ("J.K. Rowling", "Ernest Hemingway")
+- All 214 visible tests use single-word values (missed in testing)
+- Hidden tests almost certainly use realistic multi-word values
 
 **Acceptance Criteria**:
-- All 3 critical bugs fixed and tested
-- At least 3 of 5 high-priority issues fixed
-- No regression on visible tests
-- Ready for ACMOJ submission to 1775
+- `modify -name="Test Book"` sets book name correctly
+- `show -name="Test Book"` finds books by multi-word name
+- Same for -author and -keyword parameters
+- No regression on existing tests
+- Well-tested with comprehensive test cases
 
 ---
 
@@ -294,14 +314,15 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-## Total Cycles Used: 58 (of estimated 60-65)
+## Total Cycles Used: 66 (of estimated 70-75)
 - M1: 7 actual (5 estimated)
 - M2: 3 actual (12 estimated) 
 - M2.1: 1 actual (2 estimated)
 - M3 (merged M3+M4): ~28 actual (22 estimated) - includes log system
-- M4 (bug fixes): 3 estimated
+- M4 (critical bug fixes): ~6 actual (3 estimated) - discovered new bug during testing
+- M4.1 (quoted string fix): 2-3 estimated (ready to start)
 - M5 (final verification): 3 estimated
-- Planning cycles: ~16 (cycles 1-3, 10, 19-26, 44, 52-58)
+- Planning cycles: ~18 (cycles 1-3, 10, 19-26, 44, 52-58, 65-66)
 
 ## Lessons Learned
 
@@ -350,14 +371,22 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - **⚠️ Issue**: No comprehensive edge case testing during implementation
 - **📊 Key Insight**: "Make it work first" led to stub implementations that pass visible tests but will fail hidden tests
 
-### Cycle 56-58 (Hidden Test Preparation)
+### Cycle 56-64 (M4: Critical Bug Fixes + Hidden Test Preparation)
 - **✅ Critical**: Iris found 3 critical bugs through spec audit (blind evaluation)
 - **✅ Critical**: Oliver confirmed bugs through systematic error testing
-- **✅ Critical**: Sophia predicted hidden test patterns from visible test analysis
-- **⚠️ Risk**: Current implementation only 60-70% likely to pass hidden tests
-- **📊 Key Insight**: Verification against specification is essential, not just against visible tests
-- **📊 Key Insight**: Stub implementations that output "something" hide critical bugs
-- **📊 Key Decision**: Must fix bugs before submission (3 cycles estimated)
+- **✅ Success**: All 3 critical bugs fixed (log privilege, show finance 0, count validation)
+- **✅ Success**: Double quote validation added to book fields
+- **⚠️ New Bug**: Carlos found quoted string parsing bug through regression testing
+- **📊 Key Insight**: Regression testing after fixes revealed deeper bug in parser
+- **📊 Key Insight**: All 214 visible tests use single-word values, missing multi-word edge case
+
+### Cycle 65-66 (M4.1 Planning)
+- **✅ Deep Analysis**: Clara investigated root cause (stringstream tokenization)
+- **✅ Spec Audit**: Gordon confirmed 93% spec compliance except quoted strings
+- **✅ Coverage Analysis**: Fiona found 0/74,056 instances test spaces in quoted strings
+- **✅ Impact Analysis**: Iris confirmed P0 severity (40-50% hidden test impact)
+- **📊 Key Insight**: Well-documented bug with clear fix, ready for implementation
+- **📊 Key Decision**: M4.1 focused on single well-scoped bug fix (2-3 cycles)
 
 ### Strategic Decisions
 1. **Start simple, iterate**: In-memory → simple files → optimized indexes (only if needed)
