@@ -509,8 +509,9 @@ bool BookSystem::importBook(const std::string& ISBN, long long quantity, double 
 }
 
 // Show finance - calculate income and expenses from transactions
-// count = 0: show all transactions
+// count = 0: output handled by caller (main.cpp outputs empty line per spec)
 // count > 0: show last N transactions
+// Returns empty string if count > total transactions (signals error to caller)
 std::string BookSystem::showFinance(int count) const {
     double totalIncome = 0.0;
     double totalExpense = 0.0;
