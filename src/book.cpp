@@ -183,9 +183,9 @@ void BookSystem::saveFinance() {
 bool BookSystem::isValidISBN(const std::string& isbn) const {
     if (isbn.empty() || isbn.length() > 20) return false;
     
-    // Must be visible ASCII except pipe
+    // Must be visible ASCII except pipe and double quote
     for (char c : isbn) {
-        if (c < 33 || c > 126 || c == '|') return false;
+        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -193,9 +193,9 @@ bool BookSystem::isValidISBN(const std::string& isbn) const {
 bool BookSystem::isValidName(const std::string& name) const {
     if (name.empty() || name.length() > 60) return false;
     
-    // Must be visible ASCII except pipe
+    // Must be visible ASCII except pipe and double quote
     for (char c : name) {
-        if (c < 33 || c > 126 || c == '|') return false;
+        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -203,9 +203,9 @@ bool BookSystem::isValidName(const std::string& name) const {
 bool BookSystem::isValidAuthor(const std::string& author) const {
     if (author.empty() || author.length() > 60) return false;
     
-    // Must be visible ASCII except pipe
+    // Must be visible ASCII except pipe and double quote
     for (char c : author) {
-        if (c < 33 || c > 126 || c == '|') return false;
+        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -230,7 +230,7 @@ bool BookSystem::isValidKeyword(const std::string& keyword) const {
         
         // Check characters
         for (char c : segment) {
-            if (c < 33 || c > 126 || c == '|') return false;
+            if (c < 33 || c > 126 || c == '|' || c == '"') return false;
         }
     }
     
