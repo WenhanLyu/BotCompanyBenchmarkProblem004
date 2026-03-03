@@ -90,6 +90,13 @@ int main() {
                 password = "";
             }
             
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             if (userID.empty()) {
                 std::cout << "Invalid" << std::endl;
                 continue;
@@ -105,6 +112,13 @@ int main() {
         
         // Handle logout command
         if (command == "logout") {
+            // Check for extra arguments (logout takes no arguments)
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             if (accountSystem.logout()) {
                 // Success - no output
             } else {
@@ -218,6 +232,13 @@ int main() {
             std::string userID;
             ss >> userID;
             
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             if (userID.empty()) {
                 std::cout << "Invalid" << std::endl;
                 continue;
@@ -252,6 +273,13 @@ int main() {
             // Parse ISBN
             std::string isbn;
             ss >> isbn;
+            
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
             
             if (isbn.empty()) {
                 std::cout << "Invalid" << std::endl;
@@ -630,6 +658,13 @@ int main() {
                 continue;
             }
             
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             // Try to buy the book
             double totalCost = bookSystem.buyBook(isbn, quantity);
             
@@ -677,6 +712,13 @@ int main() {
                 continue;
             }
             
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             // Try to import the book
             if (bookSystem.importBook(selectedISBN, quantity, totalCost)) {
                 // Success - no output
@@ -700,6 +742,13 @@ int main() {
             // Parse next parameter
             std::string param;
             ss >> param;
+            
+            // Check for extra arguments
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
             
             // Check privilege (must be >= 7 for all reports)
             int currentPriv = accountSystem.getCurrentPrivilege();
@@ -728,6 +777,13 @@ int main() {
         // Shows chronological list of recent operations (self-defined format)
         // Requires privilege >= 7
         if (command == "log") {
+            // Check for extra arguments (log takes no arguments)
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             // Check if user is logged in
             if (!accountSystem.isLoggedIn()) {
                 std::cout << "Invalid" << std::endl;
