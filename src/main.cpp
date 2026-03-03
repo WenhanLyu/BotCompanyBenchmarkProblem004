@@ -65,6 +65,11 @@ int main() {
         std::string command;
         ss >> command;
         
+        // Whitespace-only line - skip (no output)
+        if (command.empty()) {
+            continue;
+        }
+        
         // Handle quit and exit commands
         if (command == "quit" || command == "exit") {
             break;
