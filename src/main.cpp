@@ -72,6 +72,10 @@ int main() {
         
         // Handle quit and exit commands
         if (command == "quit" || command == "exit") {
+            std::string extra;
+            if (ss >> extra) {
+                std::cout << "Invalid" << std::endl;
+            }
             break;
         }
         
