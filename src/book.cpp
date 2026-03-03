@@ -184,8 +184,10 @@ bool BookSystem::isValidISBN(const std::string& isbn) const {
     if (isbn.empty() || isbn.length() > 20) return false;
     
     // Must be visible ASCII except pipe and double quote
+    // Visible ASCII includes space (32) through tilde (126)
+    // Note: ISBN in practice shouldn't have spaces, but spec says "ASCII except invisible"
     for (char c : isbn) {
-        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
+        if (c < 32 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -194,8 +196,9 @@ bool BookSystem::isValidName(const std::string& name) const {
     if (name.empty() || name.length() > 60) return false;
     
     // Must be visible ASCII except pipe and double quote
+    // Visible ASCII includes space (32) through tilde (126)
     for (char c : name) {
-        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
+        if (c < 32 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -204,8 +207,9 @@ bool BookSystem::isValidAuthor(const std::string& author) const {
     if (author.empty() || author.length() > 60) return false;
     
     // Must be visible ASCII except pipe and double quote
+    // Visible ASCII includes space (32) through tilde (126)
     for (char c : author) {
-        if (c < 33 || c > 126 || c == '|' || c == '"') return false;
+        if (c < 32 || c > 126 || c == '|' || c == '"') return false;
     }
     return true;
 }
@@ -229,8 +233,9 @@ bool BookSystem::isValidKeyword(const std::string& keyword) const {
         segments.push_back(segment);
         
         // Check characters
+        // Visible ASCII includes space (32) through tilde (126)
         for (char c : segment) {
-            if (c < 33 || c > 126 || c == '|' || c == '"') return false;
+            if (c < 32 || c > 126 || c == '|' || c == '"') return false;
         }
     }
     
