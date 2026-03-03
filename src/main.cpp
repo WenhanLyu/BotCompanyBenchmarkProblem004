@@ -560,6 +560,7 @@ int main() {
                 std::string paramName = remaining.substr(1, eqPos - 1);
                 size_t valueStart = eqPos + 1;
                 std::string paramValue;
+                size_t paramEndPos = 0;  // Track where the first parameter ends
                 
                 // Parse value (quoted or unquoted)
                 if (valueStart < remaining.length() && remaining[valueStart] == '"') {
@@ -571,6 +572,7 @@ int main() {
                         continue;
                     }
                     paramValue = remaining.substr(valueStart, closeQuote - valueStart);
+                    paramEndPos = closeQuote + 1;  // Position after closing quote
                 } else {
                     // Unquoted value - read until space or end
                     size_t endPos = valueStart;
@@ -578,12 +580,24 @@ int main() {
                         endPos++;
                     }
                     paramValue = remaining.substr(valueStart, endPos - valueStart);
+                    paramEndPos = endPos;  // Position after last character of value
                 }
                 
                 // Check if parameter value is empty
                 if (paramValue.empty()) {
                     std::cout << "Invalid" << std::endl;
                     continue;
+                }
+                
+                // Check for multiple parameters (spec violation - only ONE parameter allowed)
+                if (paramEndPos < remaining.length()) {
+                    // Check if there's non-whitespace content after the first parameter
+                    std::string afterFirst = remaining.substr(paramEndPos);
+                    size_t firstNonSpace = afterFirst.find_first_not_of(" \t");
+                    if (firstNonSpace != std::string::npos) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
                 }
                 
                 // Execute search based on parameter
