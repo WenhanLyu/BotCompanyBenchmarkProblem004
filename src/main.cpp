@@ -186,10 +186,13 @@ int main() {
             int currentPriv = accountSystem.getCurrentPrivilege();
             
             if (currentPriv == 7 && args.size() == 2) {
-                // Privilege {7}: 2 parameters (no current password)
+                // Privilege {7}: 2 parameters (current password omitted)
                 success = accountSystem.passwd(args[0], "", args[1], false);
+            } else if (currentPriv == 7 && args.size() == 3) {
+                // Privilege {7}: 3 parameters (current password provided - also allowed)
+                success = accountSystem.passwd(args[0], args[1], args[2], true);
             } else if (currentPriv < 7 && args.size() == 3) {
-                // Privilege < {7}: 3 parameters (with current password)
+                // Privilege < {7}: 3 parameters (current password required)
                 success = accountSystem.passwd(args[0], args[1], args[2], true);
             } else {
                 std::cout << "Invalid" << std::endl;
