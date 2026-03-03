@@ -440,7 +440,12 @@ int main() {
                     
                     // Call showFinance and output result
                     std::string result = bookSystem.showFinance(count);
-                    std::cout << result << std::endl;
+                    if (result.empty() && count > 0) {
+                        // Empty result with count > 0 means count exceeded total records
+                        std::cout << "Invalid" << std::endl;
+                    } else {
+                        std::cout << result << std::endl;
+                    }
                     
                     continue;
                 }

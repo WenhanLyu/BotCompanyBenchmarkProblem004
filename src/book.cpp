@@ -509,11 +509,16 @@ std::string BookSystem::showFinance(int count) const {
     int startIdx = 0;
     int totalRecords = financeRecords.size();
     
+    // Validation: count cannot exceed total records
+    if (count > totalRecords) {
+        return "";  // Empty string signals error to caller
+    }
+    
     if (count > 0 && count < totalRecords) {
         // Show last N transactions
         startIdx = totalRecords - count;
     }
-    // If count == 0 or count >= total records, include all
+    // If count == 0 or count == total records, include all
     
     // Calculate totals from selected range
     for (int i = startIdx; i < totalRecords; i++) {
