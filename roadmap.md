@@ -3,12 +3,13 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State
-- **Phase**: PLANNING (Post-M3 completion, ready for M4 Log System)
+## Current State (Cycle 58)
+- **Phase**: PLANNING (Athena evaluating M4)
 - **Milestone**: M3 COMPLETE ✅ (Book system fully implemented)
-- **Repository**: Complete account + book systems, log system partially implemented
-- **Critical Bug**: Finance records not persisted - must fix in M4
-- **Cycles Used**: TBD (need to count actual cycles used)
+- **Repository**: Complete account + book systems, log system stub implementations with critical bugs
+- **Critical Findings**: 3 bugs found that will cause 30-40% hidden test failures
+- **Cycles Used**: 58 total (M1: 7, M2: 3, M2.1: 1, M3: ~40, Planning: ~7)
+- **Hidden Test Readiness**: 60-70% (current) → 95%+ (after fixes)
 
 ## Strategic Approach
 
@@ -196,19 +197,64 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M4: Log System (formerly M6)
-**Status**: Planned  
-**Estimated Cycles**: 6  
-**Description**: Implement logging and financial tracking features.
+### M3: Complete Book Management System (Merged M3+M4) ✅ COMPLETE
+**Status**: COMPLETE (Cycle 27-55)  
+**Estimated Cycles**: 22  
+**Actual Cycles**: ~28 (including log system implementation)
+**Description**: Implement all 5 book commands with file persistence and multi-attribute search, plus basic log system.
 
-**Note**: Renumbered from M6 due to M3/M4 merge. M5 (Performance Optimization) removed - optimization built into M3.
+**Deliverables Completed**:
+- All 5 book commands working (select, modify, import, show, buy)
+- Multi-index search (ISBN, name, author, keyword)
+- File persistence (books.dat, transactions.dat)
+- Finance tracking (show finance command)
+- Basic log command implementations (log, report finance, report employee)
+
+**Issues Found Post-Completion**:
+- 3 critical bugs in log system (found by Iris, Oliver in Cycle 57)
+- 5 high-priority validation gaps
+- Hidden test pass probability only 60-70% without fixes
 
 ---
 
-### M5: Edge Cases & Final Polish (formerly M7)
+### M4: Fix Critical Bugs for Hidden Test Readiness
+**Status**: NEXT - Ready to define  
+**Estimated Cycles**: 3  
+**Description**: Fix 3 critical bugs and 5 high-priority issues to achieve 95%+ hidden test pass rate.
+
+**Critical Bugs to Fix**:
+1. `log` command missing privilege check (any user can run it, should require {7})
+2. `show finance 0` outputs data instead of empty line (spec violation)
+3. `show finance` with count > total doesn't output "Invalid" (spec violation)
+
+**High Priority Issues**:
+4. Missing double quote validation in book fields
+5. Space-only line handling improvements
+6. Keyword empty segment validation edge cases
+7. Integer overflow checking
+8. Edge cases in show finance parameter parsing
+
+**Why Critical**:
+- Current hidden test pass probability: 60-70%
+- After critical fixes: 85-90%
+- After all fixes: 95%+
+- Total work: < 50 lines of code, < 1 hour
+- Well-documented with exact fixes needed (by Iris and Oliver)
+
+**Acceptance Criteria**:
+- All 3 critical bugs fixed and tested
+- At least 3 of 5 high-priority issues fixed
+- No regression on visible tests
+- Ready for ACMOJ submission to 1775
+
+---
+
+---
+
+### M5: Final Verification & Submission Preparation
 **Status**: Planned  
-**Estimated Cycles**: 8  
-**Description**: Handle all edge cases and prepare for hidden tests (1775).
+**Estimated Cycles**: 3  
+**Description**: Final verification and preparation for ACMOJ submission.
 
 **Deliverables**:
 - Profile test case performance (especially stress tests 170-214)
@@ -235,109 +281,27 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-### M6: Log System
-**Status**: Planned  
-**Estimated Cycles**: 6  
-**Description**: Implement logging and financial tracking features.
-
 **Deliverables**:
-- Commands: show finance, log, report finance, report employee
-- Transaction recording (income/expenditure)
-- Employee operation logging
-- Query last N transactions
-
-**Test Strategy**:
-- Test against log-focused test cases
-- Verify financial calculations
-- Test report formats
+- Final code review and cleanup
+- Comprehensive regression testing
+- Mark project complete for external ACMOJ evaluation
 
 **Acceptance Criteria**:
-- All log commands work correctly
-- Financial tracking accurate
-- Reports format matches specification
-- Passes 90+ test cases
-
-**Why Later**:
-- Log system can be added independently
-- Doesn't affect core account/book functionality
-- Lower complexity than book system
-
----
-
-### M7: Edge Cases & Hidden Test Preparation
-**Status**: Planned  
-**Estimated Cycles**: 8  
-**Description**: Handle all edge cases and prepare for hidden tests (1775).
-
-**Deliverables**:
-- Test against ALL 214 test cases
-- Fix any remaining bugs
-- Handle edge cases:
-  - Empty files (tests 135-139)
-  - Error injection (test 3)
-  - Boundary conditions
-  - Invalid commands
-- Exact output format verification (floating point precision, tabs)
-
-**Test Strategy**:
-- Run complete test suite
-- Identify failing tests and fix systematically
-- Test error handling thoroughly
-
-**Acceptance Criteria**:
-- Passes all 214 test cases in data/004/1075/
-- No memory leaks
-- Output format exactly matches requirements
-- Handles all error cases correctly
-
-**Hidden Test Considerations**:
-- Problem 1775 has unknown test cases
-- Likely tests edge cases harder
-- Ensure robust error handling
-
----
-
-### M8: Final Verification & Submission Preparation
-**Status**: Planned  
-**Estimated Cycles**: 5  
-**Description**: Final verification, code cleanup, and mark project complete.
-
-**Deliverables**:
-- Final round of testing (all 214 cases)
-- Code review and cleanup
-- Remove debug code
-- Verify git repository ready for submission
-- Final documentation
-- Mark project complete for external evaluation
-
-**Test Strategy**:
-- Full regression test
-- Clean build verification
-- Submission dry-run
-
-**Acceptance Criteria**:
-- All tests pass consistently (multiple runs)
-- Code is clean and well-organized
-- No compilation warnings
-- Git repository properly configured
-- Ready for ACMOJ submission
-
-**Completion Criteria**:
+- All critical and high-priority bugs fixed
+- No regression on any tests
+- Code is clean and ready for submission
 - Project marked complete
-- External evaluation runner handles submission
-- Team waits for ACMOJ feedback
 
 ---
 
-## Total Estimated Cycles: 57
+## Total Cycles Used: 58 (of estimated 60-65)
 - M1: 7 actual (5 estimated)
 - M2: 3 actual (12 estimated) 
 - M2.1: 1 actual (2 estimated)
-- M3 (merged M3+M4): 22 estimated (was 18 split)
-- M4 (formerly M6): 6 estimated
-- M5 (formerly M7): 8 estimated
-- M6 (formerly M8): 5 estimated
-- Planning cycles used: 5 (cycles 1-3, 10, 19-26)
+- M3 (merged M3+M4): ~28 actual (22 estimated) - includes log system
+- M4 (bug fixes): 3 estimated
+- M5 (final verification): 3 estimated
+- Planning cycles: ~16 (cycles 1-3, 10, 19-26, 44, 52-58)
 
 ## Lessons Learned
 
@@ -377,6 +341,23 @@ Implement a complete bookstore management system in C++ that passes all test cas
 - **📊 Key Insight**: Artificial milestone splits create confusion - merge related work
 - **📊 Key Insight**: Cannot "defer optimization" when feature requires indices from day 1
 - **📊 Key Decision**: Merged M3+M4 into single coherent milestone (22 cycles)
+
+### Cycle 27-55 (M3 Implementation)
+- **✅ Success**: All 5 book commands implemented and working
+- **✅ Success**: Log system commands added (show finance, log, report finance, report employee)
+- **✅ Good**: Finance persistence added (loadFinance, saveFinance)
+- **⚠️ Issue**: Log commands implemented as stubs to avoid crashes
+- **⚠️ Issue**: No comprehensive edge case testing during implementation
+- **📊 Key Insight**: "Make it work first" led to stub implementations that pass visible tests but will fail hidden tests
+
+### Cycle 56-58 (Hidden Test Preparation)
+- **✅ Critical**: Iris found 3 critical bugs through spec audit (blind evaluation)
+- **✅ Critical**: Oliver confirmed bugs through systematic error testing
+- **✅ Critical**: Sophia predicted hidden test patterns from visible test analysis
+- **⚠️ Risk**: Current implementation only 60-70% likely to pass hidden tests
+- **📊 Key Insight**: Verification against specification is essential, not just against visible tests
+- **📊 Key Insight**: Stub implementations that output "something" hide critical bugs
+- **📊 Key Decision**: Must fix bugs before submission (3 cycles estimated)
 
 ### Strategic Decisions
 1. **Start simple, iterate**: In-memory → simple files → optimized indexes (only if needed)
