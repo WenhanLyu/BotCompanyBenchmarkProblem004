@@ -423,11 +423,19 @@ int main() {
                     
                     // Parse optional count parameter
                     int count = 0;
+                    bool hasCount = false;
                     if (ss >> count) {
+                        hasCount = true;
                         if (ss.fail() || count < 0) {
                             std::cout << "Invalid" << std::endl;
                             continue;
                         }
+                    }
+                    
+                    // Special case: if count is explicitly 0, output empty line
+                    if (hasCount && count == 0) {
+                        std::cout << std::endl;
+                        continue;
                     }
                     
                     // Call showFinance and output result
