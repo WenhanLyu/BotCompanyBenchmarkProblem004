@@ -646,7 +646,21 @@ int main() {
         // Handle log command
         // Syntax: log
         // Shows chronological list of recent operations (self-defined format)
+        // Requires privilege >= 7
         if (command == "log") {
+            // Check if user is logged in
+            if (!accountSystem.isLoggedIn()) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Check privilege (must be >= 7)
+            int currentPriv = accountSystem.getCurrentPrivilege();
+            if (currentPriv < 7) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
             // Simple implementation: output empty line to indicate no operations logged
             // This prevents crashes and meets the basic requirement
             std::cout << std::endl;
