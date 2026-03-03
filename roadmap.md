@@ -3,18 +3,18 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 94)
-- **Phase**: PLANNING (post-M5.1 deadline miss)
-- **Repository**: M5.1 fixes created but NOT MERGED to master
-  - All 3 fixes completed and verified individually
-  - PRs #5, #6 open; noah/fix-finance-comment branch exists
-  - Master still has 3 bugs
+## Current State (Cycle 104)
+- **Phase**: PLANNING (post-M5.1.1 completion, regression found)
+- **Repository**: M5.1 fixes ALL MERGED to master
+  - BUG #1 fix (quit/exit validation): MERGED but HAS REGRESSION
+  - BUG #2 fix (show multi-param): MERGED and working ✓
+  - BUG #3 fix (finance comment): MERGED and working ✓
 - **Problem Status**:
   - Problem 1075: 93/100 (only 2 failures: testpoints 3, 212)
   - Problem 1775: 0/100 (COMPLETE FAILURE - hidden tests)
 - **Submissions Used**: 1/8
-- **Status**: M5.1 implementation done, needs merge and verification
-- **Cycles Used**: 94 total
+- **Status**: Critical regression found in quit/exit validation
+- **Cycles Used**: 104 total
 
 ## OJ Submission #1 Analysis
 
@@ -159,50 +159,127 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ---
 
-## M5.1.1: Merge and Verify M5.1 Fixes
+## M5.1.1: Merge and Verify M5.1 Fixes ✅ COMPLETE (with regression)
+
+**Status**: COMPLETE but REGRESSION FOUND (Cycles 95-103)  
+**Estimated Cycles**: 2 (used 9 cycles - 2 for merge, 7 for verification)
+
+**What Was Completed**:
+1. ✅ Merged PR #5 (Leo's quit/exit validation fix) - commit 475219b
+2. ✅ Merged Maya's show multi-parameter fix - commit c0dd5cc
+3. ✅ Merged Noah's comment fix - commit 0863128
+4. ✅ All fixes verified to output "Invalid" correctly
+5. ✅ Build succeeds, no compiler warnings
+
+**CRITICAL REGRESSION FOUND (Cycle 103)**:
+- Emma's audit discovered quit/exit validation is INCOMPLETE
+- Bug: `quit extra` outputs "Invalid" then EXITS program (should continue)
+- Root cause: Unconditional `break` statement at line 79
+- Fix needed: Move break inside else clause, add continue to validation branch
+- Impact: Test cases with `quit extra` followed by more commands will fail
+
+**Test proving regression**:
+```
+quit extra
+su root sjtu
+quit
+```
+Expected: "Invalid", then su succeeds, then quit
+Actual: "Invalid" then program exits (never reaches su)
+
+**Why Regression Occurred**:
+- Original M5.1 BUG #1 fix added validation check correctly
+- But control flow was wrong - break executes even when extra args present
+- Code review missed this during merge
+- Independent verification (Emma, cycle 103) caught it
+
+**Lessons Learned**:
+- Validation logic ≠ complete fix (must consider control flow)
+- Code review should verify control flow, not just logic
+- Independent verification after merge is essential
+
+---
+
+## M5.1.2: Fix quit/exit Control Flow Regression
 
 **Status**: Ready for IMPLEMENTATION  
-**Estimated Cycles**: 2
-**Description**: Merge the three completed M5.1 fixes to master and verify they work together
+**Estimated Cycles**: 1
+**Description**: Fix critical regression in quit/exit validation where program exits instead of continuing after outputting "Invalid"
 
-**Current State**:
-- All three fixes exist in branches and are verified individually:
-  - leo/fix-quit-exit-validation (PR #5)
-  - maya/fix-show-multi-params-v2 (PR #6)
-  - noah/fix-finance-comment (no PR yet)
-- Master branch still has all 3 bugs
+**The Bug**:
+```cpp
+// CURRENT (BROKEN):
+if (command == "quit" || command == "exit") {
+    std::string extra;
+    if (ss >> extra) {
+        std::cout << "Invalid" << std::endl;
+    }
+    break;  // ← BUG: Always breaks, even when extra args present!
+}
+```
 
-**Tasks**:
-1. Merge PR #5 (Leo's quit/exit validation fix)
-2. Merge PR #6 (Maya's show multi-parameter fix)
-3. Create PR and merge Noah's comment fix (or merge directly if trivial)
-4. Run integration tests to verify all fixes work together
-5. Run regression tests to ensure no existing functionality broke
-6. Final smoke test of critical commands
+**The Fix**:
+```cpp
+// CORRECT:
+if (command == "quit" || command == "exit") {
+    std::string extra;
+    if (ss >> extra) {
+        std::cout << "Invalid" << std::endl;
+        continue;  // ← Continue reading commands
+    }
+    break;  // Only break if no extra args
+}
+```
+
+**Location**: src/main.cpp lines 74-79
+
+**Test Case**:
+```
+Input:
+quit extra
+su root sjtu
+quit
+
+Expected Output:
+Invalid
+(no output from su - succeeds)
+(program exits on second quit)
+
+Current (BROKEN) Output:
+Invalid
+(program exits immediately - never reaches su)
+```
 
 **Acceptance Criteria**:
-- All three branches merged to master
-- `quit extra` outputs "Invalid" ✓
-- `exit arg` outputs "Invalid" ✓
-- `show -ISBN=A -name="B"` outputs "Invalid" ✓
-- book.cpp comment updated to match spec ✓
-- All existing tests still pass (no regressions)
-- Build succeeds, no compiler warnings
-- Ready for OJ submission #2
+- `quit extra` outputs "Invalid" and continues ✓
+- `exit extra` outputs "Invalid" and continues ✓
+- `quit` (no args) exits cleanly ✓
+- `exit` (no args) exits cleanly ✓
+- Test case above passes completely
+- All existing tests still pass (no regression)
+- Build succeeds
 
 **Why This Milestone**:
-- Work is 95% done - just needs completion
-- Merging and verification is a distinct phase from implementation
-- Better to have a small "completion" milestone than restart M5.1
-- 2 cycles is enough for: review PRs → merge → test → verify
+- This is a 1-line fix but it's CRITICAL for correctness
+- The bug was introduced by M5.1 BUG #1 "fix" (PR #5)
+- Emma's audit (cycle 103) found the regression
+- Any OJ test with `quit extra` followed by more commands will fail
+- Must fix before OJ submission #2
 
-**Budget Justification**:
-- Cycle 1: Merge all 3 fixes, run basic tests
-- Cycle 2: Comprehensive regression testing and final verification
+**Budget**: 1 cycle is sufficient - this is a trivial code change + testing
 
 ---
 
 ## Lessons Learned
+
+### Cycle 103 (M5.1.1 Completion - Regression Found)
+- **⚠️ CRITICAL**: Validation check ≠ complete fix. Must verify CONTROL FLOW too.
+- **🐛 Bug Pattern**: The quit/exit "fix" added validation but wrong break placement
+- **✅ Good**: Emma's independent blind audit caught the regression before OJ submission
+- **📊 Key Insight**: Code review must verify: (1) logic correct, (2) output correct, (3) control flow correct
+- **⚠️ Testing Gap**: Need test cases that verify program CONTINUES after "Invalid" output
+- **✅ Strategy**: Always test both success and failure paths for each command
+- **📊 Decision**: Fix immediately in M5.1.2 (1 cycle) before any OJ submission
 
 ### Cycle 94 (M5.1 Deadline Miss)
 - **⚠️ Critical**: Milestones must include "merge to master" as explicit acceptance criteria
@@ -239,24 +316,23 @@ Implement a complete bookstore management system in C++ that passes all test cas
 
 ## Next Actions
 
-1. **Athena (Cycle 94)**: 
-   - ✅ Evaluated M5.1 deadline miss
-   - ✅ Verified all fixes exist and work individually
-   - ✅ Identified root cause: merge+verify not in milestone
-   - ✅ Created M5.1.1 to complete the work
-   - Ready to hand off M5.1.1 to Ares
+1. **Athena (Cycle 104)**: 
+   - ✅ M5.1.1 completed: All 3 fixes merged to master
+   - ✅ Emma's audit found critical regression in quit/exit validation
+   - ✅ Analyzed bug: Control flow error (unconditional break)
+   - ✅ Created M5.1.2 milestone with exact fix specified
+   - Ready to hand off M5.1.2 to Ares
    
-2. **Ares Team (M5.1.1)**: 
-   - Merge PR #5 (quit/exit validation)
-   - Merge PR #6 (show multi-parameter validation)
-   - Merge Noah's comment fix
-   - Run integration tests
-   - Verify all fixes work together on master
-   - No regressions
+2. **Ares Team (M5.1.2)**: 
+   - Fix src/main.cpp lines 74-79
+   - Move break inside else clause
+   - Add continue after "Invalid" output
+   - Test: `quit extra` followed by more commands
+   - Verify all existing tests still pass
 
-3. **After M5.1.1**: OJ submission #2 with 95%+ confidence
+3. **After M5.1.2**: Final verification sweep, then OJ submission #2
 
 ---
 
-**Last Updated**: Cycle 91 (Athena)  
-**Status**: M5.1 ready for implementation, 3 bugs identified with fixes specified
+**Last Updated**: Cycle 104 (Athena)  
+**Status**: M5.1.2 ready for implementation - 1 critical regression fix needed
