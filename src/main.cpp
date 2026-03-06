@@ -669,7 +669,7 @@ int main() {
             
             // Parse ISBN and quantity
             std::string isbn;
-            long long quantity;
+            int quantity;
             ss >> isbn >> quantity;
             
             if (isbn.empty() || ss.fail()) {
@@ -722,7 +722,7 @@ int main() {
             }
             
             // Parse quantity and total cost
-            long long quantity;
+            int quantity;
             double totalCost;
             ss >> quantity >> totalCost;
             
