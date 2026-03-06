@@ -523,6 +523,12 @@ int main() {
                         std::cout << "Invalid" << std::endl;
                         continue;
                     }
+                    // Check for extra parameters after count
+                    std::string extra;
+                    if (finSs >> extra) {
+                        std::cout << "Invalid" << std::endl;
+                        continue;
+                    }
                 }
                 
                 // Special case: if count is explicitly 0, output empty line
