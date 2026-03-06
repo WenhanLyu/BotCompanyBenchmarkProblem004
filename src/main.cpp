@@ -60,6 +60,12 @@ int main() {
             continue;
         }
         
+        // Check for tab characters - only space is allowed as whitespace
+        if (line.find('\t') != std::string::npos) {
+            std::cout << "Invalid" << std::endl;
+            continue;
+        }
+        
         // Extract the command (first word)
         std::stringstream ss(line);
         std::string command;
