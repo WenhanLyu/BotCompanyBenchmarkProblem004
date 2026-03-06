@@ -3,18 +3,17 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 107)
-- **Phase**: PLANNING (post-M5.1.2 completion, evaluating readiness for OJ submission #2)
-- **Repository**: All M5.1 fixes COMPLETE and merged to master (commit cba884a)
-  - BUG #1 fix (quit/exit validation): FIXED ✓ (control flow corrected)
-  - BUG #2 fix (show multi-param): MERGED and working ✓
-  - BUG #3 fix (finance comment): MERGED and working ✓
+## Current State (Cycle 108+)
+- **Phase**: PLANNING (CRITICAL BUG FOUND - numeric overflow in buy/import)
+- **Repository**: All M5.1 fixes complete, but NEW BUG discovered
+  - M5.1 fixes: ✓ quit/exit, ✓ show multi-param, ✓ finance comment
+  - **NEW BUG #6**: buy/import accept quantity > INT_MAX (should return "Invalid")
 - **Problem Status** (from OJ submission #1):
   - Problem 1075: 93/100 (only 2 failures: testpoints 3, 212)
-  - Problem 1775: 0/100 (COMPLETE FAILURE - hidden tests)
+  - Problem 1775: 0/100 (COMPLETE FAILURE - likely caused by BUG #6)
 - **Submissions Used**: 1/8
-- **Status**: M5.1.2 complete, evaluating whether fixes resolve OJ failures
-- **Cycles Used**: 107 total
+- **Status**: Must fix BUG #6 before OJ submission #2
+- **Cycles Used**: 107 total (Ares M5.1.2: 1/1)
 
 ## OJ Submission #1 Analysis
 
@@ -270,7 +269,57 @@ Invalid
 
 ---
 
+## M5.2: Fix Numeric Overflow Bug in buy/import Commands
+
+**Status**: READY TO START  
+**Estimated Cycles**: 2 (1 for fix, 1 for verification)
+**Description**: Fix critical bug where buy and import commands accept quantity values > INT_MAX
+
+**The Fix**:
+Change `long long quantity` to `int quantity` in:
+- src/main.cpp line 672 (buy command)
+- src/main.cpp line 725 (import command)
+
+This makes the type system automatically enforce the INT_MAX constraint - values > INT_MAX will cause `ss >> quantity` to fail, triggering the existing `ss.fail()` check.
+
+**Test Cases**:
+1. `buy ISBN 2147483647` → should succeed (INT_MAX is valid)
+2. `buy ISBN 2147483648` → should output "Invalid" (INT_MAX + 1)
+3. `import 2147483647 100.00` → should succeed
+4. `import 2147483648 100.00` → should output "Invalid"
+5. `buy ISBN 0` → should output "Invalid" (quantity must be positive)
+6. `import 0 100.00` → should output "Invalid"
+
+**Acceptance Criteria**:
+- ✓ buy command rejects quantity > INT_MAX with "Invalid"
+- ✓ import command rejects quantity > INT_MAX with "Invalid"
+- ✓ buy command rejects quantity <= 0 with "Invalid"
+- ✓ import command rejects quantity <= 0 with "Invalid"
+- ✓ Valid quantities (1 to INT_MAX) still work correctly
+- ✓ All previous tests still pass (no regressions)
+- ✓ Build succeeds
+
+**Why This Milestone**:
+- CRITICAL: Very likely the root cause of 1775's 0/100 score
+- The fix is simple (2-line change) but testing must be thorough
+- Must verify no regressions in book system logic
+- After this fix, we should be ready for OJ submission #2
+
+**Budget**: 2 cycles is sufficient for this focused fix
+
+---
+
 ## Lessons Learned
+
+### Cycle 108 (M5.1.2 Complete - BUG #6 Found)
+- **🎯 CRITICAL**: Independent blind audit after "complete" milestone found CRITICAL bug
+- **📊 Key Insight**: Fiona's systematic edge case audit discovered numeric overflow bug
+- **✅ Good**: Testing boundary values (INT_MAX, INT_MAX+1) revealed the issue
+- **⚠️ Root Cause**: Using `long long` instead of `int` bypasses specification constraint
+- **📊 Impact Assessment**: This bug very likely explains 1775's 0/100 score
+- **✅ Strategy**: Always test specification boundaries (max values, overflow cases)
+- **⚠️ Lesson**: "All fixes complete" ≠ "Ready for submission" - always do independent audit
+- **📊 Decision**: Fix BUG #6 immediately (2 cycles) before wasting submission #2
 
 ### Cycle 103 (M5.1.1 Completion - Regression Found)
 - **⚠️ CRITICAL**: Validation check ≠ complete fix. Must verify CONTROL FLOW too.
@@ -331,24 +380,57 @@ Invalid
 
 ---
 
-## Next Actions
+## BUG #6: Numeric Overflow in buy/import Commands 🚨 CRITICAL
 
-1. **Athena (Cycle 107)**: 
-   - ✅ M5.1.2 verified complete (Leo's fix working correctly)
-   - Scheduled independent evaluation team to assess:
-     - Verify all M5.1 fixes are working (Iris)
-     - Analyze testpoint 3 failure (Oliver)
-     - Analyze testpoint 212 failure (Fiona)
-     - Analyze problem 1775 failures (Gordon)
-     - Comprehensive code audit (Marcus)
-   - Decision point: Are we ready for OJ submission #2?
-   
-2. **Next Milestone Options**:
-   - Option A: If fixes likely resolved failures → OJ Submission #2
-   - Option B: If more issues found → Fix identified bugs first
-   - Option C: If unclear → More targeted testing/analysis
+**Discovered**: Cycle 108 (Fiona's audit, confirmed by Athena)
+
+**The Bug**:
+- **Location**: src/main.cpp lines 672 (buy) and 725 (import)
+- **Issue**: Commands use `long long` for quantity, accepting values > INT_MAX
+- **Spec Violation**: README.md states "[Quantity] value does not exceed 2,147,483,647" (INT_MAX)
+- **Current Behavior**: `import 2147483648 100.00` succeeds (stores quantity 2147483648)
+- **Expected Behavior**: Should output "Invalid"
+
+**Test Evidence**:
+```bash
+echo -e "su root sjtu\nselect TEST\nimport 2147483648 100.00\nshow -ISBN=TEST\nquit" | ./code
+# Output: TEST  ""  ""  ""  0.00  2147483648
+# Expected: Invalid (from import command)
+```
+
+**Why This Explains 1775 Failures**:
+1. Direct validation failures: Tests with quantity > INT_MAX expect "Invalid"
+2. Calculation errors: Very large quantities cause precision loss
+3. 1775 "InnerTestCase" failures suggest boundary/edge case testing
+4. 1075 scored 93% (likely doesn't test INT_MAX boundary)
+
+**Fix Required**:
+Change `long long quantity` to `int quantity` in:
+- src/main.cpp line 672 (buy command)
+- src/main.cpp line 725 (import command)
+
+OR add explicit validation:
+```cpp
+if (quantity <= 0 || quantity > INT_MAX) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+```
+
+**Impact**: CRITICAL - Very likely the root cause of 1775's 0/100 score
 
 ---
 
-**Last Updated**: Cycle 107 (Athena)  
-**Status**: M5.1.2 complete, evaluation in progress to determine readiness for OJ submission #2
+## Next Actions
+
+1. **Athena (Cycle 108)**: 
+   - ✅ M5.1.2 verified complete
+   - ✅ CRITICAL BUG #6 found by Fiona and confirmed
+   - Decision: Fix BUG #6 immediately before OJ submission #2
+   
+2. **Next Milestone**: M5.2 - Fix numeric overflow bug in buy/import
+
+---
+
+**Last Updated**: Cycle 108 (Athena)  
+**Status**: CRITICAL BUG #6 identified, must fix before OJ submission
