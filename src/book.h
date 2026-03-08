@@ -14,13 +14,13 @@ struct Book {
     std::string author;      // 1-60 chars, visible ASCII except pipe (quoted in show output)
     std::string keyword;     // pipe-separated keywords, each 1-60 chars, no duplicates
     double price;            // Price with 2 decimal places
-    long long quantity;      // Inventory quantity (non-negative)
+    int quantity;            // Inventory quantity (non-negative)
     
     Book() : price(0.0), quantity(0) {}
     Book(const std::string& isbn)
         : ISBN(isbn), name(""), author(""), keyword(""), price(0.0), quantity(0) {}
     Book(const std::string& isbn, const std::string& n, const std::string& auth,
-         const std::string& kw, double p, long long qty)
+         const std::string& kw, double p, int qty)
         : ISBN(isbn), name(n), author(auth), keyword(kw), price(p), quantity(qty) {}
 };
 
@@ -76,8 +76,8 @@ public:
     std::vector<Book> findByKeyword(const std::string& keyword) const;
     
     // Transaction operations
-    double buyBook(const std::string& ISBN, long long quantity);  // Returns total cost, -1 on failure
-    bool importBook(const std::string& ISBN, long long quantity, double totalCost);
+    double buyBook(const std::string& ISBN, int quantity);  // Returns total cost, -1 on failure
+    bool importBook(const std::string& ISBN, int quantity, double totalCost);
     
     // Finance operations
     std::string showFinance(int count = 0) const;  // Returns formatted finance report

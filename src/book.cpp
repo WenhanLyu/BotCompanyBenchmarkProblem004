@@ -60,11 +60,19 @@ void BookSystem::loadBooks() {
         std::string keyword = firstPart.substr(thirdPipe + 1);
         
         // Convert price and quantity
-        double price = std::stod(priceStr);
-        long long quantity = std::stoll(quantityStr);
-        
-        Book book(isbn, name, author, keyword, price, quantity);
-        books[isbn] = book;
+        try {
+            double price = std::stod(priceStr);
+            int quantity = std::stoi(quantityStr);
+            
+            Book book(isbn, name, author, keyword, price, quantity);
+            books[isbn] = book;
+        } catch (const std::out_of_range& e) {
+            // Skip books with out-of-range quantity values
+            continue;
+        } catch (const std::invalid_argument& e) {
+            // Skip books with invalid data
+            continue;
+        }
     }
     
     infile.close();
@@ -435,7 +443,7 @@ bool BookSystem::modifyBook(const std::string& currentISBN, const std::string& n
 
 // Buy book - decrease quantity and return total cost
 // Returns -1.0 if book doesn't exist, quantity invalid, or insufficient stock
-double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
+double BookSystem::buyBook(const std::string& ISBN, int quantity) {
     // Validate quantity
     if (quantity <= 0) {
         return -1.0;
@@ -474,7 +482,7 @@ double BookSystem::buyBook(const std::string& ISBN, long long quantity) {
 
 // Import book - increase quantity for selected book
 // Returns false if ISBN doesn't match selected book, quantity invalid, or cost invalid
-bool BookSystem::importBook(const std::string& ISBN, long long quantity, double totalCost) {
+bool BookSystem::importBook(const std::string& ISBN, int quantity, double totalCost) {
     // Validate quantity
     if (quantity <= 0) {
         return false;
