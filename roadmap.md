@@ -523,15 +523,15 @@ if (finSs >> extra) {
 
 ---
 
-## Current State (Cycle 111+)
+## Current State (Cycle 113+)
 
-**Phase**: PLANNING (Ready for OJ Submission #2)  
-**Repository**: All 8 identified bugs fixed, 100% spec compliant
-**Problem Status** (from OJ submission #1):
-  - Problem 1075: 93/100 (testpoints 3, 212 still unknown)
-  - Problem 1775: 0/100 (likely fixed by validation bug fixes)
-**Submissions Used**: 1/8
-**Submissions Remaining**: 7/8
+**Phase**: PLANNING (BUG #9 Found - Critical Runtime Error)  
+**Repository**: Type mismatch between Book struct and input validation
+**Problem Status** (from OJ submission #2):
+  - Problem 1075: 94/100 (improved from 93, testpoint unknown)
+  - Problem 1775: 25/100 **Runtime Error at testpoint 8** (SIGABRT)
+**Submissions Used**: 2/8
+**Submissions Remaining**: 6/8
 
 **All Bugs Fixed Since Submission #1**:
 1. ✅ BUG #1: Whitespace-only lines (commit 477f6b0)
@@ -554,5 +554,120 @@ if (finSs >> extra) {
 
 ---
 
-**Last Updated**: Cycle 111 (Athena)  
-**Status**: M5.3 complete, all known bugs fixed, ready for external evaluation
+---
+
+## BUG #9: Type Mismatch in Book Quantity Field 🚨 CRITICAL
+
+**Discovered**: Cycle 113 (Athena analysis of OJ submission #2)
+
+**The Bug**:
+- **Location**: `src/book.h` line 17, `src/book.cpp` line 64, function signatures
+- **Issue**: Book struct uses `long long quantity` but input validation uses `int quantity`
+- **Root Cause**: Incomplete fix in BUG #6 - changed validation but not data structure
+- **Impact**: Runtime Error (SIGABRT) at testpoint 8 in problem 1775
+
+**Type Mismatch Details**:
+```cpp
+// src/book.h line 17
+struct Book {
+    long long quantity;  // ← WRONG: Should be int
+};
+
+// src/main.cpp lines 672, 725
+int quantity;  // ← Input validation uses int (correct)
+ss >> quantity;
+
+// src/book.cpp line 64
+long long quantity = std::stoll(quantityStr);  // ← Loading uses long long
+```
+
+**Why This Causes SIGABRT**:
+1. `std::stoll()` in `loadBooks()` can throw exceptions on malformed data
+2. No try-catch blocks around file parsing operations
+3. Uncaught exception → program aborts with SIGABRT
+4. Testpoint 8 likely has specific data that triggers this
+
+**Additional Issues**:
+- Implicit conversion `int → long long` hides the type mismatch
+- File persistence uses `long long` but spec requires INT_MAX limit
+- Inconsistent types throughout codebase
+
+**Fix Required**:
+1. Change `src/book.h` line 17: `long long quantity;` → `int quantity;`
+2. Update constructor parameters in `src/book.h` lines 23-24
+3. Update function signatures in `src/book.h` lines 79-80
+4. Change `src/book.cpp` line 64: `std::stoll()` → `std::stoi()`
+5. Add try-catch blocks around ALL file parsing operations
+6. Validate loaded data is within acceptable ranges
+
+---
+
+## M6: Fix Type Mismatch and Add Exception Handling
+
+**Status**: READY TO START  
+**Estimated Cycles**: 3 (1 implementation, 1 testing, 1 verification)
+**Description**: Fix critical type mismatch in Book quantity field and add robust exception handling for file I/O
+
+**The Fixes**:
+
+**Fix #1: Change Book::quantity to int**
+- `src/book.h` line 17: `long long quantity;` → `int quantity;`
+- `src/book.h` line 19: Update default init
+- `src/book.h` line 23: Update constructor parameter
+- `src/book.h` line 79: `buyBook(..., long long quantity)` → `buyBook(..., int quantity)`
+- `src/book.h` line 80: `importBook(..., long long quantity, ...)` → `importBook(..., int quantity, ...)`
+
+**Fix #2: Update File Loading**
+- `src/book.cpp` line 64: `std::stoll(quantityStr)` → `std::stoi(quantityStr)`
+
+**Fix #3: Add Exception Handling to File Operations**
+Wrap all file parsing in try-catch blocks:
+```cpp
+try {
+    double price = std::stod(priceStr);
+    int quantity = std::stoi(quantityStr);
+    // ... rest of parsing
+} catch (const std::exception& e) {
+    // Skip malformed line, continue loading
+    continue;
+}
+```
+
+**Locations needing exception handling:**
+- `src/book.cpp` line 63-66: loadBooks() - price and quantity parsing
+- `src/book.cpp` line 154-155: loadFinance() - type and amount parsing
+- `src/account.cpp` line 42: loadAccounts() - privilege parsing
+- `src/main.cpp` line 441: modify command - price parsing (already has ss.fail() check)
+
+**Test Cases**:
+1. Normal operation with valid data
+2. Corrupted books.dat with invalid numbers
+3. Corrupted transactions.dat with invalid numbers
+4. Corrupted accounts.dat with invalid privilege
+5. Edge case: quantity exactly at INT_MAX
+6. Edge case: quantity = 0 (should be rejected in commands, but may exist in files)
+
+**Acceptance Criteria**:
+- ✓ All Book::quantity references use `int` type
+- ✓ File loading operations have exception handling
+- ✓ Malformed data in persistence files doesn't crash the program
+- ✓ Valid data loads correctly
+- ✓ All previous tests still pass
+- ✓ Build succeeds with no warnings
+- ✓ Program doesn't crash with SIGABRT on any input
+
+**Why This Milestone**:
+- CRITICAL: Blocking 75 points on problem 1775 (25/100 score)
+- Runtime Error is worse than Wrong Answer (indicates fundamental instability)
+- Type consistency is essential for code correctness
+- File I/O robustness prevents crashes on unexpected data
+
+**Budget**: 3 cycles
+- Cycle 1: Implement type changes and exception handling
+- Cycle 2: Comprehensive testing with corrupted files and edge cases
+- Cycle 3: Independent verification and regression testing
+
+---
+
+**Last Updated**: Cycle 113 (Athena)  
+**Status**: M5.3 complete, OJ submission #2 failed with Runtime Error, BUG #9 identified
