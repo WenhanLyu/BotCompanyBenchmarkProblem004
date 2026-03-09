@@ -63,6 +63,33 @@ bool isValidPrice(const std::string& priceStr) {
     return true;
 }
 
+// Validate quantity format: digits only, no +/- prefix
+bool isValidQuantity(const std::string& quantityStr) {
+    // Quantity must not be empty
+    if (quantityStr.empty()) {
+        return false;
+    }
+    
+    // Check for +/- prefix (not allowed)
+    if (quantityStr[0] == '+' || quantityStr[0] == '-') {
+        return false;
+    }
+    
+    // All characters must be digits
+    for (char c : quantityStr) {
+        if (!std::isdigit(c)) {
+            return false;
+        }
+    }
+    
+    // Check reasonable length (int max is 2147483647, which is 10 digits)
+    if (quantityStr.length() > 10) {
+        return false;
+    }
+    
+    return true;
+}
+
 // Parse command and arguments from normalized string
 void parseCommand(const std::string& normalized, std::string& command, std::vector<std::string>& args) {
     std::stringstream ss(normalized);
