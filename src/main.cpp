@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
+#include <cmath>
 #include "account.h"
 #include "book.h"
 
@@ -439,7 +440,7 @@ int main() {
                     }
                     try {
                         newPrice = std::stod(paramValue);
-                        if (newPrice < 0) {
+                        if (!std::isfinite(newPrice) || newPrice < 0) {
                             parseError = true;
                             break;
                         }
