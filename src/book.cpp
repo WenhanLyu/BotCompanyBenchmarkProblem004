@@ -159,11 +159,19 @@ void BookSystem::loadFinance() {
         std::string typeStr = line.substr(0, pipePos);
         std::string amountStr = line.substr(pipePos + 1);
         
-        int typeInt = std::stoi(typeStr);
-        double amount = std::stod(amountStr);
-        
-        FinanceRecord::Type type = (typeInt == 0) ? FinanceRecord::INCOME : FinanceRecord::EXPENSE;
-        financeRecords.push_back(FinanceRecord(type, amount));
+        try {
+            int typeInt = std::stoi(typeStr);
+            double amount = std::stod(amountStr);
+            
+            FinanceRecord::Type type = (typeInt == 0) ? FinanceRecord::INCOME : FinanceRecord::EXPENSE;
+            financeRecords.push_back(FinanceRecord(type, amount));
+        } catch (const std::invalid_argument& e) {
+            // Skip malformed line - invalid number format
+            continue;
+        } catch (const std::out_of_range& e) {
+            // Skip malformed line - number out of range
+            continue;
+        }
     }
     
     infile.close();
