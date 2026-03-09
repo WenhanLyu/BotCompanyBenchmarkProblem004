@@ -4,6 +4,7 @@
 #include <vector>
 #include <iomanip>
 #include <iostream>
+#include <climits>
 
 const std::string BookSystem::BOOKS_FILE = "books.dat";
 const std::string BookSystem::FINANCE_FILE = "transactions.dat";
@@ -508,6 +509,11 @@ bool BookSystem::importBook(const std::string& ISBN, int quantity, double totalC
     }
     
     Book* book = &(it->second);
+    
+    // Check for overflow before adding quantity
+    if (book->quantity > INT_MAX - quantity) {
+        return false;
+    }
     
     // Increase quantity
     book->quantity += quantity;
