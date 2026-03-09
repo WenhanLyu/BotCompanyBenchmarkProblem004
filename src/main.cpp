@@ -8,6 +8,61 @@
 #include "account.h"
 #include "book.h"
 
+// Validate price format: digits.digits with exactly 2 decimal places, no +/- prefix
+bool isValidPrice(const std::string& priceStr) {
+    // Price must not be empty
+    if (priceStr.empty()) {
+        return false;
+    }
+    
+    // Check for +/- prefix (not allowed)
+    if (priceStr[0] == '+' || priceStr[0] == '-') {
+        return false;
+    }
+    
+    // Find the decimal point
+    size_t dotPos = priceStr.find('.');
+    
+    // Price must contain exactly one dot
+    if (dotPos == std::string::npos) {
+        return false;
+    }
+    
+    // Check that there's only one dot
+    if (priceStr.find('.', dotPos + 1) != std::string::npos) {
+        return false;
+    }
+    
+    // Must have at least one digit before the dot
+    if (dotPos == 0) {
+        return false;
+    }
+    
+    // Must have exactly 2 digits after the dot
+    if (dotPos + 3 != priceStr.length()) {
+        return false;
+    }
+    
+    // All characters before the dot must be digits
+    for (size_t i = 0; i < dotPos; ++i) {
+        if (!std::isdigit(priceStr[i])) {
+            return false;
+        }
+    }
+    
+    // The 2 characters after the dot must be digits
+    if (!std::isdigit(priceStr[dotPos + 1]) || !std::isdigit(priceStr[dotPos + 2])) {
+        return false;
+    }
+    
+    // Check reasonable length (e.g., max 13 chars: 10 digits + dot + 2 decimals)
+    if (priceStr.length() > 13) {
+        return false;
+    }
+    
+    return true;
+}
+
 // Parse command and arguments from normalized string
 void parseCommand(const std::string& normalized, std::string& command, std::vector<std::string>& args) {
     std::stringstream ss(normalized);
@@ -435,6 +490,11 @@ int main() {
                     newKeyword = paramValue;
                 } else if (paramName == "price") {
                     if (newPrice >= 0) {
+                        parseError = true;
+                        break;
+                    }
+                    // Validate price format before conversion
+                    if (!isValidPrice(paramValue)) {
                         parseError = true;
                         break;
                     }
