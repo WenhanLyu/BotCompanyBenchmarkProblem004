@@ -769,13 +769,22 @@ int main() {
             
             // Parse ISBN and quantity
             std::string isbn;
-            int quantity;
-            ss >> isbn >> quantity;
+            std::string quantityStr;
+            ss >> isbn >> quantityStr;
             
-            if (isbn.empty() || ss.fail()) {
+            if (isbn.empty() || quantityStr.empty()) {
                 std::cout << "Invalid" << std::endl;
                 continue;
             }
+            
+            // Validate quantity string (reject + prefix and non-digit characters)
+            if (!isValidQuantity(quantityStr)) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Convert validated quantity string to int
+            int quantity = std::stoi(quantityStr);
             
             // Check for extra arguments
             std::string extra;
