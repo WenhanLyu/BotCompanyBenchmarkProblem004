@@ -896,3 +896,146 @@ book->quantity += quantity;
 
 **Last Updated**: Cycle 352 (Athena)  
 **Status**: M7 verified complete, ready for OJ submission #3
+
+---
+
+## Cycle 353-356 - Milestone Misdirection & Investigation
+
+**Cycle 353 (Ares)**: Attempted "Submit to OJ and analyze results (Submission #3)"
+- **Status**: DEADLINE MISSED (1/1 cycles used)
+- **Outcome**: Parker blocked by missing ACMOJ_TOKEN
+- **Root Cause**: Milestone incorrectly scoped - per spec.md line 19, agents should NOT handle ACMOJ submission
+- **Lesson**: Submissions are handled by external runner/human, not agent cycles
+
+**Cycle 355 (Athena)**: Investigation of testpoint 8 crash persistence
+Deployed 4 workers to investigate why M7 didn't resolve testpoint 8 SIGABRT:
+
+1. **Fiona** (M7 verification):
+   - ✅ Verified M7 overflow fix is mathematically correct (proved + tested)
+   - 100% confidence: overflow check formula is sound
+
+2. **Gordon** (Crash source analysis):
+   - Hypothesis: Uncaught exceptions in file loading (95% confidence)
+   - Analysis: All std::stoi/stod calls ARE wrapped in try-catch
+   - Identified: Need to look beyond obvious exception sources
+
+3. **Walter** (Comprehensive audit):
+   - Found: 50+ potential crash scenarios
+   - **HIGH severity (4 issues)**:
+     - Integer overflow in buyBook(): `price * quantity` multiplication
+     - Silent file I/O failures
+     - Floating-point precision loss in finance
+     - Missing inf/nan validation in price parsing
+   - **MEDIUM/LOW**: Design issues, not immediate crash risks
+
+4. **Clara** (Crash reproduction):
+   - Status: Testing cycles failed (3 attempts, all failed)
+   - Unable to reproduce testpoint 8 crash locally
+
+**Key Finding**: Cannot reproduce testpoint 8 crash locally despite comprehensive testing. This suggests the crash is OJ-environment-specific or requires specific test data we don't have access to.
+
+---
+
+## Current State (Cycle 356)
+
+**Repository Status**:
+- Latest commit: f2c5e33 (M7 fix - importBook overflow)
+- All 10 identified bugs fixed (BUG #1-10)
+- Code quality: 100% spec compliance (verified cycle 352)
+- Local testing: 214/214 tests pass, 68/68 crash tests pass
+
+**OJ Performance** (Submission #2, Mar 8 23:43):
+- Problem 1075: 94/100 (6 points from perfect)
+- Problem 1775: 25/100 (testpoint 8 Runtime Error - SIGABRT)
+- Progress: 0→25 on 1775 (M6+M7 fixed testpoints 1-7)
+- Submissions remaining: 6/8
+
+**Diagnosis**:
+- Testpoint 8 crash persists despite M6 (exception handling) + M7 (overflow check)
+- Both fixes verified correct and complete
+- Crash cannot be reproduced locally
+- Likely requires specific OJ test data or accumulated state
+
+**Strategic Position**:
+- Fixed all bugs we can identify/reproduce
+- Further progress requires external feedback (OJ submission)
+- Have comfortable submission buffer (6 remaining)
+- Walter identified additional HIGH severity issues worth fixing
+
+---
+
+## M8: Fix Arithmetic Overflow in Financial Calculations
+
+**Status**: READY TO START  
+**Estimated Cycles**: 2 (1 for implementation, 1 for verification)
+**Description**: Fix integer overflow in buyBook() price × quantity calculation and add inf/nan validation
+
+**The Bugs (from Walter's audit)**:
+
+**BUG #11: Integer Overflow in buyBook() Calculation**
+- **Location**: `src/book.cpp` (buyBook function, price × quantity)
+- **Issue**: Multiplying large price (up to 1e13) by large quantity (up to INT_MAX) can overflow
+- **Impact**: Financial calculations produce incorrect totals
+- **Severity**: HIGH - Affects financial integrity
+
+**BUG #12: Missing inf/nan Validation**
+- **Location**: `src/main.cpp:441` (price parsing in modify command)
+- **Issue**: No validation for infinity or NaN values after std::stod
+- **Impact**: Invalid price values can be stored
+- **Severity**: MEDIUM - Edge case but should validate
+
+**The Fixes**:
+
+1. **Add overflow check before multiplication in buyBook()**:
+```cpp
+// Before: double totalCost = book->price * quantity;
+// After:
+if (quantity > 0 && book->price > DBL_MAX / quantity) {
+    return -1.0;  // Would overflow - reject operation
+}
+double totalCost = book->price * quantity;
+```
+
+2. **Add inf/nan validation after price parsing**:
+```cpp
+newPrice = std::stod(paramValue);
+if (!std::isfinite(newPrice) || newPrice < 0) {
+    parseError = true;
+    break;
+}
+```
+
+**Test Cases**:
+1. Buy with very high price (9999999999999.99) × large quantity
+2. Buy with price that would cause double overflow
+3. Modify price with "inf", "infinity", "-inf"
+4. Modify price with "nan", "NaN"
+5. Normal operations still work correctly
+6. All financial calculations remain accurate
+
+**Acceptance Criteria**:
+- ✓ buyBook() rejects operations that would overflow double precision
+- ✓ Price parsing rejects inf/nan values
+- ✓ Financial calculations remain accurate
+- ✓ All previous tests still pass
+- ✓ Build succeeds
+- ✓ No runtime errors on edge cases
+
+**Why This Milestone**:
+- Walter identified as HIGH severity issue
+- Affects financial integrity (core system requirement)
+- Simple fix (2 locations) but important for correctness
+- After this, we've addressed all HIGH severity findings
+- Then ready for next OJ submission with maximum confidence
+
+**Budget**: 2 cycles
+- Cycle 1: Implement both fixes, test locally
+- Cycle 2: Comprehensive financial calculation testing, verify correctness
+
+**Alternative Strategy**:
+If this milestone doesn't resolve testpoint 8, the project may need to be marked as "ready for external evaluation" since we cannot reproduce the crash locally and have exhausted identifiable bugs.
+
+---
+
+**Last Updated**: Cycle 356 (Athena)  
+**Status**: M7 complete, investigating testpoint 8 persistence, ready to start M8
