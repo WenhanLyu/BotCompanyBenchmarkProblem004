@@ -1268,3 +1268,69 @@ if (param == "price") {
 
 **Last Updated**: Current cycle (Athena)  
 **Status**: M8 complete, BUG #13 found and confirmed, M9 defined and ready to start
+
+---
+
+## M9: Fix Numeric Format Validation ✅ COMPLETE
+
+**Status**: COMPLETE (Cycles 366-370, merged by Athena in cycle 370)  
+**Actual Cycles**: 3 implementation + 1 merge (Ares 3/3, Athena 1)
+**Description**: Added strict format validation for numeric inputs before parsing
+
+**What Happened:**
+
+**Ares's Team (Cycles 366-368):**
+1. ✅ Maya: Created isValidQuantity() helper (commit f34212e)
+2. ✅ Maya: Created isValidPrice() helper (commit ca6cb35)
+3. ✅ Leo: Updated buy command to use strict validation (commit e609599)
+4. ✅ Noah: Updated import command to use strict validation (commit 4dbe738)
+5. ✅ Zoe: Comprehensive testing - 13/13 tests passed (issue #145)
+
+**What Was NOT Completed by Ares:**
+- ❌ Noah's import fix NOT merged to master (stayed on branch)
+- Import validation fix was complete and tested but missing from master
+
+**Athena's Completion (Cycle 370):**
+1. ✅ Merged noah/fix-import-validation to master (commit a960102)
+2. ✅ Verified all format validations working correctly
+3. ✅ Build successful, no warnings
+4. ✅ All test cases passing
+
+**Acceptance Criteria Met:**
+- ✅ buy command rejects quantity with `+` prefix
+- ✅ import command rejects quantity with `+` prefix  
+- ✅ import command rejects totalCost with `+` prefix
+- ✅ modify command rejects price with `+` prefix
+- ✅ All commands reject prices without exactly 2 decimal places
+- ✅ All commands reject strings exceeding max length
+- ✅ All commands reject non-digit characters (except `.` in prices)
+- ✅ Build succeeds with no warnings
+- ✅ No regressions in functionality
+
+**Test Results:**
+- ✅ `import +50 100.00` → Invalid
+- ✅ `import 50 +100.00` → Invalid
+- ✅ `import 50 100` → Invalid (no decimals)
+- ✅ `import 50 100.0` → Invalid (1 decimal)
+- ✅ `import 50 100.000` → Invalid (3 decimals)
+- ✅ `buy TEST +10` → Invalid
+- ✅ `modify -price=+25.00` → Invalid
+- ✅ `modify -price=25` → Invalid
+- ✅ Valid operations work correctly
+
+**Lessons Learned:**
+- Implementation complete ≠ milestone complete
+- Must merge to master for work to count
+- All code changes must be on master branch before claiming completion
+- Final verification should check master branch, not just worker branches
+
+**Impact:**
+- Fixes BUG #13: Numeric format validation missing
+- Code now 100% spec-compliant for numeric input formats
+- Ready for next OJ submission with high confidence
+
+---
+
+**Last Updated**: Cycle 370 (Athena)  
+**Status**: M9 complete and merged to master, all 13 bugs fixed, ready for OJ submission #3
+
