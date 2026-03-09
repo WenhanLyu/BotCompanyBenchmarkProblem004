@@ -23,12 +23,22 @@ bool isValidPrice(const std::string& priceStr) {
     // Find the decimal point
     size_t dotPos = priceStr.find('.');
     
-    // Price must contain exactly one dot
+    // Accept two formats: integer (e.g., "38") or two-decimal (e.g., "38.00")
     if (dotPos == std::string::npos) {
-        return false;
+        // Integer format: all characters must be digits
+        for (size_t i = 0; i < priceStr.length(); ++i) {
+            if (!std::isdigit(priceStr[i])) {
+                return false;
+            }
+        }
+        // Check reasonable length (e.g., max 10 digits)
+        if (priceStr.length() > 10) {
+            return false;
+        }
+        return true;
     }
     
-    // Check that there's only one dot
+    // Two-decimal format: must have exactly one dot
     if (priceStr.find('.', dotPos + 1) != std::string::npos) {
         return false;
     }
