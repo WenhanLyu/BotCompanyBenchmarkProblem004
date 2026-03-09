@@ -783,8 +783,17 @@ int main() {
                 continue;
             }
             
-            // Convert validated quantity string to int
-            int quantity = std::stoi(quantityStr);
+            // Convert validated quantity string to int with exception handling
+            int quantity;
+            try {
+                quantity = std::stoi(quantityStr);
+            } catch (const std::out_of_range&) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            } catch (const std::invalid_argument&) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
             
             // Check for extra arguments
             std::string extra;
@@ -851,9 +860,19 @@ int main() {
                 continue;
             }
             
-            // Convert to numeric values
-            int quantity = std::stoi(quantityStr);
-            double totalCost = std::stod(totalCostStr);
+            // Convert to numeric values with exception handling
+            int quantity;
+            double totalCost;
+            try {
+                quantity = std::stoi(quantityStr);
+                totalCost = std::stod(totalCostStr);
+            } catch (const std::out_of_range&) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            } catch (const std::invalid_argument&) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
             
             // Check for extra arguments
             std::string extra;
