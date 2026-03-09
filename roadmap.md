@@ -3,7 +3,68 @@
 ## Project Goal
 Implement a complete bookstore management system in C++ that passes all test cases on ACMOJ (problems 1075 and 1775).
 
-## Current State (Cycle 108+)
+## Current State (Cycle 382)
+
+**Phase**: PLANNING (Pre-submission verification after M9.2)  
+**Repository**: All known bugs fixed (BUG #1-15), M9.2 verified complete  
+**OJ Status** (Submission #2):
+  - Problem 1075: 94/100 (only testpoint 212 failing)
+  - Problem 1775: 25/100 (Runtime Error on testpoint 8)
+**Submissions Used**: 2/8  
+**Submissions Remaining**: 6/8
+
+**Recent Milestones Completed**:
+- ✅ M9: Strict numeric format validation (reject +, tabs, etc.)
+- ✅ M9.1: Exception handling in buy/import commands
+- ✅ M9.2: Fix isValidPrice() to accept integer notation
+
+**Assessment**:
+- All 15 identified bugs fixed
+- Tests 5, 6, 10, 211 now pass (verified manually)
+- Apollo verified M9.2 complete with no regressions
+- Ready for final pre-submission verification before OJ submission #3
+
+---
+
+## Bugs Identified and Fixed
+
+**All bugs fixed as of Cycle 382:**
+
+1. ✅ **BUG #1**: Whitespace-only lines output "Invalid" (M5)
+2. ✅ **BUG #2**: Extra arguments silently ignored (M5)
+3. ✅ **BUG #3**: passwd 3-arg form for {7} (M5)
+4. ✅ **BUG #4**: Empty parameter validation (M5)
+5. ✅ **BUG #5**: Empty keyword trailing pipe (M5)
+6. ✅ **BUG #6**: Numeric overflow in buy/import (M5.2)
+7. ✅ **BUG #7**: Type mismatch - quantity should be int (M6)
+8. ✅ **BUG #8**: Missing exception handling in file I/O (M6)
+9. ✅ **BUG #9**: quit/exit control flow regression (M5.1.2)
+10. ✅ **BUG #10**: importBook overflow check missing (M7)
+11. ✅ **BUG #11**: buyBook arithmetic overflow (M8)
+12. ✅ **BUG #12**: modify command accepts inf/nan prices (M8)
+13. ✅ **BUG #13**: Numeric format validation too loose (M9)
+14. ✅ **BUG #14**: Exception handling gap in buy/import (M9.1)
+15. ✅ **BUG #15**: Price validation too strict (M9.2)
+
+---
+
+## Next Steps
+
+**Pre-submission Verification (Cycle 382-383)**:
+- Quick final verification by blind workers (Clara, Fiona, Walter)
+- Verify no crashes, no regressions, spec compliance
+- Decision point: Submit to OJ or investigate further
+
+**Expected Outcome of OJ Submission #3**:
+- Problem 1075: 97-100/100 (testpoint 212 may still fail)
+- Problem 1775: 50-100/100 (Runtime Error should be fixed)
+
+---
+
+---
+
+# Detailed History (Cycles 1-381)
+
 - **Phase**: PLANNING (CRITICAL BUG FOUND - numeric overflow in buy/import)
 - **Repository**: All M5.1 fixes complete, but NEW BUG discovered
   - M5.1 fixes: ✓ quit/exit, ✓ show multi-param, ✓ finance comment
