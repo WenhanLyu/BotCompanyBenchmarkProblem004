@@ -830,15 +830,30 @@ int main() {
                 continue;
             }
             
-            // Parse quantity and total cost
-            int quantity;
-            double totalCost;
-            ss >> quantity >> totalCost;
+            // Parse quantity and total cost as strings first
+            std::string quantityStr, totalCostStr;
+            ss >> quantityStr >> totalCostStr;
             
             if (ss.fail()) {
                 std::cout << "Invalid" << std::endl;
                 continue;
             }
+            
+            // Validate quantity format
+            if (!isValidQuantity(quantityStr)) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Validate price format
+            if (!isValidPrice(totalCostStr)) {
+                std::cout << "Invalid" << std::endl;
+                continue;
+            }
+            
+            // Convert to numeric values
+            int quantity = std::stoi(quantityStr);
+            double totalCost = std::stod(totalCostStr);
             
             // Check for extra arguments
             std::string extra;
