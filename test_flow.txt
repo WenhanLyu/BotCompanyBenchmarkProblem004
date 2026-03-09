@@ -1,0 +1,4 @@
+su root sjtu
+select TEST001
+show -ISBN=TEST001
+quit

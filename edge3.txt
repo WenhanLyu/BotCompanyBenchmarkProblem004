@@ -1,0 +1,5 @@
+su root sjtu
+select A
+import 2147483647 999999999.99
+show -ISBN=A
+quit

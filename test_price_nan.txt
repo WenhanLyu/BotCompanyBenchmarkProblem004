@@ -1,0 +1,6 @@
+su root sjtu
+select BOOK3
+import 10 100.00
+modify -price=nan
+show -ISBN=BOOK3
+quit

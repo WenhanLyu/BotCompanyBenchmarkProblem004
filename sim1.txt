@@ -1,0 +1,9 @@
+su root sjtu
+select BOOK1
+import 500000000 1000.00
+select BOOK2
+import 600000000 2000.00
+select BOOK3
+import 700000000 3000.00
+show
+quit

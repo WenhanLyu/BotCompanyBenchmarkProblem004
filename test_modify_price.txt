@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK11
+modify -price=99.99
+show -ISBN=BOOK11
+quit

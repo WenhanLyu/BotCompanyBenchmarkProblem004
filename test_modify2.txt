@@ -1,0 +1,5 @@
+su root sjtu
+select TEST001
+modify -ISBN=TEST001 -price=50.00
+show -ISBN=TEST001
+quit

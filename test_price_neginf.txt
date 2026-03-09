@@ -1,0 +1,6 @@
+su root sjtu
+select BOOK4
+import 10 100.00
+modify -price=-inf
+show -ISBN=BOOK4
+quit

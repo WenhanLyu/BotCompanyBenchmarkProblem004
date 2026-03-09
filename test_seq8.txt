@@ -1,0 +1,13 @@
+su root sjtu
+select ISBN001
+import 648000000 6000.00
+show -ISBN=ISBN001
+select ISBN004
+import 648000000 6000.00
+show -ISBN=ISBN004
+select ISBN006
+import 148000000 1000.00
+show -ISBN=ISBN006
+show
+show finance
+quit

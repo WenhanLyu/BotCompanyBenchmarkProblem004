@@ -1,0 +1,8 @@
+su root sjtu
+select TEST2
+import 1 0.01
+import 1 0.01
+import 1 0.01
+show -ISBN=TEST2
+show finance
+quit

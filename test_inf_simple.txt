@@ -1,0 +1,9 @@
+su root sjtu
+register testuser pass123 1 Test User
+import 1 978-0-123456-78-9 TestBook Author Keyword 100.5 100
+show -ISBN=978-0-123456-78-9
+modify -ISBN=978-0-123456-78-9 -price=200.0
+show -ISBN=978-0-123456-78-9
+modify -ISBN=978-0-123456-78-9 -price=inf
+show -ISBN=978-0-123456-78-9
+quit

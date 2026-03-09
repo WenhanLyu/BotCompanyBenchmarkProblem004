@@ -1,0 +1,5 @@
+su root sjtu
+select ISBN001
+import 1000000000 10000.00
+show -ISBN=ISBN001
+quit

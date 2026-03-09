@@ -1,0 +1,10 @@
+su root sjtu
+select PARTIAL
+show -ISBN=PARTIAL
+modify -price=10.00
+show -ISBN=PARTIAL
+import 100 100.00
+show -ISBN=PARTIAL
+modify -name="Name"
+show -ISBN=PARTIAL
+quit

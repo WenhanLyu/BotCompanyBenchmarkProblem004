@@ -1,0 +1,9 @@
+su root sjtu
+select BOOK14
+modify -name="ShowTest" -author="Author1" -keyword="kw1|kw2"
+show -ISBN=BOOK14
+show -name="ShowTest"
+show -author="Author1"
+show -keyword=kw1
+show
+quit

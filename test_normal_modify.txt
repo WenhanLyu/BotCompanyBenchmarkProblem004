@@ -1,0 +1,6 @@
+su root sjtu
+select TEST
+import 10 10.00
+modify -ISBN=TEST -price=15.99
+show -ISBN=TEST
+quit

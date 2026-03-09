@@ -1,0 +1,8 @@
+su root sjtu
+select ISBN006
+import 2000000000 20000.00
+modify -name="Test Book 6"
+modify -author="Author 6"
+modify -keyword="kw1|kw2|kw3"
+show -ISBN=ISBN006
+quit

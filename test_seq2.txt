@@ -1,0 +1,6 @@
+su root sjtu
+select ISBN001
+import 500000000 5000.00
+select ISBN003
+import 300000000 3000.00
+quit

@@ -1,0 +1,22 @@
+su root sjtu
+register test1
+useradd test2 pw1 7
+su test1
+select 9781234567890
+modify -name="Test Book" -author="Test Author" -keyword="keyword1" -price=10.00
+import 100 10.00
+buy 5
+show finance
+modify -price=inf
+show finance
+modify -price=nan
+show finance
+modify -price=-inf
+show finance
+modify -price=1e309
+show finance
+modify -price=50.00
+show finance
+buy 10
+show finance
+quit

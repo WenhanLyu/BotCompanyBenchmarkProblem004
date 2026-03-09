@@ -1,0 +1,11 @@
+su root sjtu
+select BOOK1
+import 600000000 1000.00
+show -ISBN=BOOK1
+select BOOK2
+import 600000000 2000.00
+show -ISBN=BOOK2
+select BOOK3
+import 600000000 3000.00
+show -ISBN=BOOK3
+quit

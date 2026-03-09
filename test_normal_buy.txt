@@ -1,0 +1,7 @@
+su root sjtu
+select BOOK5
+import 100 2500.00
+modify -price=25.50
+buy BOOK5 5
+show finance
+quit

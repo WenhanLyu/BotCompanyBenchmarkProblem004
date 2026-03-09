@@ -1,0 +1,15 @@
+su root sjtu
+select ISBN001
+import 1 1.00
+select ISBN002
+import 1 1.00
+select ISBN003
+import 1 1.00
+select ISBN004
+import 1 1.00
+select ISBN005
+import 1 1.00
+select ISBN006
+import 1 1.00
+show
+quit

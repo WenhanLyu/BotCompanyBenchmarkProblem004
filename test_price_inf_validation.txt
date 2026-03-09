@@ -1,0 +1,14 @@
+su root sjtu
+register admin admin123 7 Admin User
+select TEST-ISBN
+import 100 50.00
+show -ISBN=TEST-ISBN
+modify -price=100.00
+show -ISBN=TEST-ISBN
+modify -price=inf
+show -ISBN=TEST-ISBN
+modify -price=nan
+show -ISBN=TEST-ISBN
+modify -price=-inf
+show -ISBN=TEST-ISBN
+quit

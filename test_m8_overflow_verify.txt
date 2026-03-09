@@ -1,0 +1,15 @@
+su root sjtu
+register test1
+useradd test2 pw1 7
+su test1
+select 9781234567890
+modify -name="Test Book" -author="Test Author" -keyword="keyword1" -price=1000000000000.00
+import 100000 1.00
+buy 50000
+show finance
+select 9781234567891
+modify -name="Overflow Test" -author="Test" -keyword="test" -price=1e13
+import 1000 1.00
+buy 500
+show finance
+quit

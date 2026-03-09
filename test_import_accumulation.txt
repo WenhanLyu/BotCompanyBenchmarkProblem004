@@ -1,0 +1,7 @@
+su root sjtu
+select BOOK18
+import 2147483640 1000.00
+import 7 100.00
+import 1 10.00
+show -ISBN=BOOK18
+quit

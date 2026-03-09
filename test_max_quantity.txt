@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK15
+import 2147483647 1000000.00
+show -ISBN=BOOK15
+quit

@@ -1,0 +1,8 @@
+su root sjtu
+show finance
+register buyer1 pass1 1 Buyer1
+select ISBN001
+modify -price=100.00
+su buyer1 pass1
+buy ISBN001 1000000
+quit

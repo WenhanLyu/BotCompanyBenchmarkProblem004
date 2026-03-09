@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK13
+modify -ISBN=BOOK13NEW
+show -ISBN=BOOK13NEW
+quit

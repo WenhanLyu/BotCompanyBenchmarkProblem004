@@ -1,0 +1,1502 @@
+su root sjtu
+select LARGEFILE1
+modify -name="Book 1"
+import 1 100.00
+select LARGEFILE2
+modify -name="Book 2"
+import 2 100.00
+select LARGEFILE3
+modify -name="Book 3"
+import 3 100.00
+select LARGEFILE4
+modify -name="Book 4"
+import 4 100.00
+select LARGEFILE5
+modify -name="Book 5"
+import 5 100.00
+select LARGEFILE6
+modify -name="Book 6"
+import 6 100.00
+select LARGEFILE7
+modify -name="Book 7"
+import 7 100.00
+select LARGEFILE8
+modify -name="Book 8"
+import 8 100.00
+select LARGEFILE9
+modify -name="Book 9"
+import 9 100.00
+select LARGEFILE10
+modify -name="Book 10"
+import 10 100.00
+select LARGEFILE11
+modify -name="Book 11"
+import 11 100.00
+select LARGEFILE12
+modify -name="Book 12"
+import 12 100.00
+select LARGEFILE13
+modify -name="Book 13"
+import 13 100.00
+select LARGEFILE14
+modify -name="Book 14"
+import 14 100.00
+select LARGEFILE15
+modify -name="Book 15"
+import 15 100.00
+select LARGEFILE16
+modify -name="Book 16"
+import 16 100.00
+select LARGEFILE17
+modify -name="Book 17"
+import 17 100.00
+select LARGEFILE18
+modify -name="Book 18"
+import 18 100.00
+select LARGEFILE19
+modify -name="Book 19"
+import 19 100.00
+select LARGEFILE20
+modify -name="Book 20"
+import 20 100.00
+select LARGEFILE21
+modify -name="Book 21"
+import 21 100.00
+select LARGEFILE22
+modify -name="Book 22"
+import 22 100.00
+select LARGEFILE23
+modify -name="Book 23"
+import 23 100.00
+select LARGEFILE24
+modify -name="Book 24"
+import 24 100.00
+select LARGEFILE25
+modify -name="Book 25"
+import 25 100.00
+select LARGEFILE26
+modify -name="Book 26"
+import 26 100.00
+select LARGEFILE27
+modify -name="Book 27"
+import 27 100.00
+select LARGEFILE28
+modify -name="Book 28"
+import 28 100.00
+select LARGEFILE29
+modify -name="Book 29"
+import 29 100.00
+select LARGEFILE30
+modify -name="Book 30"
+import 30 100.00
+select LARGEFILE31
+modify -name="Book 31"
+import 31 100.00
+select LARGEFILE32
+modify -name="Book 32"
+import 32 100.00
+select LARGEFILE33
+modify -name="Book 33"
+import 33 100.00
+select LARGEFILE34
+modify -name="Book 34"
+import 34 100.00
+select LARGEFILE35
+modify -name="Book 35"
+import 35 100.00
+select LARGEFILE36
+modify -name="Book 36"
+import 36 100.00
+select LARGEFILE37
+modify -name="Book 37"
+import 37 100.00
+select LARGEFILE38
+modify -name="Book 38"
+import 38 100.00
+select LARGEFILE39
+modify -name="Book 39"
+import 39 100.00
+select LARGEFILE40
+modify -name="Book 40"
+import 40 100.00
+select LARGEFILE41
+modify -name="Book 41"
+import 41 100.00
+select LARGEFILE42
+modify -name="Book 42"
+import 42 100.00
+select LARGEFILE43
+modify -name="Book 43"
+import 43 100.00
+select LARGEFILE44
+modify -name="Book 44"
+import 44 100.00
+select LARGEFILE45
+modify -name="Book 45"
+import 45 100.00
+select LARGEFILE46
+modify -name="Book 46"
+import 46 100.00
+select LARGEFILE47
+modify -name="Book 47"
+import 47 100.00
+select LARGEFILE48
+modify -name="Book 48"
+import 48 100.00
+select LARGEFILE49
+modify -name="Book 49"
+import 49 100.00
+select LARGEFILE50
+modify -name="Book 50"
+import 50 100.00
+select LARGEFILE51
+modify -name="Book 51"
+import 51 100.00
+select LARGEFILE52
+modify -name="Book 52"
+import 52 100.00
+select LARGEFILE53
+modify -name="Book 53"
+import 53 100.00
+select LARGEFILE54
+modify -name="Book 54"
+import 54 100.00
+select LARGEFILE55
+modify -name="Book 55"
+import 55 100.00
+select LARGEFILE56
+modify -name="Book 56"
+import 56 100.00
+select LARGEFILE57
+modify -name="Book 57"
+import 57 100.00
+select LARGEFILE58
+modify -name="Book 58"
+import 58 100.00
+select LARGEFILE59
+modify -name="Book 59"
+import 59 100.00
+select LARGEFILE60
+modify -name="Book 60"
+import 60 100.00
+select LARGEFILE61
+modify -name="Book 61"
+import 61 100.00
+select LARGEFILE62
+modify -name="Book 62"
+import 62 100.00
+select LARGEFILE63
+modify -name="Book 63"
+import 63 100.00
+select LARGEFILE64
+modify -name="Book 64"
+import 64 100.00
+select LARGEFILE65
+modify -name="Book 65"
+import 65 100.00
+select LARGEFILE66
+modify -name="Book 66"
+import 66 100.00
+select LARGEFILE67
+modify -name="Book 67"
+import 67 100.00
+select LARGEFILE68
+modify -name="Book 68"
+import 68 100.00
+select LARGEFILE69
+modify -name="Book 69"
+import 69 100.00
+select LARGEFILE70
+modify -name="Book 70"
+import 70 100.00
+select LARGEFILE71
+modify -name="Book 71"
+import 71 100.00
+select LARGEFILE72
+modify -name="Book 72"
+import 72 100.00
+select LARGEFILE73
+modify -name="Book 73"
+import 73 100.00
+select LARGEFILE74
+modify -name="Book 74"
+import 74 100.00
+select LARGEFILE75
+modify -name="Book 75"
+import 75 100.00
+select LARGEFILE76
+modify -name="Book 76"
+import 76 100.00
+select LARGEFILE77
+modify -name="Book 77"
+import 77 100.00
+select LARGEFILE78
+modify -name="Book 78"
+import 78 100.00
+select LARGEFILE79
+modify -name="Book 79"
+import 79 100.00
+select LARGEFILE80
+modify -name="Book 80"
+import 80 100.00
+select LARGEFILE81
+modify -name="Book 81"
+import 81 100.00
+select LARGEFILE82
+modify -name="Book 82"
+import 82 100.00
+select LARGEFILE83
+modify -name="Book 83"
+import 83 100.00
+select LARGEFILE84
+modify -name="Book 84"
+import 84 100.00
+select LARGEFILE85
+modify -name="Book 85"
+import 85 100.00
+select LARGEFILE86
+modify -name="Book 86"
+import 86 100.00
+select LARGEFILE87
+modify -name="Book 87"
+import 87 100.00
+select LARGEFILE88
+modify -name="Book 88"
+import 88 100.00
+select LARGEFILE89
+modify -name="Book 89"
+import 89 100.00
+select LARGEFILE90
+modify -name="Book 90"
+import 90 100.00
+select LARGEFILE91
+modify -name="Book 91"
+import 91 100.00
+select LARGEFILE92
+modify -name="Book 92"
+import 92 100.00
+select LARGEFILE93
+modify -name="Book 93"
+import 93 100.00
+select LARGEFILE94
+modify -name="Book 94"
+import 94 100.00
+select LARGEFILE95
+modify -name="Book 95"
+import 95 100.00
+select LARGEFILE96
+modify -name="Book 96"
+import 96 100.00
+select LARGEFILE97
+modify -name="Book 97"
+import 97 100.00
+select LARGEFILE98
+modify -name="Book 98"
+import 98 100.00
+select LARGEFILE99
+modify -name="Book 99"
+import 99 100.00
+select LARGEFILE100
+modify -name="Book 100"
+import 100 100.00
+select LARGEFILE101
+modify -name="Book 101"
+import 101 100.00
+select LARGEFILE102
+modify -name="Book 102"
+import 102 100.00
+select LARGEFILE103
+modify -name="Book 103"
+import 103 100.00
+select LARGEFILE104
+modify -name="Book 104"
+import 104 100.00
+select LARGEFILE105
+modify -name="Book 105"
+import 105 100.00
+select LARGEFILE106
+modify -name="Book 106"
+import 106 100.00
+select LARGEFILE107
+modify -name="Book 107"
+import 107 100.00
+select LARGEFILE108
+modify -name="Book 108"
+import 108 100.00
+select LARGEFILE109
+modify -name="Book 109"
+import 109 100.00
+select LARGEFILE110
+modify -name="Book 110"
+import 110 100.00
+select LARGEFILE111
+modify -name="Book 111"
+import 111 100.00
+select LARGEFILE112
+modify -name="Book 112"
+import 112 100.00
+select LARGEFILE113
+modify -name="Book 113"
+import 113 100.00
+select LARGEFILE114
+modify -name="Book 114"
+import 114 100.00
+select LARGEFILE115
+modify -name="Book 115"
+import 115 100.00
+select LARGEFILE116
+modify -name="Book 116"
+import 116 100.00
+select LARGEFILE117
+modify -name="Book 117"
+import 117 100.00
+select LARGEFILE118
+modify -name="Book 118"
+import 118 100.00
+select LARGEFILE119
+modify -name="Book 119"
+import 119 100.00
+select LARGEFILE120
+modify -name="Book 120"
+import 120 100.00
+select LARGEFILE121
+modify -name="Book 121"
+import 121 100.00
+select LARGEFILE122
+modify -name="Book 122"
+import 122 100.00
+select LARGEFILE123
+modify -name="Book 123"
+import 123 100.00
+select LARGEFILE124
+modify -name="Book 124"
+import 124 100.00
+select LARGEFILE125
+modify -name="Book 125"
+import 125 100.00
+select LARGEFILE126
+modify -name="Book 126"
+import 126 100.00
+select LARGEFILE127
+modify -name="Book 127"
+import 127 100.00
+select LARGEFILE128
+modify -name="Book 128"
+import 128 100.00
+select LARGEFILE129
+modify -name="Book 129"
+import 129 100.00
+select LARGEFILE130
+modify -name="Book 130"
+import 130 100.00
+select LARGEFILE131
+modify -name="Book 131"
+import 131 100.00
+select LARGEFILE132
+modify -name="Book 132"
+import 132 100.00
+select LARGEFILE133
+modify -name="Book 133"
+import 133 100.00
+select LARGEFILE134
+modify -name="Book 134"
+import 134 100.00
+select LARGEFILE135
+modify -name="Book 135"
+import 135 100.00
+select LARGEFILE136
+modify -name="Book 136"
+import 136 100.00
+select LARGEFILE137
+modify -name="Book 137"
+import 137 100.00
+select LARGEFILE138
+modify -name="Book 138"
+import 138 100.00
+select LARGEFILE139
+modify -name="Book 139"
+import 139 100.00
+select LARGEFILE140
+modify -name="Book 140"
+import 140 100.00
+select LARGEFILE141
+modify -name="Book 141"
+import 141 100.00
+select LARGEFILE142
+modify -name="Book 142"
+import 142 100.00
+select LARGEFILE143
+modify -name="Book 143"
+import 143 100.00
+select LARGEFILE144
+modify -name="Book 144"
+import 144 100.00
+select LARGEFILE145
+modify -name="Book 145"
+import 145 100.00
+select LARGEFILE146
+modify -name="Book 146"
+import 146 100.00
+select LARGEFILE147
+modify -name="Book 147"
+import 147 100.00
+select LARGEFILE148
+modify -name="Book 148"
+import 148 100.00
+select LARGEFILE149
+modify -name="Book 149"
+import 149 100.00
+select LARGEFILE150
+modify -name="Book 150"
+import 150 100.00
+select LARGEFILE151
+modify -name="Book 151"
+import 151 100.00
+select LARGEFILE152
+modify -name="Book 152"
+import 152 100.00
+select LARGEFILE153
+modify -name="Book 153"
+import 153 100.00
+select LARGEFILE154
+modify -name="Book 154"
+import 154 100.00
+select LARGEFILE155
+modify -name="Book 155"
+import 155 100.00
+select LARGEFILE156
+modify -name="Book 156"
+import 156 100.00
+select LARGEFILE157
+modify -name="Book 157"
+import 157 100.00
+select LARGEFILE158
+modify -name="Book 158"
+import 158 100.00
+select LARGEFILE159
+modify -name="Book 159"
+import 159 100.00
+select LARGEFILE160
+modify -name="Book 160"
+import 160 100.00
+select LARGEFILE161
+modify -name="Book 161"
+import 161 100.00
+select LARGEFILE162
+modify -name="Book 162"
+import 162 100.00
+select LARGEFILE163
+modify -name="Book 163"
+import 163 100.00
+select LARGEFILE164
+modify -name="Book 164"
+import 164 100.00
+select LARGEFILE165
+modify -name="Book 165"
+import 165 100.00
+select LARGEFILE166
+modify -name="Book 166"
+import 166 100.00
+select LARGEFILE167
+modify -name="Book 167"
+import 167 100.00
+select LARGEFILE168
+modify -name="Book 168"
+import 168 100.00
+select LARGEFILE169
+modify -name="Book 169"
+import 169 100.00
+select LARGEFILE170
+modify -name="Book 170"
+import 170 100.00
+select LARGEFILE171
+modify -name="Book 171"
+import 171 100.00
+select LARGEFILE172
+modify -name="Book 172"
+import 172 100.00
+select LARGEFILE173
+modify -name="Book 173"
+import 173 100.00
+select LARGEFILE174
+modify -name="Book 174"
+import 174 100.00
+select LARGEFILE175
+modify -name="Book 175"
+import 175 100.00
+select LARGEFILE176
+modify -name="Book 176"
+import 176 100.00
+select LARGEFILE177
+modify -name="Book 177"
+import 177 100.00
+select LARGEFILE178
+modify -name="Book 178"
+import 178 100.00
+select LARGEFILE179
+modify -name="Book 179"
+import 179 100.00
+select LARGEFILE180
+modify -name="Book 180"
+import 180 100.00
+select LARGEFILE181
+modify -name="Book 181"
+import 181 100.00
+select LARGEFILE182
+modify -name="Book 182"
+import 182 100.00
+select LARGEFILE183
+modify -name="Book 183"
+import 183 100.00
+select LARGEFILE184
+modify -name="Book 184"
+import 184 100.00
+select LARGEFILE185
+modify -name="Book 185"
+import 185 100.00
+select LARGEFILE186
+modify -name="Book 186"
+import 186 100.00
+select LARGEFILE187
+modify -name="Book 187"
+import 187 100.00
+select LARGEFILE188
+modify -name="Book 188"
+import 188 100.00
+select LARGEFILE189
+modify -name="Book 189"
+import 189 100.00
+select LARGEFILE190
+modify -name="Book 190"
+import 190 100.00
+select LARGEFILE191
+modify -name="Book 191"
+import 191 100.00
+select LARGEFILE192
+modify -name="Book 192"
+import 192 100.00
+select LARGEFILE193
+modify -name="Book 193"
+import 193 100.00
+select LARGEFILE194
+modify -name="Book 194"
+import 194 100.00
+select LARGEFILE195
+modify -name="Book 195"
+import 195 100.00
+select LARGEFILE196
+modify -name="Book 196"
+import 196 100.00
+select LARGEFILE197
+modify -name="Book 197"
+import 197 100.00
+select LARGEFILE198
+modify -name="Book 198"
+import 198 100.00
+select LARGEFILE199
+modify -name="Book 199"
+import 199 100.00
+select LARGEFILE200
+modify -name="Book 200"
+import 200 100.00
+select LARGEFILE201
+modify -name="Book 201"
+import 201 100.00
+select LARGEFILE202
+modify -name="Book 202"
+import 202 100.00
+select LARGEFILE203
+modify -name="Book 203"
+import 203 100.00
+select LARGEFILE204
+modify -name="Book 204"
+import 204 100.00
+select LARGEFILE205
+modify -name="Book 205"
+import 205 100.00
+select LARGEFILE206
+modify -name="Book 206"
+import 206 100.00
+select LARGEFILE207
+modify -name="Book 207"
+import 207 100.00
+select LARGEFILE208
+modify -name="Book 208"
+import 208 100.00
+select LARGEFILE209
+modify -name="Book 209"
+import 209 100.00
+select LARGEFILE210
+modify -name="Book 210"
+import 210 100.00
+select LARGEFILE211
+modify -name="Book 211"
+import 211 100.00
+select LARGEFILE212
+modify -name="Book 212"
+import 212 100.00
+select LARGEFILE213
+modify -name="Book 213"
+import 213 100.00
+select LARGEFILE214
+modify -name="Book 214"
+import 214 100.00
+select LARGEFILE215
+modify -name="Book 215"
+import 215 100.00
+select LARGEFILE216
+modify -name="Book 216"
+import 216 100.00
+select LARGEFILE217
+modify -name="Book 217"
+import 217 100.00
+select LARGEFILE218
+modify -name="Book 218"
+import 218 100.00
+select LARGEFILE219
+modify -name="Book 219"
+import 219 100.00
+select LARGEFILE220
+modify -name="Book 220"
+import 220 100.00
+select LARGEFILE221
+modify -name="Book 221"
+import 221 100.00
+select LARGEFILE222
+modify -name="Book 222"
+import 222 100.00
+select LARGEFILE223
+modify -name="Book 223"
+import 223 100.00
+select LARGEFILE224
+modify -name="Book 224"
+import 224 100.00
+select LARGEFILE225
+modify -name="Book 225"
+import 225 100.00
+select LARGEFILE226
+modify -name="Book 226"
+import 226 100.00
+select LARGEFILE227
+modify -name="Book 227"
+import 227 100.00
+select LARGEFILE228
+modify -name="Book 228"
+import 228 100.00
+select LARGEFILE229
+modify -name="Book 229"
+import 229 100.00
+select LARGEFILE230
+modify -name="Book 230"
+import 230 100.00
+select LARGEFILE231
+modify -name="Book 231"
+import 231 100.00
+select LARGEFILE232
+modify -name="Book 232"
+import 232 100.00
+select LARGEFILE233
+modify -name="Book 233"
+import 233 100.00
+select LARGEFILE234
+modify -name="Book 234"
+import 234 100.00
+select LARGEFILE235
+modify -name="Book 235"
+import 235 100.00
+select LARGEFILE236
+modify -name="Book 236"
+import 236 100.00
+select LARGEFILE237
+modify -name="Book 237"
+import 237 100.00
+select LARGEFILE238
+modify -name="Book 238"
+import 238 100.00
+select LARGEFILE239
+modify -name="Book 239"
+import 239 100.00
+select LARGEFILE240
+modify -name="Book 240"
+import 240 100.00
+select LARGEFILE241
+modify -name="Book 241"
+import 241 100.00
+select LARGEFILE242
+modify -name="Book 242"
+import 242 100.00
+select LARGEFILE243
+modify -name="Book 243"
+import 243 100.00
+select LARGEFILE244
+modify -name="Book 244"
+import 244 100.00
+select LARGEFILE245
+modify -name="Book 245"
+import 245 100.00
+select LARGEFILE246
+modify -name="Book 246"
+import 246 100.00
+select LARGEFILE247
+modify -name="Book 247"
+import 247 100.00
+select LARGEFILE248
+modify -name="Book 248"
+import 248 100.00
+select LARGEFILE249
+modify -name="Book 249"
+import 249 100.00
+select LARGEFILE250
+modify -name="Book 250"
+import 250 100.00
+select LARGEFILE251
+modify -name="Book 251"
+import 251 100.00
+select LARGEFILE252
+modify -name="Book 252"
+import 252 100.00
+select LARGEFILE253
+modify -name="Book 253"
+import 253 100.00
+select LARGEFILE254
+modify -name="Book 254"
+import 254 100.00
+select LARGEFILE255
+modify -name="Book 255"
+import 255 100.00
+select LARGEFILE256
+modify -name="Book 256"
+import 256 100.00
+select LARGEFILE257
+modify -name="Book 257"
+import 257 100.00
+select LARGEFILE258
+modify -name="Book 258"
+import 258 100.00
+select LARGEFILE259
+modify -name="Book 259"
+import 259 100.00
+select LARGEFILE260
+modify -name="Book 260"
+import 260 100.00
+select LARGEFILE261
+modify -name="Book 261"
+import 261 100.00
+select LARGEFILE262
+modify -name="Book 262"
+import 262 100.00
+select LARGEFILE263
+modify -name="Book 263"
+import 263 100.00
+select LARGEFILE264
+modify -name="Book 264"
+import 264 100.00
+select LARGEFILE265
+modify -name="Book 265"
+import 265 100.00
+select LARGEFILE266
+modify -name="Book 266"
+import 266 100.00
+select LARGEFILE267
+modify -name="Book 267"
+import 267 100.00
+select LARGEFILE268
+modify -name="Book 268"
+import 268 100.00
+select LARGEFILE269
+modify -name="Book 269"
+import 269 100.00
+select LARGEFILE270
+modify -name="Book 270"
+import 270 100.00
+select LARGEFILE271
+modify -name="Book 271"
+import 271 100.00
+select LARGEFILE272
+modify -name="Book 272"
+import 272 100.00
+select LARGEFILE273
+modify -name="Book 273"
+import 273 100.00
+select LARGEFILE274
+modify -name="Book 274"
+import 274 100.00
+select LARGEFILE275
+modify -name="Book 275"
+import 275 100.00
+select LARGEFILE276
+modify -name="Book 276"
+import 276 100.00
+select LARGEFILE277
+modify -name="Book 277"
+import 277 100.00
+select LARGEFILE278
+modify -name="Book 278"
+import 278 100.00
+select LARGEFILE279
+modify -name="Book 279"
+import 279 100.00
+select LARGEFILE280
+modify -name="Book 280"
+import 280 100.00
+select LARGEFILE281
+modify -name="Book 281"
+import 281 100.00
+select LARGEFILE282
+modify -name="Book 282"
+import 282 100.00
+select LARGEFILE283
+modify -name="Book 283"
+import 283 100.00
+select LARGEFILE284
+modify -name="Book 284"
+import 284 100.00
+select LARGEFILE285
+modify -name="Book 285"
+import 285 100.00
+select LARGEFILE286
+modify -name="Book 286"
+import 286 100.00
+select LARGEFILE287
+modify -name="Book 287"
+import 287 100.00
+select LARGEFILE288
+modify -name="Book 288"
+import 288 100.00
+select LARGEFILE289
+modify -name="Book 289"
+import 289 100.00
+select LARGEFILE290
+modify -name="Book 290"
+import 290 100.00
+select LARGEFILE291
+modify -name="Book 291"
+import 291 100.00
+select LARGEFILE292
+modify -name="Book 292"
+import 292 100.00
+select LARGEFILE293
+modify -name="Book 293"
+import 293 100.00
+select LARGEFILE294
+modify -name="Book 294"
+import 294 100.00
+select LARGEFILE295
+modify -name="Book 295"
+import 295 100.00
+select LARGEFILE296
+modify -name="Book 296"
+import 296 100.00
+select LARGEFILE297
+modify -name="Book 297"
+import 297 100.00
+select LARGEFILE298
+modify -name="Book 298"
+import 298 100.00
+select LARGEFILE299
+modify -name="Book 299"
+import 299 100.00
+select LARGEFILE300
+modify -name="Book 300"
+import 300 100.00
+select LARGEFILE301
+modify -name="Book 301"
+import 301 100.00
+select LARGEFILE302
+modify -name="Book 302"
+import 302 100.00
+select LARGEFILE303
+modify -name="Book 303"
+import 303 100.00
+select LARGEFILE304
+modify -name="Book 304"
+import 304 100.00
+select LARGEFILE305
+modify -name="Book 305"
+import 305 100.00
+select LARGEFILE306
+modify -name="Book 306"
+import 306 100.00
+select LARGEFILE307
+modify -name="Book 307"
+import 307 100.00
+select LARGEFILE308
+modify -name="Book 308"
+import 308 100.00
+select LARGEFILE309
+modify -name="Book 309"
+import 309 100.00
+select LARGEFILE310
+modify -name="Book 310"
+import 310 100.00
+select LARGEFILE311
+modify -name="Book 311"
+import 311 100.00
+select LARGEFILE312
+modify -name="Book 312"
+import 312 100.00
+select LARGEFILE313
+modify -name="Book 313"
+import 313 100.00
+select LARGEFILE314
+modify -name="Book 314"
+import 314 100.00
+select LARGEFILE315
+modify -name="Book 315"
+import 315 100.00
+select LARGEFILE316
+modify -name="Book 316"
+import 316 100.00
+select LARGEFILE317
+modify -name="Book 317"
+import 317 100.00
+select LARGEFILE318
+modify -name="Book 318"
+import 318 100.00
+select LARGEFILE319
+modify -name="Book 319"
+import 319 100.00
+select LARGEFILE320
+modify -name="Book 320"
+import 320 100.00
+select LARGEFILE321
+modify -name="Book 321"
+import 321 100.00
+select LARGEFILE322
+modify -name="Book 322"
+import 322 100.00
+select LARGEFILE323
+modify -name="Book 323"
+import 323 100.00
+select LARGEFILE324
+modify -name="Book 324"
+import 324 100.00
+select LARGEFILE325
+modify -name="Book 325"
+import 325 100.00
+select LARGEFILE326
+modify -name="Book 326"
+import 326 100.00
+select LARGEFILE327
+modify -name="Book 327"
+import 327 100.00
+select LARGEFILE328
+modify -name="Book 328"
+import 328 100.00
+select LARGEFILE329
+modify -name="Book 329"
+import 329 100.00
+select LARGEFILE330
+modify -name="Book 330"
+import 330 100.00
+select LARGEFILE331
+modify -name="Book 331"
+import 331 100.00
+select LARGEFILE332
+modify -name="Book 332"
+import 332 100.00
+select LARGEFILE333
+modify -name="Book 333"
+import 333 100.00
+select LARGEFILE334
+modify -name="Book 334"
+import 334 100.00
+select LARGEFILE335
+modify -name="Book 335"
+import 335 100.00
+select LARGEFILE336
+modify -name="Book 336"
+import 336 100.00
+select LARGEFILE337
+modify -name="Book 337"
+import 337 100.00
+select LARGEFILE338
+modify -name="Book 338"
+import 338 100.00
+select LARGEFILE339
+modify -name="Book 339"
+import 339 100.00
+select LARGEFILE340
+modify -name="Book 340"
+import 340 100.00
+select LARGEFILE341
+modify -name="Book 341"
+import 341 100.00
+select LARGEFILE342
+modify -name="Book 342"
+import 342 100.00
+select LARGEFILE343
+modify -name="Book 343"
+import 343 100.00
+select LARGEFILE344
+modify -name="Book 344"
+import 344 100.00
+select LARGEFILE345
+modify -name="Book 345"
+import 345 100.00
+select LARGEFILE346
+modify -name="Book 346"
+import 346 100.00
+select LARGEFILE347
+modify -name="Book 347"
+import 347 100.00
+select LARGEFILE348
+modify -name="Book 348"
+import 348 100.00
+select LARGEFILE349
+modify -name="Book 349"
+import 349 100.00
+select LARGEFILE350
+modify -name="Book 350"
+import 350 100.00
+select LARGEFILE351
+modify -name="Book 351"
+import 351 100.00
+select LARGEFILE352
+modify -name="Book 352"
+import 352 100.00
+select LARGEFILE353
+modify -name="Book 353"
+import 353 100.00
+select LARGEFILE354
+modify -name="Book 354"
+import 354 100.00
+select LARGEFILE355
+modify -name="Book 355"
+import 355 100.00
+select LARGEFILE356
+modify -name="Book 356"
+import 356 100.00
+select LARGEFILE357
+modify -name="Book 357"
+import 357 100.00
+select LARGEFILE358
+modify -name="Book 358"
+import 358 100.00
+select LARGEFILE359
+modify -name="Book 359"
+import 359 100.00
+select LARGEFILE360
+modify -name="Book 360"
+import 360 100.00
+select LARGEFILE361
+modify -name="Book 361"
+import 361 100.00
+select LARGEFILE362
+modify -name="Book 362"
+import 362 100.00
+select LARGEFILE363
+modify -name="Book 363"
+import 363 100.00
+select LARGEFILE364
+modify -name="Book 364"
+import 364 100.00
+select LARGEFILE365
+modify -name="Book 365"
+import 365 100.00
+select LARGEFILE366
+modify -name="Book 366"
+import 366 100.00
+select LARGEFILE367
+modify -name="Book 367"
+import 367 100.00
+select LARGEFILE368
+modify -name="Book 368"
+import 368 100.00
+select LARGEFILE369
+modify -name="Book 369"
+import 369 100.00
+select LARGEFILE370
+modify -name="Book 370"
+import 370 100.00
+select LARGEFILE371
+modify -name="Book 371"
+import 371 100.00
+select LARGEFILE372
+modify -name="Book 372"
+import 372 100.00
+select LARGEFILE373
+modify -name="Book 373"
+import 373 100.00
+select LARGEFILE374
+modify -name="Book 374"
+import 374 100.00
+select LARGEFILE375
+modify -name="Book 375"
+import 375 100.00
+select LARGEFILE376
+modify -name="Book 376"
+import 376 100.00
+select LARGEFILE377
+modify -name="Book 377"
+import 377 100.00
+select LARGEFILE378
+modify -name="Book 378"
+import 378 100.00
+select LARGEFILE379
+modify -name="Book 379"
+import 379 100.00
+select LARGEFILE380
+modify -name="Book 380"
+import 380 100.00
+select LARGEFILE381
+modify -name="Book 381"
+import 381 100.00
+select LARGEFILE382
+modify -name="Book 382"
+import 382 100.00
+select LARGEFILE383
+modify -name="Book 383"
+import 383 100.00
+select LARGEFILE384
+modify -name="Book 384"
+import 384 100.00
+select LARGEFILE385
+modify -name="Book 385"
+import 385 100.00
+select LARGEFILE386
+modify -name="Book 386"
+import 386 100.00
+select LARGEFILE387
+modify -name="Book 387"
+import 387 100.00
+select LARGEFILE388
+modify -name="Book 388"
+import 388 100.00
+select LARGEFILE389
+modify -name="Book 389"
+import 389 100.00
+select LARGEFILE390
+modify -name="Book 390"
+import 390 100.00
+select LARGEFILE391
+modify -name="Book 391"
+import 391 100.00
+select LARGEFILE392
+modify -name="Book 392"
+import 392 100.00
+select LARGEFILE393
+modify -name="Book 393"
+import 393 100.00
+select LARGEFILE394
+modify -name="Book 394"
+import 394 100.00
+select LARGEFILE395
+modify -name="Book 395"
+import 395 100.00
+select LARGEFILE396
+modify -name="Book 396"
+import 396 100.00
+select LARGEFILE397
+modify -name="Book 397"
+import 397 100.00
+select LARGEFILE398
+modify -name="Book 398"
+import 398 100.00
+select LARGEFILE399
+modify -name="Book 399"
+import 399 100.00
+select LARGEFILE400
+modify -name="Book 400"
+import 400 100.00
+select LARGEFILE401
+modify -name="Book 401"
+import 401 100.00
+select LARGEFILE402
+modify -name="Book 402"
+import 402 100.00
+select LARGEFILE403
+modify -name="Book 403"
+import 403 100.00
+select LARGEFILE404
+modify -name="Book 404"
+import 404 100.00
+select LARGEFILE405
+modify -name="Book 405"
+import 405 100.00
+select LARGEFILE406
+modify -name="Book 406"
+import 406 100.00
+select LARGEFILE407
+modify -name="Book 407"
+import 407 100.00
+select LARGEFILE408
+modify -name="Book 408"
+import 408 100.00
+select LARGEFILE409
+modify -name="Book 409"
+import 409 100.00
+select LARGEFILE410
+modify -name="Book 410"
+import 410 100.00
+select LARGEFILE411
+modify -name="Book 411"
+import 411 100.00
+select LARGEFILE412
+modify -name="Book 412"
+import 412 100.00
+select LARGEFILE413
+modify -name="Book 413"
+import 413 100.00
+select LARGEFILE414
+modify -name="Book 414"
+import 414 100.00
+select LARGEFILE415
+modify -name="Book 415"
+import 415 100.00
+select LARGEFILE416
+modify -name="Book 416"
+import 416 100.00
+select LARGEFILE417
+modify -name="Book 417"
+import 417 100.00
+select LARGEFILE418
+modify -name="Book 418"
+import 418 100.00
+select LARGEFILE419
+modify -name="Book 419"
+import 419 100.00
+select LARGEFILE420
+modify -name="Book 420"
+import 420 100.00
+select LARGEFILE421
+modify -name="Book 421"
+import 421 100.00
+select LARGEFILE422
+modify -name="Book 422"
+import 422 100.00
+select LARGEFILE423
+modify -name="Book 423"
+import 423 100.00
+select LARGEFILE424
+modify -name="Book 424"
+import 424 100.00
+select LARGEFILE425
+modify -name="Book 425"
+import 425 100.00
+select LARGEFILE426
+modify -name="Book 426"
+import 426 100.00
+select LARGEFILE427
+modify -name="Book 427"
+import 427 100.00
+select LARGEFILE428
+modify -name="Book 428"
+import 428 100.00
+select LARGEFILE429
+modify -name="Book 429"
+import 429 100.00
+select LARGEFILE430
+modify -name="Book 430"
+import 430 100.00
+select LARGEFILE431
+modify -name="Book 431"
+import 431 100.00
+select LARGEFILE432
+modify -name="Book 432"
+import 432 100.00
+select LARGEFILE433
+modify -name="Book 433"
+import 433 100.00
+select LARGEFILE434
+modify -name="Book 434"
+import 434 100.00
+select LARGEFILE435
+modify -name="Book 435"
+import 435 100.00
+select LARGEFILE436
+modify -name="Book 436"
+import 436 100.00
+select LARGEFILE437
+modify -name="Book 437"
+import 437 100.00
+select LARGEFILE438
+modify -name="Book 438"
+import 438 100.00
+select LARGEFILE439
+modify -name="Book 439"
+import 439 100.00
+select LARGEFILE440
+modify -name="Book 440"
+import 440 100.00
+select LARGEFILE441
+modify -name="Book 441"
+import 441 100.00
+select LARGEFILE442
+modify -name="Book 442"
+import 442 100.00
+select LARGEFILE443
+modify -name="Book 443"
+import 443 100.00
+select LARGEFILE444
+modify -name="Book 444"
+import 444 100.00
+select LARGEFILE445
+modify -name="Book 445"
+import 445 100.00
+select LARGEFILE446
+modify -name="Book 446"
+import 446 100.00
+select LARGEFILE447
+modify -name="Book 447"
+import 447 100.00
+select LARGEFILE448
+modify -name="Book 448"
+import 448 100.00
+select LARGEFILE449
+modify -name="Book 449"
+import 449 100.00
+select LARGEFILE450
+modify -name="Book 450"
+import 450 100.00
+select LARGEFILE451
+modify -name="Book 451"
+import 451 100.00
+select LARGEFILE452
+modify -name="Book 452"
+import 452 100.00
+select LARGEFILE453
+modify -name="Book 453"
+import 453 100.00
+select LARGEFILE454
+modify -name="Book 454"
+import 454 100.00
+select LARGEFILE455
+modify -name="Book 455"
+import 455 100.00
+select LARGEFILE456
+modify -name="Book 456"
+import 456 100.00
+select LARGEFILE457
+modify -name="Book 457"
+import 457 100.00
+select LARGEFILE458
+modify -name="Book 458"
+import 458 100.00
+select LARGEFILE459
+modify -name="Book 459"
+import 459 100.00
+select LARGEFILE460
+modify -name="Book 460"
+import 460 100.00
+select LARGEFILE461
+modify -name="Book 461"
+import 461 100.00
+select LARGEFILE462
+modify -name="Book 462"
+import 462 100.00
+select LARGEFILE463
+modify -name="Book 463"
+import 463 100.00
+select LARGEFILE464
+modify -name="Book 464"
+import 464 100.00
+select LARGEFILE465
+modify -name="Book 465"
+import 465 100.00
+select LARGEFILE466
+modify -name="Book 466"
+import 466 100.00
+select LARGEFILE467
+modify -name="Book 467"
+import 467 100.00
+select LARGEFILE468
+modify -name="Book 468"
+import 468 100.00
+select LARGEFILE469
+modify -name="Book 469"
+import 469 100.00
+select LARGEFILE470
+modify -name="Book 470"
+import 470 100.00
+select LARGEFILE471
+modify -name="Book 471"
+import 471 100.00
+select LARGEFILE472
+modify -name="Book 472"
+import 472 100.00
+select LARGEFILE473
+modify -name="Book 473"
+import 473 100.00
+select LARGEFILE474
+modify -name="Book 474"
+import 474 100.00
+select LARGEFILE475
+modify -name="Book 475"
+import 475 100.00
+select LARGEFILE476
+modify -name="Book 476"
+import 476 100.00
+select LARGEFILE477
+modify -name="Book 477"
+import 477 100.00
+select LARGEFILE478
+modify -name="Book 478"
+import 478 100.00
+select LARGEFILE479
+modify -name="Book 479"
+import 479 100.00
+select LARGEFILE480
+modify -name="Book 480"
+import 480 100.00
+select LARGEFILE481
+modify -name="Book 481"
+import 481 100.00
+select LARGEFILE482
+modify -name="Book 482"
+import 482 100.00
+select LARGEFILE483
+modify -name="Book 483"
+import 483 100.00
+select LARGEFILE484
+modify -name="Book 484"
+import 484 100.00
+select LARGEFILE485
+modify -name="Book 485"
+import 485 100.00
+select LARGEFILE486
+modify -name="Book 486"
+import 486 100.00
+select LARGEFILE487
+modify -name="Book 487"
+import 487 100.00
+select LARGEFILE488
+modify -name="Book 488"
+import 488 100.00
+select LARGEFILE489
+modify -name="Book 489"
+import 489 100.00
+select LARGEFILE490
+modify -name="Book 490"
+import 490 100.00
+select LARGEFILE491
+modify -name="Book 491"
+import 491 100.00
+select LARGEFILE492
+modify -name="Book 492"
+import 492 100.00
+select LARGEFILE493
+modify -name="Book 493"
+import 493 100.00
+select LARGEFILE494
+modify -name="Book 494"
+import 494 100.00
+select LARGEFILE495
+modify -name="Book 495"
+import 495 100.00
+select LARGEFILE496
+modify -name="Book 496"
+import 496 100.00
+select LARGEFILE497
+modify -name="Book 497"
+import 497 100.00
+select LARGEFILE498
+modify -name="Book 498"
+import 498 100.00
+select LARGEFILE499
+modify -name="Book 499"
+import 499 100.00
+select LARGEFILE500
+modify -name="Book 500"
+import 500 100.00
+quit

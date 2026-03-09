@@ -1,0 +1,5 @@
+su root sjtu
+select 12345678901234567890
+import 100 100.00
+show -ISBN=12345678901234567890
+quit

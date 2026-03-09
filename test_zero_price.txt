@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK17
+modify -price=0.00
+show -ISBN=BOOK17
+quit

@@ -1,0 +1,8 @@
+su root sjtu
+select BOOK99
+import 100 2500.00
+modify -price=25.50
+buy BOOK99 5
+show -ISBN=BOOK99
+show finance
+quit

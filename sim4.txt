@@ -1,0 +1,9 @@
+su root sjtu
+select ASAN1
+import 1000000000 1000.00
+import 1000000000 1000.00
+import 200000000 1000.00
+show -ISBN=ASAN1
+import 1 1000.00
+show -ISBN=ASAN1
+quit

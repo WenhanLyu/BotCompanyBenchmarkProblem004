@@ -1,0 +1,5 @@
+su root sjtu
+select KEYTEST
+modify -keyword="kw1|kw2|kw3|kw4|kw5|kw6|kw7|kw8|kw9|kw10"
+show -ISBN=KEYTEST
+quit

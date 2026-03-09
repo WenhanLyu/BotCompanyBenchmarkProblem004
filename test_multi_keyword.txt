@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK20
+modify -keyword="aa|bb|cc|dd|ee"
+show -keyword=cc
+quit

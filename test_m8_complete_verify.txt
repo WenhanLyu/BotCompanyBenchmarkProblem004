@@ -1,0 +1,32 @@
+su root sjtu
+register alice
+useradd bob pw1 7
+su alice
+select 9780000000001
+modify -name="Normal Book" -author="Author1" -keyword="test" -price=99.99
+import 1000 50.00
+buy 10
+show finance
+select 9780000000002
+modify -name="Edge Case Book" -author="Author2" -keyword="edge" -price=1e10
+import 2147483647 1.00
+buy 2147483647
+show finance
+select 9780000000003
+modify -name="Invalid Price Test" -author="Author3" -keyword="invalid" -price=inf
+show finance
+select 9780000000004
+modify -name="Test" -author="Test" -keyword="test" -price=100.00
+import 100 100.00
+buy 50
+show finance
+modify -price=nan
+show finance
+modify -price=-inf
+show finance
+modify -price=1e309
+show finance
+modify -price=200.00
+buy 50
+show finance
+quit

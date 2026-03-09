@@ -1,0 +1,503 @@
+su root sjtu
+select BOOK1
+modify -name="BookName1"
+modify -author="Author1"
+modify -keyword="kw1a|kw1b|kw1c"
+import 1 100.00
+select BOOK2
+modify -name="BookName2"
+modify -author="Author2"
+modify -keyword="kw2a|kw2b|kw2c"
+import 2 100.00
+select BOOK3
+modify -name="BookName3"
+modify -author="Author3"
+modify -keyword="kw3a|kw3b|kw3c"
+import 3 100.00
+select BOOK4
+modify -name="BookName4"
+modify -author="Author4"
+modify -keyword="kw4a|kw4b|kw4c"
+import 4 100.00
+select BOOK5
+modify -name="BookName5"
+modify -author="Author5"
+modify -keyword="kw5a|kw5b|kw5c"
+import 5 100.00
+select BOOK6
+modify -name="BookName6"
+modify -author="Author6"
+modify -keyword="kw6a|kw6b|kw6c"
+import 6 100.00
+select BOOK7
+modify -name="BookName7"
+modify -author="Author7"
+modify -keyword="kw7a|kw7b|kw7c"
+import 7 100.00
+select BOOK8
+modify -name="BookName8"
+modify -author="Author8"
+modify -keyword="kw8a|kw8b|kw8c"
+import 8 100.00
+select BOOK9
+modify -name="BookName9"
+modify -author="Author9"
+modify -keyword="kw9a|kw9b|kw9c"
+import 9 100.00
+select BOOK10
+modify -name="BookName10"
+modify -author="Author10"
+modify -keyword="kw10a|kw10b|kw10c"
+import 10 100.00
+select BOOK11
+modify -name="BookName11"
+modify -author="Author11"
+modify -keyword="kw11a|kw11b|kw11c"
+import 11 100.00
+select BOOK12
+modify -name="BookName12"
+modify -author="Author12"
+modify -keyword="kw12a|kw12b|kw12c"
+import 12 100.00
+select BOOK13
+modify -name="BookName13"
+modify -author="Author13"
+modify -keyword="kw13a|kw13b|kw13c"
+import 13 100.00
+select BOOK14
+modify -name="BookName14"
+modify -author="Author14"
+modify -keyword="kw14a|kw14b|kw14c"
+import 14 100.00
+select BOOK15
+modify -name="BookName15"
+modify -author="Author15"
+modify -keyword="kw15a|kw15b|kw15c"
+import 15 100.00
+select BOOK16
+modify -name="BookName16"
+modify -author="Author16"
+modify -keyword="kw16a|kw16b|kw16c"
+import 16 100.00
+select BOOK17
+modify -name="BookName17"
+modify -author="Author17"
+modify -keyword="kw17a|kw17b|kw17c"
+import 17 100.00
+select BOOK18
+modify -name="BookName18"
+modify -author="Author18"
+modify -keyword="kw18a|kw18b|kw18c"
+import 18 100.00
+select BOOK19
+modify -name="BookName19"
+modify -author="Author19"
+modify -keyword="kw19a|kw19b|kw19c"
+import 19 100.00
+select BOOK20
+modify -name="BookName20"
+modify -author="Author20"
+modify -keyword="kw20a|kw20b|kw20c"
+import 20 100.00
+select BOOK21
+modify -name="BookName21"
+modify -author="Author21"
+modify -keyword="kw21a|kw21b|kw21c"
+import 21 100.00
+select BOOK22
+modify -name="BookName22"
+modify -author="Author22"
+modify -keyword="kw22a|kw22b|kw22c"
+import 22 100.00
+select BOOK23
+modify -name="BookName23"
+modify -author="Author23"
+modify -keyword="kw23a|kw23b|kw23c"
+import 23 100.00
+select BOOK24
+modify -name="BookName24"
+modify -author="Author24"
+modify -keyword="kw24a|kw24b|kw24c"
+import 24 100.00
+select BOOK25
+modify -name="BookName25"
+modify -author="Author25"
+modify -keyword="kw25a|kw25b|kw25c"
+import 25 100.00
+select BOOK26
+modify -name="BookName26"
+modify -author="Author26"
+modify -keyword="kw26a|kw26b|kw26c"
+import 26 100.00
+select BOOK27
+modify -name="BookName27"
+modify -author="Author27"
+modify -keyword="kw27a|kw27b|kw27c"
+import 27 100.00
+select BOOK28
+modify -name="BookName28"
+modify -author="Author28"
+modify -keyword="kw28a|kw28b|kw28c"
+import 28 100.00
+select BOOK29
+modify -name="BookName29"
+modify -author="Author29"
+modify -keyword="kw29a|kw29b|kw29c"
+import 29 100.00
+select BOOK30
+modify -name="BookName30"
+modify -author="Author30"
+modify -keyword="kw30a|kw30b|kw30c"
+import 30 100.00
+select BOOK31
+modify -name="BookName31"
+modify -author="Author31"
+modify -keyword="kw31a|kw31b|kw31c"
+import 31 100.00
+select BOOK32
+modify -name="BookName32"
+modify -author="Author32"
+modify -keyword="kw32a|kw32b|kw32c"
+import 32 100.00
+select BOOK33
+modify -name="BookName33"
+modify -author="Author33"
+modify -keyword="kw33a|kw33b|kw33c"
+import 33 100.00
+select BOOK34
+modify -name="BookName34"
+modify -author="Author34"
+modify -keyword="kw34a|kw34b|kw34c"
+import 34 100.00
+select BOOK35
+modify -name="BookName35"
+modify -author="Author35"
+modify -keyword="kw35a|kw35b|kw35c"
+import 35 100.00
+select BOOK36
+modify -name="BookName36"
+modify -author="Author36"
+modify -keyword="kw36a|kw36b|kw36c"
+import 36 100.00
+select BOOK37
+modify -name="BookName37"
+modify -author="Author37"
+modify -keyword="kw37a|kw37b|kw37c"
+import 37 100.00
+select BOOK38
+modify -name="BookName38"
+modify -author="Author38"
+modify -keyword="kw38a|kw38b|kw38c"
+import 38 100.00
+select BOOK39
+modify -name="BookName39"
+modify -author="Author39"
+modify -keyword="kw39a|kw39b|kw39c"
+import 39 100.00
+select BOOK40
+modify -name="BookName40"
+modify -author="Author40"
+modify -keyword="kw40a|kw40b|kw40c"
+import 40 100.00
+select BOOK41
+modify -name="BookName41"
+modify -author="Author41"
+modify -keyword="kw41a|kw41b|kw41c"
+import 41 100.00
+select BOOK42
+modify -name="BookName42"
+modify -author="Author42"
+modify -keyword="kw42a|kw42b|kw42c"
+import 42 100.00
+select BOOK43
+modify -name="BookName43"
+modify -author="Author43"
+modify -keyword="kw43a|kw43b|kw43c"
+import 43 100.00
+select BOOK44
+modify -name="BookName44"
+modify -author="Author44"
+modify -keyword="kw44a|kw44b|kw44c"
+import 44 100.00
+select BOOK45
+modify -name="BookName45"
+modify -author="Author45"
+modify -keyword="kw45a|kw45b|kw45c"
+import 45 100.00
+select BOOK46
+modify -name="BookName46"
+modify -author="Author46"
+modify -keyword="kw46a|kw46b|kw46c"
+import 46 100.00
+select BOOK47
+modify -name="BookName47"
+modify -author="Author47"
+modify -keyword="kw47a|kw47b|kw47c"
+import 47 100.00
+select BOOK48
+modify -name="BookName48"
+modify -author="Author48"
+modify -keyword="kw48a|kw48b|kw48c"
+import 48 100.00
+select BOOK49
+modify -name="BookName49"
+modify -author="Author49"
+modify -keyword="kw49a|kw49b|kw49c"
+import 49 100.00
+select BOOK50
+modify -name="BookName50"
+modify -author="Author50"
+modify -keyword="kw50a|kw50b|kw50c"
+import 50 100.00
+select BOOK51
+modify -name="BookName51"
+modify -author="Author51"
+modify -keyword="kw51a|kw51b|kw51c"
+import 51 100.00
+select BOOK52
+modify -name="BookName52"
+modify -author="Author52"
+modify -keyword="kw52a|kw52b|kw52c"
+import 52 100.00
+select BOOK53
+modify -name="BookName53"
+modify -author="Author53"
+modify -keyword="kw53a|kw53b|kw53c"
+import 53 100.00
+select BOOK54
+modify -name="BookName54"
+modify -author="Author54"
+modify -keyword="kw54a|kw54b|kw54c"
+import 54 100.00
+select BOOK55
+modify -name="BookName55"
+modify -author="Author55"
+modify -keyword="kw55a|kw55b|kw55c"
+import 55 100.00
+select BOOK56
+modify -name="BookName56"
+modify -author="Author56"
+modify -keyword="kw56a|kw56b|kw56c"
+import 56 100.00
+select BOOK57
+modify -name="BookName57"
+modify -author="Author57"
+modify -keyword="kw57a|kw57b|kw57c"
+import 57 100.00
+select BOOK58
+modify -name="BookName58"
+modify -author="Author58"
+modify -keyword="kw58a|kw58b|kw58c"
+import 58 100.00
+select BOOK59
+modify -name="BookName59"
+modify -author="Author59"
+modify -keyword="kw59a|kw59b|kw59c"
+import 59 100.00
+select BOOK60
+modify -name="BookName60"
+modify -author="Author60"
+modify -keyword="kw60a|kw60b|kw60c"
+import 60 100.00
+select BOOK61
+modify -name="BookName61"
+modify -author="Author61"
+modify -keyword="kw61a|kw61b|kw61c"
+import 61 100.00
+select BOOK62
+modify -name="BookName62"
+modify -author="Author62"
+modify -keyword="kw62a|kw62b|kw62c"
+import 62 100.00
+select BOOK63
+modify -name="BookName63"
+modify -author="Author63"
+modify -keyword="kw63a|kw63b|kw63c"
+import 63 100.00
+select BOOK64
+modify -name="BookName64"
+modify -author="Author64"
+modify -keyword="kw64a|kw64b|kw64c"
+import 64 100.00
+select BOOK65
+modify -name="BookName65"
+modify -author="Author65"
+modify -keyword="kw65a|kw65b|kw65c"
+import 65 100.00
+select BOOK66
+modify -name="BookName66"
+modify -author="Author66"
+modify -keyword="kw66a|kw66b|kw66c"
+import 66 100.00
+select BOOK67
+modify -name="BookName67"
+modify -author="Author67"
+modify -keyword="kw67a|kw67b|kw67c"
+import 67 100.00
+select BOOK68
+modify -name="BookName68"
+modify -author="Author68"
+modify -keyword="kw68a|kw68b|kw68c"
+import 68 100.00
+select BOOK69
+modify -name="BookName69"
+modify -author="Author69"
+modify -keyword="kw69a|kw69b|kw69c"
+import 69 100.00
+select BOOK70
+modify -name="BookName70"
+modify -author="Author70"
+modify -keyword="kw70a|kw70b|kw70c"
+import 70 100.00
+select BOOK71
+modify -name="BookName71"
+modify -author="Author71"
+modify -keyword="kw71a|kw71b|kw71c"
+import 71 100.00
+select BOOK72
+modify -name="BookName72"
+modify -author="Author72"
+modify -keyword="kw72a|kw72b|kw72c"
+import 72 100.00
+select BOOK73
+modify -name="BookName73"
+modify -author="Author73"
+modify -keyword="kw73a|kw73b|kw73c"
+import 73 100.00
+select BOOK74
+modify -name="BookName74"
+modify -author="Author74"
+modify -keyword="kw74a|kw74b|kw74c"
+import 74 100.00
+select BOOK75
+modify -name="BookName75"
+modify -author="Author75"
+modify -keyword="kw75a|kw75b|kw75c"
+import 75 100.00
+select BOOK76
+modify -name="BookName76"
+modify -author="Author76"
+modify -keyword="kw76a|kw76b|kw76c"
+import 76 100.00
+select BOOK77
+modify -name="BookName77"
+modify -author="Author77"
+modify -keyword="kw77a|kw77b|kw77c"
+import 77 100.00
+select BOOK78
+modify -name="BookName78"
+modify -author="Author78"
+modify -keyword="kw78a|kw78b|kw78c"
+import 78 100.00
+select BOOK79
+modify -name="BookName79"
+modify -author="Author79"
+modify -keyword="kw79a|kw79b|kw79c"
+import 79 100.00
+select BOOK80
+modify -name="BookName80"
+modify -author="Author80"
+modify -keyword="kw80a|kw80b|kw80c"
+import 80 100.00
+select BOOK81
+modify -name="BookName81"
+modify -author="Author81"
+modify -keyword="kw81a|kw81b|kw81c"
+import 81 100.00
+select BOOK82
+modify -name="BookName82"
+modify -author="Author82"
+modify -keyword="kw82a|kw82b|kw82c"
+import 82 100.00
+select BOOK83
+modify -name="BookName83"
+modify -author="Author83"
+modify -keyword="kw83a|kw83b|kw83c"
+import 83 100.00
+select BOOK84
+modify -name="BookName84"
+modify -author="Author84"
+modify -keyword="kw84a|kw84b|kw84c"
+import 84 100.00
+select BOOK85
+modify -name="BookName85"
+modify -author="Author85"
+modify -keyword="kw85a|kw85b|kw85c"
+import 85 100.00
+select BOOK86
+modify -name="BookName86"
+modify -author="Author86"
+modify -keyword="kw86a|kw86b|kw86c"
+import 86 100.00
+select BOOK87
+modify -name="BookName87"
+modify -author="Author87"
+modify -keyword="kw87a|kw87b|kw87c"
+import 87 100.00
+select BOOK88
+modify -name="BookName88"
+modify -author="Author88"
+modify -keyword="kw88a|kw88b|kw88c"
+import 88 100.00
+select BOOK89
+modify -name="BookName89"
+modify -author="Author89"
+modify -keyword="kw89a|kw89b|kw89c"
+import 89 100.00
+select BOOK90
+modify -name="BookName90"
+modify -author="Author90"
+modify -keyword="kw90a|kw90b|kw90c"
+import 90 100.00
+select BOOK91
+modify -name="BookName91"
+modify -author="Author91"
+modify -keyword="kw91a|kw91b|kw91c"
+import 91 100.00
+select BOOK92
+modify -name="BookName92"
+modify -author="Author92"
+modify -keyword="kw92a|kw92b|kw92c"
+import 92 100.00
+select BOOK93
+modify -name="BookName93"
+modify -author="Author93"
+modify -keyword="kw93a|kw93b|kw93c"
+import 93 100.00
+select BOOK94
+modify -name="BookName94"
+modify -author="Author94"
+modify -keyword="kw94a|kw94b|kw94c"
+import 94 100.00
+select BOOK95
+modify -name="BookName95"
+modify -author="Author95"
+modify -keyword="kw95a|kw95b|kw95c"
+import 95 100.00
+select BOOK96
+modify -name="BookName96"
+modify -author="Author96"
+modify -keyword="kw96a|kw96b|kw96c"
+import 96 100.00
+select BOOK97
+modify -name="BookName97"
+modify -author="Author97"
+modify -keyword="kw97a|kw97b|kw97c"
+import 97 100.00
+select BOOK98
+modify -name="BookName98"
+modify -author="Author98"
+modify -keyword="kw98a|kw98b|kw98c"
+import 98 100.00
+select BOOK99
+modify -name="BookName99"
+modify -author="Author99"
+modify -keyword="kw99a|kw99b|kw99c"
+import 99 100.00
+select BOOK100
+modify -name="BookName100"
+modify -author="Author100"
+modify -keyword="kw100a|kw100b|kw100c"
+import 100 100.00
+show
+quit

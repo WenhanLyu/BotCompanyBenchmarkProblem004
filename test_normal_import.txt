@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK6
+import 50 1000.00
+show -ISBN=BOOK6
+quit

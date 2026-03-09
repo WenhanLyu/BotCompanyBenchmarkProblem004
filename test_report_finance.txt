@@ -1,0 +1,12 @@
+su root sjtu
+register alice 3 pw
+logout
+su alice pw
+select BOOK8
+import 50 500.00
+modify -price=10.00
+buy BOOK8 5
+logout
+su root sjtu
+report finance
+quit

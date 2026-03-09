@@ -1,0 +1,10 @@
+su root sjtu
+register alice alice123 1 alice alice
+buy 978-0-123456-78-9 20
+modify -ISBN=978-0-123456-78-9 -price=inf
+modify -ISBN=978-0-123456-78-9 -price=nan
+modify -ISBN=978-0-123456-78-9 -price=-inf
+modify -ISBN=978-0-123456-78-9 -price=1e308
+modify -ISBN=978-0-123456-78-9 -price=1e309
+show -ISBN=978-0-123456-78-9
+quit

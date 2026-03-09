@@ -1,0 +1,8 @@
+su root sjtu
+show finance 9999999
+select TEST
+import 100 100.00
+show finance 9999999
+show finance 2
+show finance 1
+quit

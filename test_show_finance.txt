@@ -1,0 +1,7 @@
+su root sjtu
+select BOOK7
+import 100 1000.00
+modify -price=10.00
+buy BOOK7 10
+show finance
+quit

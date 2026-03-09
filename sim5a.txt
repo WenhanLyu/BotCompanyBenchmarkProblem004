@@ -1,0 +1,5 @@
+su root sjtu
+select PERSIST
+import 1500000000 1000.00
+show -ISBN=PERSIST
+quit

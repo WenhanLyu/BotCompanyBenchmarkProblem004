@@ -1,0 +1,5 @@
+su root sjtu
+select TEST
+import 10 10.50
+show -ISBN=TEST
+quit

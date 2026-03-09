@@ -1,0 +1,5 @@
+su root sjtu
+select TEST001
+import 50 100.00
+show -ISBN=TEST001
+quit

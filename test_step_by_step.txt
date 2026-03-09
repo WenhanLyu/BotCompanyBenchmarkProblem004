@@ -1,0 +1,8 @@
+su root sjtu
+select BOOK99
+show -ISBN=BOOK99
+import 100 2500.00
+show -ISBN=BOOK99
+modify -price=25.50
+show -ISBN=BOOK99
+quit

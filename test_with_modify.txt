@@ -1,0 +1,8 @@
+su root sjtu
+select TEST001
+import 50 5000.00
+modify -ISBN=TEST001 -price=100.00
+show -ISBN=TEST001
+buy 5
+show finance
+quit

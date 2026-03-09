@@ -1,0 +1,6 @@
+su root sjtu
+register user2 1 oldpass
+passwd user2 oldpass newpass
+logout
+su user2 newpass
+quit

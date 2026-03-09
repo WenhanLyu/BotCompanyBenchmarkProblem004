@@ -1,0 +1,6 @@
+su root sjtu
+register user4 1 pass4
+delete user4
+logout
+su user4 pass4
+quit

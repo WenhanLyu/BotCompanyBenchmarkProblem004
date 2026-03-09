@@ -1,0 +1,5 @@
+su root sjtu
+useradd user3 pass3 3
+logout
+su user3 pass3
+quit

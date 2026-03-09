@@ -1,0 +1,5 @@
+su root sjtu
+select TESTBOOK
+modify -name="MyBook"
+show -ISBN=TESTBOOK
+quit

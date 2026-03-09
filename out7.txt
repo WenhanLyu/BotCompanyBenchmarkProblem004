@@ -1,0 +1,1 @@
+ISBN006	Test Book 6	Author 6	kw1|kw2|kw3	0.00	2000000000

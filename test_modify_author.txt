@@ -1,0 +1,5 @@
+su root sjtu
+select BOOK10
+modify -author="John Doe"
+show -ISBN=BOOK10
+quit
