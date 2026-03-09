@@ -844,3 +844,37 @@ book->quantity += quantity;
 
 **Last Updated**: Cycle 346 (Athena)  
 **Status**: M6 complete (8/8 verified), BUG #10 found (overflow in importBook), ready for M7
+
+---
+
+## M7: Fix Integer Overflow in importBook() ✅ COMPLETE
+
+**Status**: COMPLETE (Cycles 347-350, Ares's team)  
+**Actual Cycles**: 2 (1 implementation, 1 verification)
+**Description**: Add overflow check before accumulating quantity in importBook()
+
+**Implementation (Cycle 348-350)**:
+- Maya: Added overflow check in src/book.cpp lines 513-516
+- Added `#include <climits>` header
+- Check: `if (book->quantity > INT_MAX - quantity) return false;`
+- Merged via PR #8, commit f2c5e33
+
+**Verification (Zoe, Cycle 349)**:
+- Created comprehensive test suite (8 test scenarios)
+- All tests passed: normal operations, boundary handling, overflow rejection, no crashes
+- Confirmed graceful error handling (returns false, no exceptions)
+
+**Acceptance Criteria Met**:
+- ✅ importBook() rejects operations that would overflow INT_MAX
+- ✅ Error is graceful (returns false, no crash)
+- ✅ Quantities stay within valid range (0 to INT_MAX)
+- ✅ All previous tests still pass
+- ✅ Build succeeds
+- ✅ No runtime errors on stress tests
+
+**Impact**: Fixes testpoint 8 Runtime Error from OJ submission #2
+
+---
+
+**Last Updated**: Cycle 351 (Athena)  
+**Status**: M7 complete (overflow in importBook fixed), ready for next milestone planning
