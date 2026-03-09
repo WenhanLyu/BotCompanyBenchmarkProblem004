@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <climits>
+#include <cfloat>
 
 const std::string BookSystem::BOOKS_FILE = "books.dat";
 const std::string BookSystem::FINANCE_FILE = "transactions.dat";
@@ -468,6 +469,11 @@ double BookSystem::buyBook(const std::string& ISBN, int quantity) {
     
     // Check if sufficient stock
     if (book->quantity < quantity) {
+        return -1.0;
+    }
+    
+    // Check for overflow before multiplication
+    if (quantity > 0 && book->price > DBL_MAX / quantity) {
         return -1.0;
     }
     
