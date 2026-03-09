@@ -1489,3 +1489,171 @@ try {
 **Last Updated**: Cycle 373 (Athena)  
 **Status**: BUG #14 found (exception handling gap), M9.1 defined and ready to start
 
+## M9.1: Fix Exception Handling in buy/import Numeric Parsing ✅ COMPLETE
+
+**Status**: COMPLETE (Cycle 374, Ares)  
+**Actual Cycles**: 1  
+**Description**: Added try-catch blocks around std::stoi() calls to handle out_of_range exceptions gracefully
+
+**Implementation (Leo, Cycle 374)**:
+- Added try-catch around std::stoi() in buy command (src/main.cpp line 787)
+- Added try-catch around std::stoi() and std::stod() in import command (lines 855-856)
+- Catches std::out_of_range and std::invalid_argument exceptions
+- Outputs "Invalid" and continues on exception
+
+**Verification**:
+- ✅ `buy TEST 2147483648` outputs "Invalid" (no crash)
+- ✅ `import 2147483648 100.00` outputs "Invalid" (no crash)
+- ✅ Normal operations work correctly
+- ✅ Build succeeds
+
+**Commit**: 4411ab3
+
+---
+
+## Current State (Cycle 375)
+
+**Phase**: PLANNING (BUG #15 Found - Price Validation Too Strict)  
+**Repository**: M9.1 complete but regression found in isValidPrice()
+**OJ Status** (Submission #2):
+  - Problem 1075: 94/100
+  - Problem 1775: 25/100
+**Submissions Used**: 2/8  
+**Submissions Remaining**: 6/8
+
+**Assessment**:
+- Athena's independent verification found CRITICAL BUG #15
+- Local test suite: 16/20 tests pass, 4 fail (tests 5, 6, 10, 211)
+- Root cause: isValidPrice() too strict - rejects "38" (requires "38.00")
+- This is a regression from M9 that broke existing functionality
+- Must fix before OJ submission
+
+---
+
+## BUG #15: Price Validation Too Strict 🚨 CRITICAL
+
+**Discovered**: Cycle 375 (Athena's independent verification)
+
+**The Bug**:
+- **Location**: src/main.cpp line 12 (`isValidPrice()` function)
+- **Issue**: Requires exactly 2 decimal places, but spec allows integer notation
+- **Examples**:
+  - `modify -price=38.00` → works ✓
+  - `modify -price=38` → "Invalid" ✗ (WRONG!)
+
+**Impact**:
+- Local test failures: 4/20 tests fail (tests 5, 6, 10, 211)
+- These tests use prices like "-price=38" without decimals
+- CRITICAL regression from M9 that broke existing functionality
+- Will cause significant OJ test failures
+
+**Root Cause**:
+M9 added strict price validation to reject `+` prefix (correct), but implementation is TOO strict:
+```cpp
+// Current (BROKEN):
+if (dotPos == std::string::npos) {
+    return false;  // Rejects "38" - WRONG!
+}
+if (dotPos + 3 != priceStr.length()) {
+    return false;  // Rejects "38.0" or "38.000" - correct
+}
+```
+
+**Specification** (README.md lines 276-279):
+- Legal character set: digits and `.`
+- "Floating-point numbers in this system have fixed input/output precision of two decimal places"
+- Interpretation: OUTPUT must be formatted with 2 decimals, INPUT can be "38" or "38.00"
+
+**Test Evidence**:
+```bash
+# From data/004/1075/5.in line 7:
+modify -name="GonzalesLLC" -keyword="KlinePLC|SuttonPLC" -author="HunterLtd" -price=38
+
+Expected: Success (store as 38.00, output as "38.00")
+Actual: Invalid (rejected by isValidPrice())
+```
+
+**Fix Required**:
+Update `isValidPrice()` to accept both formats:
+1. Integer format: "38", "100", "5" (no decimal point)
+2. Two-decimal format: "38.00", "100.50", "5.99"
+3. Continue rejecting: "+38", "-38", "38.", "38.0", "38.000", "abc", etc.
+
+**Pattern**:
+```cpp
+bool isValidPrice(const std::string& priceStr) {
+    if (priceStr.empty()) return false;
+    if (priceStr[0] == '+' || priceStr[0] == '-') return false;
+    if (priceStr.length() > 13) return false;
+    
+    size_t dotPos = priceStr.find('.');
+    
+    if (dotPos == std::string::npos) {
+        // No decimal point - integer format like "38"
+        // All characters must be digits
+        for (char c : priceStr) {
+            if (!std::isdigit(c)) return false;
+        }
+        return true;
+    }
+    
+    // Has decimal point - must have exactly 2 decimals after dot
+    if (priceStr.find('.', dotPos + 1) != std::string::npos) return false;  // Only one dot
+    if (dotPos == 0) return false;  // Must have digit before dot
+    if (dotPos + 3 != priceStr.length()) return false;  // Exactly 2 decimals
+    
+    // All chars except dot must be digits
+    for (size_t i = 0; i < priceStr.length(); i++) {
+        if (i == dotPos) continue;
+        if (!std::isdigit(priceStr[i])) return false;
+    }
+    
+    return true;
+}
+```
+
+---
+
+## M9.2: Fix isValidPrice() to Accept Integer Notation
+
+**Status**: READY TO START  
+**Estimated Cycles**: 1 (simple fix, well-defined)
+**Description**: Update isValidPrice() to accept both integer and two-decimal formats
+
+**The Fix**:
+Update `isValidPrice()` in src/main.cpp (lines 12-64) to accept:
+- Integer format: "38", "100", "5"
+- Two-decimal format: "38.00", "100.50"
+- Continue rejecting: "+38", "38.", "38.0", "38.000"
+
+**Test Cases**:
+1. `modify -price=38` → should succeed (integer notation)
+2. `modify -price=38.00` → should succeed (two-decimal notation)
+3. `modify -price=38.0` → should output "Invalid" (only 1 decimal)
+4. `modify -price=38.` → should output "Invalid" (trailing dot)
+5. `modify -price=+38.00` → should output "Invalid" (+ prefix)
+6. `modify -price=38.000` → should output "Invalid" (3 decimals)
+7. All 4 failing tests (5, 6, 10, 211) should pass
+8. All 16 passing tests should still pass (no regression)
+
+**Acceptance Criteria**:
+- ✓ isValidPrice() accepts integer notation ("38")
+- ✓ isValidPrice() accepts two-decimal notation ("38.00")
+- ✓ isValidPrice() rejects invalid formats ("+38", "38.", "38.0")
+- ✓ Local test suite: 20/20 tests pass
+- ✓ Build succeeds with no warnings
+- ✓ No regressions in other functionality
+
+**Why This Milestone**:
+- CRITICAL regression from M9
+- Blocking 4/20 local tests
+- Must fix before OJ submission
+- Simple fix, well-understood requirement
+- After this, ready for OJ submission #3
+
+**Budget**: 1 cycle (straightforward fix + testing)
+
+---
+
+**Last Updated**: Cycle 375 (Athena)  
+**Status**: M9.1 complete, BUG #15 found (price validation too strict), M9.2 defined and ready to start
