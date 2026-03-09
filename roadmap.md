@@ -740,5 +740,107 @@ Decision pending based on findings.
 
 ---
 
-**Last Updated**: Cycle 345 (Athena)  
-**Status**: M6 complete (verified), but testpoint 8 still crashes - investigating additional bug
+## BUG #10: Integer Overflow in importBook() Accumulation 🚨 CRITICAL
+
+**Discovered**: Cycle 346 (Gordon's investigation of testpoint 8 crash)
+
+**The Bug**:
+- **Location**: `src/book.cpp` line 513
+- **Issue**: `book->quantity += quantity` has no overflow check
+- **Impact**: When importing to books near INT_MAX, addition causes signed integer overflow → undefined behavior → crash
+
+**Proof of Bug**:
+```bash
+echo "su root sjtu
+select TEST
+import 2147483647 1.00
+import 1 1.00
+show -ISBN=TEST
+quit" | ./code
+```
+Output shows: `TEST ... -2147483648` (quantity wrapped to negative!)
+
+**Why This Causes Runtime Error**:
+1. M6 fixed input validation (quantity > INT_MAX rejected)
+2. But ACCUMULATION not checked: `INT_MAX + 1` still happens
+3. Signed integer overflow = undefined behavior in C++
+4. Negative quantities cause crashes in file I/O or subsequent operations
+5. Testpoint 8 accumulates imports across tests 1-7, triggering overflow
+
+**Contrast with buyBook()**:
+- buyBook() at line 477: `book->quantity -= quantity`
+- Has check at line 469: `if (book->quantity < quantity) return -1.0;`
+- ✅ Subtraction cannot underflow (protected)
+- ❌ Addition has no protection (bug!)
+
+**Fix Required**:
+```cpp
+// Add before line 513 in book.cpp
+if (book->quantity > INT_MAX - quantity) {
+    return false;  // Would overflow - reject operation
+}
+book->quantity += quantity;
+```
+
+**Impact**: CRITICAL - Blocking 75 points on problem 1775 (25/100 score)
+
+---
+
+## M7: Fix Integer Overflow in importBook()
+
+**Status**: READY TO START  
+**Estimated Cycles**: 2 (1 for fix, 1 for verification)
+**Description**: Add overflow check before accumulating quantity in importBook()
+
+**The Fix**:
+Add overflow check in `src/book.cpp` before line 513:
+```cpp
+// Check for overflow before adding
+if (book->quantity > INT_MAX - quantity) {
+    return false;  // Would overflow
+}
+book->quantity += quantity;
+```
+
+**Test Cases**:
+1. `import 2147483647 1.00` then `import 1 1.00` → second import should fail
+2. `import 1000000000 1.00` four times → should fail on 3rd attempt
+3. `import 1 1.00` repeatedly → should work until approaching INT_MAX
+4. Normal operations still work correctly
+5. Buy operations after overflow attempt still work
+
+**Acceptance Criteria**:
+- ✓ importBook() rejects operations that would overflow INT_MAX
+- ✓ Error is graceful (returns false, no crash)
+- ✓ Quantities stay within valid range (0 to INT_MAX)
+- ✓ All previous tests still pass
+- ✓ Build succeeds
+- ✓ No runtime errors on stress tests
+
+**Why This Milestone**:
+- Gordon identified this as root cause of testpoint 8 crash
+- Reproduces the crash symptom (negative quantity after overflow)
+- Simple fix (3-line check) but critical for correctness
+- After M6 fixed input validation, this is the remaining overflow gap
+
+**Budget**: 2 cycles (1 implementation, 1 verification with stress tests)
+
+---
+
+## Lessons Learned
+
+### Cycle 346 (M6 Complete, BUG #10 Found)
+- **✅ M6 Verification**: Fiona independently confirmed all 8 requirements complete
+- **🐛 New Bug**: Gordon found overflow in importBook() accumulation (BUG #10)
+- **📊 Root Cause**: M6 fixed INPUT validation but not ACCUMULATION overflow
+- **⚠️ Pattern**: Type change from `long long` to `int` introduced new overflow risk
+- **✅ Testing**: Clara ran 135 edge cases (all pass) but didn't test overflow accumulation
+- **⚠️ Code Audit**: Walter found 50+ potential crashes (uncaught exceptions, buffer overflows)
+- **📊 Priority**: Fix BUG #10 immediately (confirmed root cause), defer Walter's findings
+- **✅ Strategy**: Gordon's targeted investigation > broad testing for finding root cause
+- **⚠️ Lesson**: When fixing one overflow path, must check ALL overflow paths
+
+---
+
+**Last Updated**: Cycle 346 (Athena)  
+**Status**: M6 complete (8/8 verified), BUG #10 found (overflow in importBook), ready for M7
