@@ -1331,6 +1331,161 @@ if (param == "price") {
 
 ---
 
-**Last Updated**: Cycle 370 (Athena)  
-**Status**: M9 complete and merged to master, all 13 bugs fixed, ready for OJ submission #3
+## Current State (Cycle 373)
+
+**Phase**: PLANNING (BUG #14 Found - Critical Exception Handling Gap)  
+**Repository**: M9 complete but regression found in exception handling
+**Status**: Pre-submission validation milestone INCOMPLETE (deadline missed)
+**Submissions Used**: 2/8  
+**Submissions Remaining**: 6/8
+
+**Assessment**:
+- Ares attempted "Pre-submission validation and readiness check" (1/1 cycles)
+- Nora's build verification found CRITICAL BUG #14: Uncaught exceptions in buy/import
+- Root cause: M9 added format validation but missed exception handling for numeric overflow
+- Impact: Program crashes on values > INT_MAX instead of outputting "Invalid"
+- This is a P0 blocker that would cause OJ test failures
+
+---
+
+## BUG #14: Uncaught Exception in buy/import Numeric Parsing 🚨 CRITICAL
+
+**Discovered**: Cycle 373 (Nora's build verification)
+
+**The Bug**:
+- **Location**: src/main.cpp lines 787 (buy) and 855 (import)
+- **Issue**: `std::stoi()` throws `std::out_of_range` exception for values > INT_MAX
+- **Root Cause**: `isValidQuantity()` validates format (length ≤ 10 digits) but not numeric range
+- **Example**: String "2147483648" (10 digits) passes validation but exceeds INT_MAX (2147483647)
+- **Impact**: Program crashes with uncaught exception instead of outputting "Invalid"
+
+**Test Evidence**:
+```bash
+printf 'su root sjtu\nbuy TEST 2147483648\nquit\n' | ./code
+# Result: libc++abi: terminating due to uncaught exception of type std::out_of_range
+
+printf 'su root sjtu\nselect TEST\nimport 2147483648 100.00\nquit\n' | ./code
+# Result: libc++abi: terminating due to uncaught exception of type std::out_of_range
+```
+
+**Comparison**: The modify command has the CORRECT pattern (lines 528-537):
+```cpp
+try {
+    newPrice = std::stod(paramValue);
+    if (!std::isfinite(newPrice) || newPrice < 0) {
+        parseError = true;
+        break;
+    }
+} catch (...) {
+    parseError = true;
+    break;
+}
+```
+
+**Fix Required**:
+Add try-catch blocks around `std::stoi()` calls in buy and import commands:
+```cpp
+int quantity;
+try {
+    quantity = std::stoi(quantityStr);
+} catch (const std::out_of_range&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+} catch (const std::invalid_argument&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+```
+
+**Why This is Critical**:
+- OJ boundary testing will test INT_MAX and INT_MAX+1
+- Program crash = test failure
+- This could explain persistent edge case failures
+
+---
+
+## M9.1: Fix Exception Handling in buy/import Numeric Parsing
+
+**Status**: READY TO START  
+**Estimated Cycles**: 1 (simple fix, 2 locations)
+**Description**: Add try-catch blocks around std::stoi() calls to handle out_of_range exceptions gracefully
+
+**The Fix**:
+
+1. **Update buy command** (src/main.cpp, line 787):
+```cpp
+// Convert validated quantity string to int with exception handling
+int quantity;
+try {
+    quantity = std::stoi(quantityStr);
+} catch (const std::out_of_range&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+} catch (const std::invalid_argument&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+```
+
+2. **Update import command** (src/main.cpp, lines 855-856):
+```cpp
+// Convert to numeric values with exception handling
+int quantity;
+double totalCost;
+try {
+    quantity = std::stoi(quantityStr);
+    totalCost = std::stod(totalCostStr);
+} catch (const std::out_of_range&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+} catch (const std::invalid_argument&) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+```
+
+**Test Cases**:
+1. `buy TEST 2147483647` → should succeed (INT_MAX)
+2. `buy TEST 2147483648` → should output "Invalid", no crash (INT_MAX+1)
+3. `import 2147483647 100.00` → should succeed
+4. `import 2147483648 100.00` → should output "Invalid", no crash
+5. `import 99999999999999999999 100.00` → should output "Invalid", no crash
+6. Normal operations still work correctly
+7. All 214 local tests still pass
+
+**Acceptance Criteria**:
+- ✓ buy command handles std::stoi() exceptions gracefully
+- ✓ import command handles std::stoi() and std::stod() exceptions gracefully
+- ✓ Values > INT_MAX output "Invalid" instead of crashing
+- ✓ All previous tests still pass (no regressions)
+- ✓ Build succeeds with no warnings
+- ✓ No program crashes on boundary values
+
+**Why This Milestone**:
+- CRITICAL: P0 blocker found by Nora's verification
+- Regression from M9: Format validation added but exception handling missed
+- Simple fix (2 locations, ~10 lines total) but essential for stability
+- Follows established pattern from modify command
+- After this, truly ready for OJ submission #3
+
+**Budget**: 1 cycle (straightforward fix + testing)
+
+---
+
+## Lessons Learned
+
+### Cycle 373 (Pre-submission Validation - Deadline Missed)
+- **🐛 Critical Bug**: Nora found uncaught exception in buy/import (BUG #14)
+- **⚠️ Root Cause**: M9 added format validation but missed exception handling
+- **📊 Pattern**: isValidQuantity() checks length (≤10) but 10-digit numbers can exceed INT_MAX
+- **✅ Good**: Independent build verification caught the bug before OJ submission
+- **⚠️ Testing Gap**: Boundary testing should test INT_MAX+1, not just INT_MAX
+- **✅ Reference**: modify command has correct pattern - should have been followed
+- **📊 Decision**: Fix immediately in M9.1 (1 cycle) before OJ submission
+- **⚠️ Lesson**: Format validation ≠ value validation, must handle conversion exceptions
+
+---
+
+**Last Updated**: Cycle 373 (Athena)  
+**Status**: BUG #14 found (exception handling gap), M9.1 defined and ready to start
 
