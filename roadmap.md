@@ -1107,5 +1107,164 @@ If this milestone doesn't resolve testpoint 8, the project may need to be marked
 
 ---
 
-**Last Updated**: Cycle 362 (Athena)  
-**Status**: M8 verified complete, ready for OJ submission #3
+## BUG #13: Numeric Format Validation Missing 🚨 CRITICAL
+
+**Discovered**: Current cycle (Athena independent verification of Gordon's findings)
+
+**The Bug**:
+- **Specification** (README lines 272-279):
+  - Quantity: "Legal character set: digits" (10 chars max)
+  - Price/TotalCost: "Legal character set: digits and `.`" (13 chars max)
+- **Current Behavior**: Accepts leading `+` sign (not in legal character set)
+- **Test Evidence**:
+  - `import +50 100.00` succeeds (should output "Invalid")
+  - `import 50 +100.00` succeeds (should output "Invalid")
+  - `buy TEST +10` succeeds (should output "Invalid")
+  - `modify -price=+50.00` succeeds (should output "Invalid")
+
+**Root Cause**:
+- Code uses `ss >> quantity` and `std::stod()` without pre-validation
+- C++ stream operators accept leading `+` sign by default
+- No format validation before numeric parsing
+
+**Why This Explains 1775 Failures**:
+1. Direct specification violation (character set requirement)
+2. 1075 (94/100): Visible tests use normal formats, don't test `+` prefix
+3. 1775 (25/100): Hidden tests likely check strict format compliance
+4. Pattern matches: functionality works (1075 high), compliance fails (1775 low)
+
+**Locations**:
+- `src/main.cpp:686` - buy command: `ss >> isbn >> quantity`
+- `src/main.cpp:740` - import command: `ss >> quantity >> totalCost`
+- `src/main.cpp:441` - modify command: `newPrice = std::stod(paramValue)`
+
+---
+
+## M9: Fix Numeric Format Validation
+
+**Status**: READY TO START  
+**Estimated Cycles**: 3 (1 implementation, 1 testing, 1 verification)
+**Description**: Add strict format validation for numeric inputs before parsing
+
+**The Fixes**:
+
+1. **Add validation helper functions** (in main.cpp or new header):
+```cpp
+bool isValidQuantity(const std::string& s) {
+    // Check: only digits, max 10 chars, not empty
+    if (s.empty() || s.length() > 10) return false;
+    for (char c : s) {
+        if (!std::isdigit(c)) return false;
+    }
+    // Check value doesn't exceed INT_MAX when parsed
+    try {
+        long long val = std::stoll(s);
+        if (val > INT_MAX || val <= 0) return false;
+    } catch (...) {
+        return false;
+    }
+    return true;
+}
+
+bool isValidPrice(const std::string& s) {
+    // Check: only digits and '.', max 13 chars, exactly 2 decimal places
+    if (s.empty() || s.length() > 13) return false;
+    
+    // Find decimal point
+    size_t dotPos = s.find('.');
+    if (dotPos == std::string::npos) return false;  // Must have decimal
+    if (s.find('.', dotPos + 1) != std::string::npos) return false;  // Only one dot
+    if (dotPos + 3 != s.length()) return false;  // Exactly 2 decimal places
+    
+    // Check all characters are digits or '.'
+    for (size_t i = 0; i < s.length(); i++) {
+        if (i == dotPos) continue;
+        if (!std::isdigit(s[i])) return false;
+    }
+    
+    return true;
+}
+```
+
+2. **Update buy command** (line 686):
+```cpp
+// Parse ISBN and quantity as strings first
+std::string isbn, quantityStr;
+ss >> isbn >> quantityStr;
+
+if (isbn.empty() || !isValidQuantity(quantityStr)) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+
+int quantity = std::stoi(quantityStr);
+```
+
+3. **Update import command** (line 740):
+```cpp
+// Parse as strings first
+std::string quantityStr, totalCostStr;
+ss >> quantityStr >> totalCostStr;
+
+if (!isValidQuantity(quantityStr) || !isValidPrice(totalCostStr)) {
+    std::cout << "Invalid" << std::endl;
+    continue;
+}
+
+int quantity = std::stoi(quantityStr);
+double totalCost = std::stod(totalCostStr);
+```
+
+4. **Update modify -price=** (line 441):
+```cpp
+if (param == "price") {
+    if (!isValidPrice(paramValue)) {
+        parseError = true;
+        break;
+    }
+    newPrice = std::stod(paramValue);
+    priceSet = true;
+}
+```
+
+**Test Cases**:
+1. `import +50 100.00` → Invalid
+2. `import 50 +100.00` → Invalid
+3. `buy TEST +10` → Invalid
+4. `modify -price=+50.00` → Invalid
+5. `import 50 100` → Invalid (price missing decimals)
+6. `import 50 100.0` → Invalid (only 1 decimal place)
+7. `import 50 100.000` → Invalid (3 decimal places)
+8. `import 12345678901 100.00` → Invalid (11 digits, exceeds 10)
+9. `import 50 12345678901.12` → Invalid (14 chars, exceeds 13)
+10. Normal operations still work: `import 50 100.00` → Success
+
+**Acceptance Criteria**:
+- ✓ buy command rejects quantity with `+` prefix
+- ✓ import command rejects quantity with `+` prefix
+- ✓ import command rejects totalCost with `+` prefix
+- ✓ modify command rejects price with `+` prefix
+- ✓ All commands reject prices without exactly 2 decimal places
+- ✓ All commands reject strings exceeding max length
+- ✓ All commands reject non-digit characters (except `.` in prices)
+- ✓ All previous tests still pass (214/214 local tests)
+- ✓ Build succeeds with no warnings
+- ✓ No regressions in functionality
+
+**Why This Milestone**:
+- CRITICAL: Direct specification violation (character set requirements)
+- Gordon found with 90% confidence this explains 1775 failures
+- Athena independently verified the bug exists
+- Fix is well-defined and localized (3-4 code locations)
+- After this fix, code will be strictly spec-compliant
+- Better to fix KNOWN bug than waste OJ submission
+
+**Budget**: 3 cycles
+- Cycle 1: Implement validation functions and update all 3 locations
+- Cycle 2: Comprehensive testing (format edge cases + regression tests)
+- Cycle 3: Independent verification and final checks
+
+---
+
+**Last Updated**: Current cycle (Athena)  
+**Status**: M8 complete, BUG #13 found and confirmed, M9 defined and ready to start
