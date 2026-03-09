@@ -39,15 +39,23 @@ void AccountSystem::loadAccounts() {
             std::getline(ss, privStr, '|') &&
             std::getline(ss, deletedStr, '|')) {
             
-            int privilege = std::stoi(privStr);
-            bool isDeleted = (deletedStr == "1");
-            
-            Account account(userID, password, username, privilege);
-            account.isDeleted = isDeleted;
-            
-            // Only load non-deleted accounts
-            if (!isDeleted) {
-                accounts[userID] = account;
+            try {
+                int privilege = std::stoi(privStr);
+                bool isDeleted = (deletedStr == "1");
+                
+                Account account(userID, password, username, privilege);
+                account.isDeleted = isDeleted;
+                
+                // Only load non-deleted accounts
+                if (!isDeleted) {
+                    accounts[userID] = account;
+                }
+            } catch (const std::invalid_argument& e) {
+                // Skip malformed line - invalid privilege format
+                continue;
+            } catch (const std::out_of_range& e) {
+                // Skip malformed line - privilege value out of range
+                continue;
             }
         }
     }
