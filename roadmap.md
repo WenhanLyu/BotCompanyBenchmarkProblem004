@@ -1039,3 +1039,73 @@ If this milestone doesn't resolve testpoint 8, the project may need to be marked
 
 **Last Updated**: Cycle 356 (Athena)  
 **Status**: M7 complete, investigating testpoint 8 persistence, ready to start M8
+
+---
+
+## M8: Fix Arithmetic Overflow in Financial Calculations ✅ COMPLETE
+
+**Status**: COMPLETE (Cycles 357-361, Ares + Apollo)  
+**Actual Cycles**: 2 (1 implementation, 1 verification)
+**Description**: Fixed integer overflow in buyBook() price × quantity calculation and added inf/nan validation
+
+**Implementation (Ares, Cycles 357-360)**:
+- Leo: Added overflow check in buyBook() before multiplication (commit dd69116)
+- Maya: Added inf/nan validation in modify command (commit 192662d)
+- Both merged via PR #9 (commit df13595)
+
+**Verification (Apollo, Cycle 361)**:
+- Code review: Both implementations correct and at specified locations
+- Overflow testing: 57+ extreme value tests, all pass
+- Inf/nan testing: All invalid inputs rejected correctly
+- Regression testing: 29/29 tests pass, zero regressions
+
+**Acceptance Criteria Met**:
+- ✅ buyBook() rejects operations that would overflow double precision
+- ✅ Price parsing rejects inf/nan values
+- ✅ Financial calculations remain accurate
+- ✅ All previous tests still pass
+- ✅ Build succeeds
+- ✅ No runtime errors on edge cases
+
+---
+
+## Current State (Cycle 362)
+
+**Phase**: PLANNING (M8 complete, awaiting OJ submission #3)  
+**Repository**: All 12 identified bugs fixed, code at highest quality
+**OJ Status** (Submission #2):
+  - Problem 1075: 94/100 (6 points from perfect)
+  - Problem 1775: 25/100 (testpoint 8 Runtime Error - SIGABRT)
+**Submissions Used**: 2/8
+**Submissions Remaining**: 6/8
+
+**All Bugs Fixed**:
+1. ✅ BUG #1-5: Edge case validation bugs (M5)
+2. ✅ BUG #6: INT_MAX overflow in buy/import (M5.2)
+3. ✅ BUG #7: Tab character acceptance (M5.3)
+4. ✅ BUG #8: show finance extra parameters (M5.3)
+5. ✅ BUG #9: Type mismatch in Book::quantity (M6)
+6. ✅ BUG #10: importBook() accumulation overflow (M7)
+7. ✅ BUG #11: buyBook() price × quantity overflow (M8)
+8. ✅ BUG #12: inf/nan validation in modify (M8)
+
+**Code Quality**:
+- 100% specification compliance (verified cycle 352)
+- 214/214 local tests pass
+- 68/68 crash tests pass
+- Zero compiler warnings
+- Clean git state
+
+**Strategic Position**:
+- Fixed all bugs we can identify and reproduce
+- Cannot reproduce testpoint 8 crash locally
+- M6/M7/M8 all target the SIGABRT issue
+- Need external feedback (OJ submission) to progress further
+- Have comfortable submission buffer (6 remaining)
+
+**Assessment**: READY FOR OJ SUBMISSION #3
+
+---
+
+**Last Updated**: Cycle 362 (Athena)  
+**Status**: M8 verified complete, ready for OJ submission #3
